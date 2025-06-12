@@ -14,6 +14,7 @@ Created: 2025-06-12
 import tkinter as tk
 from tkinter import ttk, messagebox
 import logging
+import os
 from typing import Optional
 
 from core.config import AppConfig
@@ -130,7 +131,8 @@ class MainWindow(LoggerMixin):
         
         # Create tab frames
         self._create_connection_template_tab()  # Kết hợp Connection & Templates
-        self._create_queue_tab()
+        self._create_saved_tests_tab()          # Tab mới quản lý test cases đã tạo
+        self._create_queue_tab()                # Tab quản lý queue
         self._create_history_tab()
         self._create_logs_tab()
 
@@ -149,7 +151,7 @@ class MainWindow(LoggerMixin):
         top_frame.pack(fill=tk.X, padx=10, pady=5)
         
         # Connection panel
-        conn_frame = ttk.LabelFrame(top_frame, text="Kết Nối Router")
+        conn_frame = ttk.LabelFrame(top_frame, text="Router Connection")
         conn_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5, pady=5)
         
         # Host and port (on same line)
@@ -184,7 +186,7 @@ class MainWindow(LoggerMixin):
         ttk.Button(button_frame, text="Save", command=self._save_connection_settings).pack(side=tk.LEFT, padx=5)
         
         # Status panel
-        status_frame = ttk.LabelFrame(top_frame, text="Trạng Thái")
+        status_frame = ttk.LabelFrame(top_frame, text="Status")
         status_frame.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=5, pady=5)
         
         # Connection status indicator
@@ -200,15 +202,28 @@ class MainWindow(LoggerMixin):
         library_frame = ttk.LabelFrame(frame, text="Test Case Library")
         library_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
-        # Search bar
-        search_frame = ttk.Frame(library_frame)
-        search_frame.pack(fill=tk.X, padx=5, pady=5)
+        # Category tabs for filtering
+        filter_frame = ttk.Frame(library_frame)
+        filter_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        ttk.Label(search_frame, text="Search:").pack(side=tk.LEFT, padx=5)
-        self.search_var = tk.StringVar()
-        ttk.Entry(search_frame, textvariable=self.search_var, width=30).pack(side=tk.LEFT, padx=5)
+        # Create a notebook for category tabs
+        self.category_tabs = ttk.Notebook(filter_frame)
+        self.category_tabs.pack(side=tk.LEFT, fill=tk.X, expand=True)
         
-        ttk.Button(search_frame, text="Refresh", command=self._refresh_test_cases).pack(side=tk.RIGHT, padx=5)
+        # Create tabs for each category
+        self.category_frames = {}
+        self.add_category_tab("ALL", "All")  # First tab shows all
+        self.add_category_tab("WAN", "WAN")
+        self.add_category_tab("LAN", "LAN")
+        self.add_category_tab("Network", "Network")
+        self.add_category_tab("Security", "Security")
+        self.add_category_tab("System", "System")
+        
+        # Refresh button
+        ttk.Button(filter_frame, text="Refresh", command=self._refresh_test_cases).pack(side=tk.RIGHT, padx=5)
+        
+        # Bind event for tab selection to filter test cases
+        self.category_tabs.bind("<<NotebookTabChanged>>", self._on_category_tab_changed)
         
         # Create TreeView with hierarchical structure
         treeview_frame = ttk.Frame(library_frame)
@@ -235,57 +250,91 @@ class MainWindow(LoggerMixin):
         action_frame = ttk.Frame(library_frame)
         action_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        ttk.Button(action_frame, text="✅ Thêm vào Test Queue", command=self._add_to_test_queue).pack(side=tk.LEFT, padx=5)
-        ttk.Button(action_frame, text="🔍 Xem Chi Tiết", command=self._view_template_details).pack(side=tk.LEFT, padx=5)
-        ttk.Button(action_frame, text="📝 Tạo Từ Template", command=self._create_from_template).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(action_frame, text="✅ Add to Test Queue", command=self._add_to_test_queue).pack(side=tk.LEFT, padx=5)
+        ttk.Button(action_frame, text="🔍 View Details", command=self._view_template_details).pack(side=tk.LEFT, padx=5)
+        ttk.Button(action_frame, text="📝 Create from Template", command=self._create_from_template).pack(side=tk.RIGHT, padx=5)
         
         # ROW 3: Parameters section
         self.params_frame = ttk.LabelFrame(frame, text="Template Parameters")
         self.params_frame.pack(fill=tk.BOTH, padx=10, pady=5)
         
-        # We'll create a dynamic parameters form based on selected template
+        # Create dynamic parameters form based on selected template
         self.create_placeholder_params()
 
-    def _create_placeholder_params(self):
-        """Alias for create_placeholder_params for consistency"""
-        self.create_placeholder_params()
+    def add_category_tab(self, category_id, display_name):
+        """Add a category tab to the category notebook"""
+        # Tạo frame cho tab
+        tab_frame = ttk.Frame(self.category_tabs)
+        # Thêm tab vào notebook
+        self.category_tabs.add(tab_frame, text=display_name)
+        # Lưu trữ để tham chiếu sau này
+        self.category_frames[category_id] = tab_frame
 
-    def _populate_test_tree(self):
+    def _on_category_tab_changed(self, event):
+        """Handle change of category tab"""
+        selected_tab = self.category_tabs.select()
+        if not selected_tab:
+            return
+            
+        # Lấy index tab đang được chọn
+        tab_index = self.category_tabs.index(selected_tab)
+        
+        # Lọc test cases dựa trên tab được chọn
+        categories = ["ALL", "WAN", "LAN", "Network", "Ping", "Security", "System"]
+        if tab_index >= 0 and tab_index < len(categories):
+            selected_category = categories[tab_index]
+            self._filter_test_cases_by_category(selected_category)
+        
+    def _filter_test_cases_by_category(self, category):
+        """Filter test cases by category"""
+        # Nếu là "ALL", hiển thị tất cả
+        if category == "ALL":
+            self._populate_test_tree()
+            return
+            
+        # Lọc các test case theo danh mục
+        self._populate_test_tree(filter_category=category)
+
+    def _populate_test_tree(self, filter_category=None):
         """Populate the test case tree with hierarchical data"""
         # Clear existing items
         for item in self.test_tree.get_children():
             self.test_tree.delete(item)
         
-        # Define categories and their test cases
+        # Define categories and their test cases with standardized naming
         test_categories = {
             "WAN": [
-                {"id": "wan_create", "name": "Tạo WAN mới", "impacts_network": True},
-                {"id": "wan_delete", "name": "Xóa WAN", "impacts_network": True},
-                {"id": "wan_modify", "name": "Chỉnh sửa WAN", "impacts_network": True},
+                {"id": "wan_create", "name": "wan_create", "impacts_network": True},
+                {"id": "wan_delete", "name": "wan_delete", "impacts_network": True},
+                {"id": "wan_edit", "name": "wan_edit", "impacts_network": True},
             ],
             "LAN": [
-                {"id": "lan_config", "name": "Cấu hình LAN", "impacts_network": True},
-                {"id": "lan_interfaces", "name": "Quản lý interfaces LAN", "impacts_network": True},
-                {"id": "lan_dhcp", "name": "Thiết lập DHCP server", "impacts_network": True},
+                {"id": "lan_config", "name": "lan_config", "impacts_network": True},
+                {"id": "lan_interfaces", "name": "lan_interfaces", "impacts_network": True},
+                {"id": "lan_dhcp", "name": "lan_dhcp", "impacts_network": True},
             ],
             "Network": [
-                {"id": "ping_test", "name": "Kiểm tra Ping", "impacts_network": False},
-                {"id": "bandwidth_test", "name": "Kiểm tra Bandwidth", "impacts_network": False},
-                {"id": "dns_test", "name": "Kiểm tra DNS", "impacts_network": False},
+                {"id": "ping_test", "name": "ping_test", "impacts_network": False},
+                {"id": "bandwidth_test", "name": "bandwidth_test", "impacts_network": False},
+                {"id": "dns_test", "name": "dns_test", "impacts_network": False},
             ],
             "Security": [
-                {"id": "firewall_rule", "name": "Thiết lập Firewall", "impacts_network": False},
-                {"id": "port_forward", "name": "Cấu hình Port Forwarding", "impacts_network": False},
+                {"id": "firewall_rule", "name": "firewall_rule", "impacts_network": False},
+                {"id": "port_forward", "name": "port_forward", "impacts_network": False},
             ],
             "System": [
-                {"id": "sys_backup", "name": "Sao lưu cấu hình", "impacts_network": False},
-                {"id": "sys_restore", "name": "Phục hồi cấu hình", "impacts_network": True},
-                {"id": "sys_reboot", "name": "Khởi động lại Router", "impacts_network": True},
+                {"id": "sys_backup", "name": "sys_backup", "impacts_network": False},
+                {"id": "sys_restore", "name": "sys_restore", "impacts_network": True},
+                {"id": "sys_reboot", "name": "sys_reboot", "impacts_network": True},
             ],
         }
         
         # Add categories and their test cases
         for category, test_cases in test_categories.items():
+            # Skip if filtering and this category is not the one we want
+            if filter_category and filter_category != "ALL" and category != filter_category:
+                continue
+                
             # Add category as parent
             category_id = self.test_tree.insert("", "end", text=category)
             
@@ -376,6 +425,312 @@ class MainWindow(LoggerMixin):
         # Create UI for parameters
         self._create_parameter_controls(params)
 
+    def _create_saved_tests_tab(self) -> None:
+        """Create a tab to browse saved test cases"""
+        if not self.notebook:
+            return
+            
+        frame = ttk.Frame(self.notebook)
+        self.notebook.add(frame, text="Saved Tests")
+        
+        # Controls at the top
+        control_frame = ttk.Frame(frame)
+        control_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        ttk.Button(control_frame, text="Refresh", command=self._load_saved_tests).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="Add to Queue", command=self._add_saved_test_to_queue).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="Delete", command=self._delete_saved_test).pack(side=tk.RIGHT, padx=5)
+        
+        # Create TreeView for saved tests
+        treeview_frame = ttk.Frame(frame)
+        treeview_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        
+        columns = ("name", "category", "timestamp", "path")
+        self.saved_tests_tree = ttk.Treeview(treeview_frame, columns=columns, show="headings")
+        
+        self.saved_tests_tree.heading("name", text="Test Name")
+        self.saved_tests_tree.heading("category", text="Category")
+        self.saved_tests_tree.heading("timestamp", text="Created")
+        self.saved_tests_tree.heading("path", text="Path")
+        
+        self.saved_tests_tree.column("name", width=200)
+        self.saved_tests_tree.column("category", width=100)
+        self.saved_tests_tree.column("timestamp", width=150)
+        self.saved_tests_tree.column("path", width=300)
+        
+        # Add scrollbar
+        scrollbar_y = ttk.Scrollbar(treeview_frame, orient=tk.VERTICAL, command=self.saved_tests_tree.yview)
+        self.saved_tests_tree.configure(yscrollcommand=scrollbar_y.set)
+        
+        # Pack treeview and scrollbar
+        self.saved_tests_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Double-click to view details
+        self.saved_tests_tree.bind("<Double-1>", self._view_saved_test_details)
+        
+        # Load saved tests
+        self._load_saved_tests()
+
+    def _load_saved_tests(self) -> None:
+        """Load all saved test cases"""
+        import os
+        import glob
+        import datetime
+        import json
+        
+        # Clear existing items
+        for item in self.saved_tests_tree.get_children():
+            self.saved_tests_tree.delete(item)
+        
+        # Base directory for generated tests
+        base_dir = os.path.join("data", "temp", "generated_tests")
+        
+        # Check if directory exists
+        if not os.path.exists(base_dir):
+            return
+        
+        # Find all JSON files recursively
+        test_files = []
+        for category in os.listdir(base_dir):
+            category_path = os.path.join(base_dir, category)
+            if os.path.isdir(category_path):
+                for json_file in glob.glob(os.path.join(category_path, "*.json")):
+                    test_files.append((json_file, category))
+        
+        # Sort by modification time (newest first)
+        test_files.sort(key=lambda x: os.path.getmtime(x[0]), reverse=True)
+        
+        # Add to treeview
+        for file_path, category in test_files:
+            file_name = os.path.basename(file_path)
+            base_name = os.path.splitext(file_name)[0]  # Remove .json extension
+            
+            # Extract timestamp from JSON metadata if exists
+            timestamp = ""
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    
+                    # Handle both formats: dictionary with metadata or list of test cases
+                    if isinstance(data, dict) and "metadata" in data:
+                        # New format with proper metadata
+                        metadata = data["metadata"]
+                        if "created_at" in metadata:
+                            timestamp = metadata["created_at"]
+                    elif isinstance(data, list):
+                        # Old format - list of test cases without metadata
+                        # Không có metadata, sử dụng fallback
+                        self.logger.debug(f"File {file_name} is in old list format without metadata")
+                        
+                # If still empty, use fallback
+                if not timestamp:
+                    mod_time = os.path.getmtime(file_path)
+                    timestamp = datetime.datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M:%S")
+                    
+            except Exception as e:
+                # Log the error and fallback to file modification time
+                self.logger.error(f"Error reading timestamp from {file_name}: {e}")
+                mod_time = os.path.getmtime(file_path)
+                timestamp = datetime.datetime.fromtimestamp(mod_time).strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Use base_name as display name
+            self.saved_tests_tree.insert("", "end", values=(
+                base_name,  # Giữ nguyên định dạng service_action_identifier
+                category.title(),
+                timestamp,  # Thời gian từ metadata hoặc file modification time
+                file_path
+            ))
+
+    def _add_saved_test_to_queue(self, file_path=None) -> None:
+        """Add selected saved test to queue"""
+        import os
+        
+        # If file_path is not provided, get it from tree selection
+        if file_path is None:
+            selected = self.saved_tests_tree.selection()
+            if not selected:
+                messagebox.showinfo("Information", "Please select a test file")
+                return
+            
+            # Get file path from selection
+            values = self.saved_tests_tree.item(selected[0], "values")
+            file_path = values[3]
+        
+        import json
+        try:
+            # Extract the filename for display
+            filename = os.path.basename(file_path)
+            
+            # Load the test file
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            # Handle both formats
+            test_case = {}
+            if isinstance(data, dict) and "test_cases" in data:
+                # New format
+                test_case = data["test_cases"][0] if data["test_cases"] else {}
+            elif isinstance(data, list) and len(data) > 0:
+                # Old format
+                test_case = data[0]
+            else:
+                raise ValueError("Invalid test case format")
+                
+            service = test_case.get("service", "")
+            action = test_case.get("action", "")
+            params = test_case.get("params", {})
+            
+            # Determine category from file path
+            parts = file_path.split(os.sep)
+            category = "Unknown"
+            if "generated_tests" in parts:
+                idx = parts.index("generated_tests")
+                if idx + 1 < len(parts):
+                    category = parts[idx + 1].title()
+            
+            # Generate test ID and name
+            test_id = f"{service}_{action}" if action else service
+            display_name = test_id  # Sử dụng test_id làm tên hiển thị
+            
+            # Add to queue
+            if hasattr(self, 'queue_manager'):
+                added = self.queue_manager.add_item(test_id, display_name, category, params)
+                
+                if added:
+                    # Switch to queue tab
+                    if self.notebook:
+                        for i in range(self.notebook.index("end")):
+                            if "Test Queue" in self.notebook.tab(i, "text"):
+                                self.notebook.select(i)
+                                break
+                        
+                    self.logger.info(f"Added saved test to queue: {filename}")
+                    
+                    # Update status
+                    if self.status_var:
+                        self.status_var.set(f"Added {filename} to queue")
+                        
+                    messagebox.showinfo("Success", f"Added {display_name} to queue")
+                else:
+                    messagebox.showerror("Error", "Failed to add test to queue")
+            else:
+                messagebox.showinfo("Information", "Queue manager not initialized yet")
+                
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to add test to queue: {e}")
+
+    def _view_saved_test_details(self, event) -> None:
+        """View details of selected saved test"""
+        import os
+        
+        selected = self.saved_tests_tree.selection()
+        if not selected:
+            return
+        
+        # Get file path
+        values = self.saved_tests_tree.item(selected[0], "values")
+        file_path = values[3]
+        
+        # Load and display the test file
+        import json
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                test_data = json.load(f)
+            
+            # Extract metadata and test cases based on file format
+            metadata = {}
+            test_cases = []
+            
+            if isinstance(test_data, dict):
+                # New format with metadata
+                metadata = test_data.get("metadata", {})
+                test_cases = test_data.get("test_cases", [])
+            elif isinstance(test_data, list):
+                # Old format - test_data is directly a list of test cases
+                test_cases = test_data
+                # No metadata available
+                
+            created_by = metadata.get("created_by", "Unknown")
+            created_at = metadata.get("created_at", "Unknown")
+            
+            # Format JSON for display
+            formatted_json = json.dumps(test_cases, indent=2)
+            
+            # Create popup window with better title based on filename
+            file_name = os.path.basename(file_path)
+            # Remove .json extension and split by underscore
+            base_name = os.path.splitext(file_name)[0]
+            
+            popup = tk.Toplevel(self.root)
+            popup.title(f"Test Details: {base_name}")
+            popup.geometry("600x450")
+            
+            # Add metadata info at top
+            meta_frame = ttk.Frame(popup)
+            meta_frame.pack(fill=tk.X, padx=10, pady=5)
+            
+            ttk.Label(meta_frame, text=f"Created by: {created_by}", font=("Segoe UI", 9)).pack(anchor=tk.W)
+            ttk.Label(meta_frame, text=f"Created on: {created_at}", font=("Segoe UI", 9)).pack(anchor=tk.W)
+            
+            # Add text area with scrollbar
+            text_frame = ttk.Frame(popup)
+            text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+            
+            text = tk.Text(text_frame, wrap=tk.WORD)
+            scrollbar = ttk.Scrollbar(text_frame, orient=tk.VERTICAL, command=text.yview)
+            text.configure(yscrollcommand=scrollbar.set)
+            
+            text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+            
+            # Insert formatted JSON
+            text.insert(tk.END, formatted_json)
+            text.config(state=tk.DISABLED)
+            
+            # Add buttons for actions
+            button_frame = ttk.Frame(popup)
+            button_frame.pack(fill=tk.X, padx=10, pady=10)
+            
+            ttk.Button(button_frame, text="Add to Test Queue", 
+                    command=lambda file=file_path: self._add_saved_test_to_queue(file)).pack(side=tk.LEFT, padx=5)
+            
+            ttk.Button(button_frame, text="Close", 
+                    command=popup.destroy).pack(side=tk.RIGHT, padx=5)
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load test file: {e}")
+
+    def _delete_saved_test(self) -> None:
+        """Delete selected saved test file"""
+        selected = self.saved_tests_tree.selection()
+        if not selected:
+            messagebox.showinfo("Information", "Please select a test file")
+            return
+        
+        # Get file path
+        values = self.saved_tests_tree.item(selected[0], "values")
+        file_path = values[3]
+        test_name = values[0]
+        
+        # Confirm deletion
+        if messagebox.askyesno("Confirm Deletion", f"Delete test file '{test_name}'?"):
+            try:
+                import os
+                os.remove(file_path)
+                
+                # Remove from treeview
+                self.saved_tests_tree.delete(selected[0])
+                
+                self.logger.info(f"Deleted test file: {file_path}")
+                
+                # Update status
+                if self.status_var:
+                    self.status_var.set(f"Deleted test file: {test_name}")
+                    
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to delete file: {e}")
+
     def _refresh_test_cases(self):
         """Refresh test case tree"""
         # In Phase 1, just repopulate
@@ -401,10 +756,10 @@ class MainWindow(LoggerMixin):
         header_frame = ttk.Frame(param_table_frame)
         header_frame.pack(fill=tk.X, pady=5)
         
-        ttk.Label(header_frame, text="Tham số", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
-        ttk.Label(header_frame, text="Giá trị", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
-        ttk.Label(header_frame, text="Kiểu", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
-        ttk.Label(header_frame, text="Bắt buộc", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(header_frame, text="Param", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
+        ttk.Label(header_frame, text="Value", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
+        ttk.Label(header_frame, text="Type", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
+        ttk.Label(header_frame, text="Require", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
         
         # Create parameter rows
         param_rows_frame = ttk.Frame(param_table_frame)
@@ -443,7 +798,7 @@ class MainWindow(LoggerMixin):
         button_frame = ttk.Frame(self.params_frame)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        ttk.Button(button_frame, text="💾 Lưu Tham Số", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="💾 Save Param", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="🔄 Reset", command=lambda: self._on_test_case_selected(None)).pack(side=tk.LEFT, padx=5)
 
     def _save_parameters(self) -> None:
@@ -485,10 +840,10 @@ class MainWindow(LoggerMixin):
         header_frame = ttk.Frame(param_table_frame)
         header_frame.pack(fill=tk.X, pady=5)
         
-        ttk.Label(header_frame, text="Tham số", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
-        ttk.Label(header_frame, text="Giá trị", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
-        ttk.Label(header_frame, text="Kiểu", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
-        ttk.Label(header_frame, text="Bắt buộc", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(header_frame, text="Parameter", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
+        ttk.Label(header_frame, text="Value", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
+        ttk.Label(header_frame, text="Type", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
+        ttk.Label(header_frame, text="Required", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
         
         # Sample parameters (in a real app, these would be dynamically loaded)
         params = [
@@ -525,7 +880,7 @@ class MainWindow(LoggerMixin):
         button_frame = ttk.Frame(self.params_frame)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        ttk.Button(button_frame, text="💾 Lưu Tham Số", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="🔄 Reset", command=lambda: self.create_placeholder_params()).pack(side=tk.LEFT, padx=5)
 
 
@@ -544,15 +899,54 @@ class MainWindow(LoggerMixin):
         # This would normally load the parameters for the selected template
         self.create_placeholder_params()
         
-    def _add_to_test_queue(self):
+    def _add_to_test_queue(self) -> None:
         """Add current template with parameters to test queue"""
-        selected = self.test_tree.selection()  # Sửa từ template_tree thành test_tree
+        selected = self.test_tree.selection()
         if not selected:
-            messagebox.showinfo("Information", "Please select a template first")
+            messagebox.showinfo("Information", "Please select a test case first")
             return
         
-        template_name = self.test_tree.item(selected[0], "values")[1]  # Sửa
-        messagebox.showinfo("Success", f"Template '{template_name}' added to Test Queue with current parameters")
+        # Skip if it's a category node (has children)
+        if self.test_tree.get_children(selected[0]):
+            messagebox.showinfo("Information", "Please select a specific test case, not a category")
+            return
+        
+        # Get test case info
+        test_id = self.test_tree.item(selected[0], "values")[0]
+        test_name = test_id  # Sử dụng ID làm tên để đảm bảo nhất quán
+        category = self.test_tree.item(self.test_tree.parent(selected[0]), "text")
+        
+        # Collect parameter values
+        params = {}
+        for param_name, var in self.param_vars.items():
+            value = var.get()
+            # Basic type conversion
+            if value.lower() == "true":
+                params[param_name] = True
+            elif value.lower() == "false":
+                params[param_name] = False
+            elif value.isdigit():
+                params[param_name] = int(value)
+            else:
+                params[param_name] = value
+        
+        # Add to queue
+        added = self.queue_manager.add_item(test_id, test_name, category, params)
+        
+        if added:
+            # Update status
+            if self.status_var:
+                self.status_var.set(f"Added {test_name} to test queue")
+                
+            # Switch to queue tab to show the addition
+            if self.notebook:
+                queue_tab_index = self.notebook.index("end") - 3  # Assuming queue is the 2nd tab
+                self.notebook.select(queue_tab_index)
+                
+            # Log the addition
+            self.logger.info(f"Added test case to queue: {test_name} ({test_id})")
+        else:
+            messagebox.showerror("Error", "Failed to add test to queue")
 
     def _create_from_template(self):
         """Create a new test case from the selected template"""
@@ -564,23 +958,73 @@ class MainWindow(LoggerMixin):
         # Get test case info
         test_id = self.test_tree.item(selected[0], "values")[0]
         test_name = self.test_tree.item(selected[0], "text").split(" ⚠️")[0]
-        category = self.test_tree.item(self.test_tree.parent(selected[0]), "text").lower()
+        category = self.test_tree.item(self.test_tree.parent(selected[0]), "text")
         
         # Get service and action from test_id
         parts = test_id.split('_')
         service = parts[0]  # wan, ping, etc.
         action = parts[1] if len(parts) > 1 else ""  # create, delete, etc.
         
-        # Collect parameter values
+        # Kiểm tra nhưng tên test cases đã tồn tại
+        import os
+        import glob
+        save_dir = os.path.join("data", "temp", "generated_tests", category.lower())
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Lấy danh sách các filenames hiện có
+        existing_files = []
+        pattern = f"{service}_{action}_*.json" if action else f"{service}_*.json"
+        if os.path.exists(save_dir):
+            existing_files = [os.path.basename(f) for f in glob.glob(os.path.join(save_dir, pattern))]
+        
+        # Tìm số identifier tiếp theo có sẵn
+        next_id = 1
+        while True:
+            test_filename = f"{service}_{action}_{next_id}.json" if action else f"{service}_{next_id}.json"
+            if test_filename not in existing_files:
+                break
+            next_id += 1
+        
+        # Hiển thị cửa sổ nhập với gợi ý số tiếp theo
+        from tkinter import simpledialog
+        prompt_message = (
+            f"Enter test identifier (recommended: {next_id}):\n\n"
+            f"• Current test: {test_id}\n"
+            f"• File will be saved as: {service}_{action}_[identifier].json\n\n"
+            f"Note: Use simple identifiers like numbers or short descriptions."
+        )
+        
+        identifier = simpledialog.askstring("Test Identifier", prompt_message, initialvalue=str(next_id))
+        
+        if not identifier:
+            messagebox.showinfo("Information", "Test creation cancelled")
+            return
+        
+        # Loại bỏ ký tự không hợp lệ và kiểm tra trùng lặp
+        import re
+        # Chỉ giữ lại ký tự an toàn cho tên file
+        identifier = re.sub(r'[\\/*?:"<>|]', "", identifier)
+        
+        # Loại bỏ service và action khỏi identifier nếu người dùng vô tình nhập
+        identifier = identifier.replace(service, "").replace(action, "")
+        # Loại bỏ dấu gạch dư thừa
+        identifier = re.sub(r'^_+|_+$', "", identifier)
+        identifier = re.sub(r'_+', "_", identifier)
+        
+        # Nếu identifier trống sau khi loại bỏ các phần không cần thiết, sử dụng giá trị mặc định
+        if not identifier:
+            identifier = str(next_id)
+        
+        # Thu thập tham số
         params = {}
         for param_name, var in self.param_vars.items():
-            # Special handling for array parameters
+            # Xử lý đặc biệt cho tham số mảng
             if param_name == "ipv4_dns":
                 # Split comma-separated values into array
                 dns_values = var.get().split(",")
                 params[param_name] = [dns.strip() for dns in dns_values if dns.strip()]
             else:
-                # Handle different types
+                # Chuyển đổi kiểu dữ liệu
                 value = var.get()
                 if value.lower() == "true":
                     params[param_name] = True
@@ -590,44 +1034,80 @@ class MainWindow(LoggerMixin):
                     params[param_name] = int(value)
                 else:
                     params[param_name] = value
+
+        # Thời gian hiện tại từ yêu cầu  
+        current_time = "2025-06-12 08:11:17"
+        current_user = "juno-kyojin"
         
-        # Create the JSON structure
-        test_case = {
+        # Tạo đúng cấu trúc JSON theo đặc tả - QUAN TRỌNG: Đặt metadata ngoài mảng test_cases
+        test_data = {
             "test_cases": [
                 {
-                    "service": service
+                    "service": service,
+                    "params": params
                 }
-            ]
+            ],
+            "metadata": {
+                "created_by": current_user,
+                "created_at": current_time,
+                "category": category,
+                "identifier": identifier
+            }
         }
         
-        # Add action if it exists
+        # Thêm action nếu có
         if action:
-            test_case["test_cases"][0]["action"] = action
+            test_data["test_cases"][0]["action"] = action
         
-        # Add params
-        test_case["test_cases"][0]["params"] = params
+        # Xây dựng tên file theo định dạng service_action_identifier.json
+        filename = f"{service}_{action}_{identifier}.json" if action else f"{service}_{identifier}.json"
         
-        # Create a unique filename
-        from datetime import datetime
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{test_id}_{timestamp}.json"
+        # Log tên file đã tạo để debug
+        self.logger.info(f"Generated filename: {filename}")
         
-        # In a real app, save to file
+        # Đường dẫn đầy đủ cho file
+        file_path = os.path.join(save_dir, filename)
+        
+        # Kiểm tra file đã tồn tại chưa
+        if os.path.exists(file_path):
+            overwrite = messagebox.askyesno(
+                "File Exists", 
+                f"File {filename} already exists. Overwrite?"
+            )
+            if not overwrite:
+                return
+        
+        # Lưu file với cấu trúc đúng
         import json
         try:
-            # Just for demo in Phase 1
-            json_str = json.dumps(test_case, indent=4)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(test_data, f, indent=4)
+            
+            self.logger.info(f"Generated test case saved to: {file_path}")
+            
+            # Hiển thị thông báo thành công
             messagebox.showinfo("Test Case Created", 
-                            f"Created test case file '{filename}':\n\n{json_str[:200]}...")
+                        f"Test case saved to:\n{file_path}\n\n"
+                        f"You can find it in the 'Saved Tests' tab.")
             
-            self.logger.info(f"Generated test case: {filename}")
+            # Làm mới tab Saved Tests
+            if hasattr(self, '_load_saved_tests'):
+                self._load_saved_tests()
+                
+            # Chuyển đến tab Saved Tests
+            if self.notebook:
+                for i in range(self.notebook.index("end")):
+                    if "Saved Tests" in self.notebook.tab(i, "text"):
+                        self.notebook.select(i)
+                        break
             
-            # Update status
+            # Cập nhật trạng thái
             if self.status_var:
                 self.status_var.set(f"Test case {filename} created")
                 
         except Exception as e:
             messagebox.showerror("Error", f"Failed to create test case: {e}")
+
     def _view_template_details(self):
         """View details of the selected test case"""
         selected = self.test_tree.selection()
@@ -803,11 +1283,45 @@ class MainWindow(LoggerMixin):
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="Test Queue")
         
-        # Placeholder content
-        ttk.Label(frame, text="Test queue will be implemented in Phase 2").pack(
-            expand=True
-        )
+        # Import the TestQueueManager
+        from gui.widgets.queue_manager import TestQueueManager
+        
+        # Create queue manager as a member variable to access from other methods
+        self.queue_manager = TestQueueManager(frame, 
+                                            on_selection_change=self._on_queue_selection_change)
+        self.queue_manager.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Status display at the bottom
+        status_frame = ttk.Frame(frame)
+        status_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        self.queue_status_var = tk.StringVar(value="Queue ready. No tests running.")
+        ttk.Label(status_frame, textvariable=self.queue_status_var).pack(side=tk.LEFT)
+        
+        # Display test count
+        count_label = ttk.Label(status_frame, text="0 tests in queue")
+        count_label.pack(side=tk.RIGHT)
+        
+        # Update the test count when queue changes
+        def update_count():
+            if hasattr(self, 'queue_manager'):
+                count = len(self.queue_manager.queue_items)
+                count_label.config(text=f"{count} tests in queue")
+        
+        # Schedule periodic updates
+        update_count()
+        if self.root:
+            self.root.after(1000, update_count)
     
+    def _on_queue_selection_change(self, item_data: dict) -> None:
+        """Handle selection change in queue manager"""
+        # Update UI based on selected item
+        if self.status_var:
+            self.status_var.set(f"Selected: {item_data.get('name', '')}")
+        
+        # Log the selection
+        self.logger.debug(f"Queue item selected: {item_data.get('name', '')}")
+
     def _create_history_tab(self) -> None:
         """Create the test history tab."""
         if not self.notebook:
