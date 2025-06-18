@@ -99,6 +99,22 @@ def main() -> int:
         return 3
 
 
+def run(self) -> None:
+    """
+    Run the application main loop.
+    
+    This starts the Tkinter event loop and blocks until the window is closed.
+    """
+    if not self.root:
+        raise TestCaseManagerError("Window not initialized")
+    
+    try:
+        self.logger.info("Starting GUI main loop")
+        self.root.mainloop()
+    except Exception as e:
+        self.logger.error(f"GUI error: {e}")
+        raise TestCaseManagerError(f"GUI execution failed: {e}")
+
 if __name__ == "__main__":
     # Check Python version
     if sys.version_info < (3, 8):

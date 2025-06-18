@@ -20,22 +20,87 @@ import time
 from datetime import datetime
 
 class TestQueueManager(ttk.Frame):
-    """Widget for managing test queue with add, remove, reorder functionality"""
+    """Test Queue Manager widget for managing test cases"""
     
-    def __init__(self, parent, on_selection_change: Optional[Callable] = None, **kwargs):
-        """
-        Initialize the queue manager widget
+    def __init__(self, parent, on_selection_change=None, on_run_all=None, on_run_selected=None):
+        """Initialize the queue manager"""
+        super().__init__(parent)
         
-        Args:
-            parent: Parent widget
-            on_selection_change: Callback function when selection changes
-            **kwargs: Additional arguments for ttk.Frame
-        """
-        super().__init__(parent, **kwargs)
+        # Callbacks
         self.on_selection_change = on_selection_change
-        self.queue_items: List[Dict] = []
+        self.on_run_all = on_run_all
+        self.on_run_selected = on_run_selected
         
+        # QUAN TRỌNG: Khởi tạo các thuộc tính trạng thái
+        self.running = False
+        self.current_index = -1
+        
+        # Queue data structures
+        self.queue_items = []
+        self.next_order = 1
+        
+        # Create GUI components
         self._create_widgets()
+        
+        # Set up drag and drop functionality
+        self._setup_drag_drop()
+
+    def _setup_drag_drop(self):
+        """Set up drag and drop functionality for the queue items"""
+        # Đây là các biến để theo dõi thao tác kéo thả
+        self.drag_source_index = None
+        self.drag_item_id = None
+        
+        # Bind các sự kiện chuột để hỗ trợ drag & drop
+        self.queue_tree.bind("<ButtonPress-1>", self._on_drag_start)
+        self.queue_tree.bind("<B1-Motion>", self._on_drag_motion)
+        self.queue_tree.bind("<ButtonRelease-1>", self._on_drag_end)
+
+    def _on_drag_start(self, event):
+        """Handle start of drag operation"""
+        # Xác định item được click
+        item_id = self.queue_tree.identify_row(event.y)
+        if item_id:
+            # Lưu thông tin item đang kéo để sử dụng sau này
+            self.drag_source_index = self.queue_tree.index(item_id)
+            self.drag_item_id = item_id
+
+    def _on_drag_motion(self, event):
+        """Handle drag motion"""
+        # Chỉ xử lý nếu đang kéo một item
+        if self.drag_item_id:
+            pass  # Trong phase 1, chúng ta không cần hiệu ứng đặc biệt
+    
+    def _on_drag_end(self, event):
+        """Handle end of drag operation"""
+        # Chỉ xử lý nếu đang kéo một item
+        if self.drag_item_id and self.drag_source_index is not None:
+            # Xác định vị trí thả
+            target_id = self.queue_tree.identify_row(event.y)
+            if target_id and target_id != self.drag_item_id:
+                target_index = self.queue_tree.index(target_id)
+                
+                # Di chuyển item trong queue
+                item = self.queue_items.pop(self.drag_source_index)
+                self.queue_items.insert(target_index, item)
+                
+                # Cập nhật số thứ tự
+                for i, item in enumerate(self.queue_items):
+                    item["order"] = i + 1
+                    
+                # Cập nhật TreeView
+                self._refresh_queue_view()
+                
+                # Chọn lại item đã di chuyển
+                items = self.queue_tree.get_children()
+                if 0 <= target_index < len(items):
+                    self.queue_tree.selection_set(items[target_index])
+            
+            # Reset các biến theo dõi
+            self.drag_source_index = None
+            self.drag_item_id = None
+            
+
     
     def _create_widgets(self):
         """Create all widgets for the queue manager"""
@@ -346,23 +411,100 @@ class TestQueueManager(ttk.Frame):
             messagebox.showinfo("Information", "Queue is empty, nothing to run")
             return
         
-        # This is a placeholder for Phase 1
-        messagebox.showinfo("Run Tests", 
-                           f"Test execution will be implemented in Phase 2\n\n"
-                           f"Would run {len(self.queue_items)} tests in sequence")
-    
+        # Sử dụng callback nếu được cung cấp
+        if callable(self.on_run_all):
+            self.on_run_all()
+        else:
+            # Fallback to legacy behavior
+            messagebox.showinfo("Run Tests", 
+                        "Test execution will be implemented in Phase 2\n\n"
+                            f"Would run {len(self.queue_items)} tests in sequence")
+
+
     def run_selected_tests(self):
-        """Run selected test in the queue"""
+        """Run selected test(s) from queue using callback"""
+        # Lấy item được chọn
         selected = self.queue_tree.selection()
+        
         if not selected:
-            messagebox.showinfo("Information", "Please select a test case first")
+            messagebox.showinfo("No Selection", "Please select a test to run")
             return
         
-        # Get current item index
-        curr_idx = self.queue_tree.index(selected[0])
-        item = self.queue_items[curr_idx]
+        # Lấy index của item được chọn
+        try:
+            index = self.queue_tree.index(selected[0])
+            
+            # Gọi callback nếu được cung cấp
+            if self.on_run_selected:
+                # Gọi callback với index đã chọn
+                self.on_run_selected(index)
+            else:
+                messagebox.showinfo("Not Implemented", "Run Selected not implemented")
         
-        # This is a placeholder for Phase 1
-        messagebox.showinfo("Run Test", 
-                           f"Test execution will be implemented in Phase 2\n\n"
-                           f"Would run test: {item['name']}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to run selected test: {str(e)}")
+
+    def _run_test_at_index(self, curr_idx):
+        """Run the test at specified index with improved error handling"""
+        try:
+            # Kiểm tra chỉ số trước khi truy cập
+            if curr_idx < 0 or curr_idx >= len(self.queue_items):
+                self.running = False
+                return
+                
+            # Lấy item và gọi callback với chỉ số
+            item = self.queue_items[curr_idx]
+            
+            # Cập nhật trạng thái hiện tại
+            self.current_index = curr_idx
+            
+            # Gọi callback nếu có
+            if self.on_run_selected:
+                self.on_run_selected(curr_idx)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error running test: {str(e)}")
+            self.running = False
+
+    def _continue_to_next_test(self):
+        """Continue to the next test if possible"""
+        try:
+            next_idx = self.current_index + 1
+            
+            # Kiểm tra có còn test nào không
+            if next_idx >= len(self.queue_items):
+                # Đã chạy hết các test
+                self.running = False
+                return
+            
+            # Cập nhật trạng thái và chạy test tiếp theo
+            self.current_index = next_idx
+            self._run_test_at_index(self.current_index)
+        except Exception as e:
+            messagebox.showerror("Error", f"Error advancing to next test: {str(e)}")
+            self.running = False            
+    def update_status(self, index, status, message=None):
+        """Update status of a test in the queue"""
+        items = self.queue_tree.get_children()  # Sử dụng queue_tree thay vì test_queue
+        if 0 <= index < len(items):
+            item_id = items[index]
+            values = list(self.queue_tree.item(item_id, "values"))  # Sử dụng queue_tree
+            
+            # Cột "status" thực ra ở index 4 dựa vào định nghĩa columns
+            # columns = ("order", "name", "category", "parameters", "status")
+            status_col = 4  # Cột thứ 5 (index 4)
+            if len(values) > status_col:
+                values[status_col] = status
+                
+            # Không có cột message riêng trong implementation hiện tại
+            # Có thể cập nhật vào cột parameters nếu cần hiển thị message
+            
+            # Cập nhật UI
+            self.queue_tree.item(item_id, values=tuple(values))  # Sử dụng queue_tree
+            
+            # Cập nhật dữ liệu nội bộ
+            if index < len(self.queue_items):
+                self.queue_items[index]["status"] = status
+                if message:
+                    self.queue_items[index]["message"] = message
+
+        

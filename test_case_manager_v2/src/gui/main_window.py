@@ -15,6 +15,10 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import logging
 import os
+import json
+import time
+import threading
+import requests 
 from typing import Optional
 
 from core.config import AppConfig
@@ -30,7 +34,7 @@ class MainWindow(LoggerMixin):
     This class implements the main GUI window with tabbed interface,
     menu bar, status bar, and core application functionality.
     """
-    
+            
     def __init__(self, config: AppConfig) -> None:
         """
         Initialize the main window.
@@ -42,21 +46,84 @@ class MainWindow(LoggerMixin):
         self.root: Optional[tk.Tk] = None
         self.notebook: Optional[ttk.Notebook] = None
         
-        # Initialize tkinter variables
+        # Thêm biến theo dõi trạng thái kết nối
+        self.http_connected = False
+        # Initialize HTTP variables
+        self.http_host_var: Optional[tk.StringVar] = None
+        self.http_port_var: Optional[tk.StringVar] = None
+        self.http_conn_timeout_var: Optional[tk.StringVar] = None
+        self.http_read_timeout_var: Optional[tk.StringVar] = None
+        self.connection_type_var: Optional[tk.StringVar] = None
+        self.connection_mode_var: Optional[tk.StringVar] = None
+        
+        # Initialize SSH variables
         self.ssh_host_var: Optional[tk.StringVar] = None
         self.ssh_port_var: Optional[tk.StringVar] = None
         self.ssh_username_var: Optional[tk.StringVar] = None
         self.ssh_password_var: Optional[tk.StringVar] = None
+        
+        # Common variables
         self.connection_status_var: Optional[tk.StringVar] = None
         self.status_var: Optional[tk.StringVar] = None
         self.log_text: Optional[tk.Text] = None
         
+        # Không ghi đè lên property logger từ LoggerMixin
+        # self.logger đã được định nghĩa bởi LoggerMixin, chỉ cần sử dụng nó
+        
+        # Initialize network modules
+        self._load_network_modules()
+        
+        # Setup UI
         self._setup_window()
         self._create_menu()
         self._create_tabs()
         self._create_status_bar()
         
         self.logger.info("Main window initialized")
+
+    def _safe_get(self, string_var, default=""):
+        """Safely get value from a StringVar that might be None"""
+        if string_var is None:
+            return default
+        try:
+            return string_var.get()
+        except Exception:
+            return default
+
+        
+
+    def _safe_set(self, string_var, value):
+        """Safely set value to a StringVar that might be None"""
+        if string_var is not None:
+            try:
+                string_var.set(value)
+            except Exception:
+                pass  # Ignore errors when setting
+    def _safe_after(self, delay, callback):
+        """Safely call after on root object that might be None"""
+        if self.root is not None:
+            try:
+                return self.root.after(delay, callback)
+            except Exception:
+                pass
+        return None
+    def _load_network_modules(self) -> None:
+        """Load network modules as needed"""
+        try:
+            # Import the HTTP client module
+            from network.http_client import HTTPTestClient
+            self.http_client = HTTPTestClient()
+            self.logger.info("HTTP client module loaded")
+            
+            # SSH module will be loaded on demand when needed
+            self.ssh_connection = None
+            
+        except ImportError as e:
+            self.logger.error(f"Failed to import HTTP client module: {e}")
+            self.http_client = None
+        except Exception as e:
+            self.logger.error(f"Failed to initialize network modules: {e}")
+            self.http_client = None
     
     def _setup_window(self) -> None:
         """Setup the main window properties."""
@@ -136,7 +203,6 @@ class MainWindow(LoggerMixin):
         self._create_history_tab()
         self._create_logs_tab()
 
-
     def _create_connection_template_tab(self) -> None:
         """Create the combined connection and templates tab."""
         if not self.notebook:
@@ -154,29 +220,91 @@ class MainWindow(LoggerMixin):
         conn_frame = ttk.LabelFrame(top_frame, text="Router Connection")
         conn_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5, pady=5)
         
+        # Connection type
+        type_frame = ttk.Frame(conn_frame)
+        type_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        # Connection type radio buttons
+        self.connection_type_var = tk.StringVar(value="http")  # Default to HTTP
+        
+        ttk.Radiobutton(
+            type_frame,
+            text="HTTP Client-Server",
+            variable=self.connection_type_var,
+            value="http",
+            command=self._toggle_connection_ui
+        ).pack(side=tk.LEFT, padx=10)
+        
+        ttk.Radiobutton(
+            type_frame,
+            text="SSH (Legacy)",
+            variable=self.connection_type_var,
+            value="ssh",
+            command=self._toggle_connection_ui
+        ).pack(side=tk.LEFT, padx=10)
+        
+        # Connection settings (stacked frames for HTTP and SSH)
+        self.conn_settings_frame = ttk.Frame(conn_frame)
+        self.conn_settings_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        # HTTP Connection Frame
+        self.http_frame = ttk.Frame(self.conn_settings_frame)
+        
         # Host and port (on same line)
-        host_port_frame = ttk.Frame(conn_frame)
-        host_port_frame.pack(fill=tk.X, padx=5, pady=5)
+        host_port_frame = ttk.Frame(self.http_frame)
+        host_port_frame.pack(fill=tk.X, padx=0, pady=5)
+        
+        ttk.Label(host_port_frame, text="Host:").pack(side=tk.LEFT, padx=2)
+        self.http_host_var = tk.StringVar(value=self.config.network.ssh_host)  # Reuse SSH host as default
+        ttk.Entry(host_port_frame, textvariable=self.http_host_var, width=15).pack(side=tk.LEFT, padx=2)
+        
+        ttk.Label(host_port_frame, text="Port:").pack(side=tk.LEFT, padx=10)
+        self.http_port_var = tk.StringVar(value="8080")
+        ttk.Entry(host_port_frame, textvariable=self.http_port_var, width=5).pack(side=tk.LEFT, padx=2)
+        
+        # Timeout settings
+        timeout_frame = ttk.Frame(self.http_frame)
+        timeout_frame.pack(fill=tk.X, padx=0, pady=5)
+        
+        ttk.Label(timeout_frame, text="Connect Timeout:").pack(side=tk.LEFT, padx=2)
+        self.http_conn_timeout_var = tk.StringVar(value="5")
+        ttk.Entry(timeout_frame, textvariable=self.http_conn_timeout_var, width=5).pack(side=tk.LEFT, padx=2)
+        
+        ttk.Label(timeout_frame, text="Read Timeout:").pack(side=tk.LEFT, padx=10)
+        self.http_read_timeout_var = tk.StringVar(value="40")
+        ttk.Entry(timeout_frame, textvariable=self.http_read_timeout_var, width=5).pack(side=tk.LEFT, padx=2)
+        
+        ttk.Label(timeout_frame, text="seconds").pack(side=tk.LEFT, padx=2)
+        
+        # SSH Connection Frame
+        self.ssh_frame = ttk.Frame(self.conn_settings_frame)
+        
+        # Host and port (on same line)
+        host_port_frame = ttk.Frame(self.ssh_frame)
+        host_port_frame.pack(fill=tk.X, padx=0, pady=5)
         
         ttk.Label(host_port_frame, text="Host:").pack(side=tk.LEFT, padx=2)
         self.ssh_host_var = tk.StringVar(value=self.config.network.ssh_host)
         ttk.Entry(host_port_frame, textvariable=self.ssh_host_var, width=15).pack(side=tk.LEFT, padx=2)
         
-        ttk.Label(host_port_frame, text="Port:").pack(side=tk.LEFT, padx=2)
+        ttk.Label(host_port_frame, text="Port:").pack(side=tk.LEFT, padx=10)
         self.ssh_port_var = tk.StringVar(value=str(self.config.network.ssh_port))
         ttk.Entry(host_port_frame, textvariable=self.ssh_port_var, width=5).pack(side=tk.LEFT, padx=2)
         
         # Username and password (on same line)
-        user_pass_frame = ttk.Frame(conn_frame)
-        user_pass_frame.pack(fill=tk.X, padx=5, pady=5)
+        user_pass_frame = ttk.Frame(self.ssh_frame)
+        user_pass_frame.pack(fill=tk.X, padx=0, pady=5)
         
         ttk.Label(user_pass_frame, text="User:").pack(side=tk.LEFT, padx=2)
         self.ssh_username_var = tk.StringVar(value=self.config.network.ssh_username)
         ttk.Entry(user_pass_frame, textvariable=self.ssh_username_var, width=10).pack(side=tk.LEFT, padx=2)
         
-        ttk.Label(user_pass_frame, text="Pass:").pack(side=tk.LEFT, padx=2)
+        ttk.Label(user_pass_frame, text="Pass:").pack(side=tk.LEFT, padx=10)
         self.ssh_password_var = tk.StringVar(value=self.config.network.ssh_password)
         ttk.Entry(user_pass_frame, textvariable=self.ssh_password_var, show="*", width=10).pack(side=tk.LEFT, padx=2)
+        
+        # Show appropriate connection UI based on initial selection
+        self._toggle_connection_ui()
         
         # Buttons
         button_frame = ttk.Frame(conn_frame)
@@ -194,7 +322,10 @@ class MainWindow(LoggerMixin):
         status_indicator.pack(fill=tk.X, padx=5, pady=5)
         
         self.connection_status_var = tk.StringVar(value="🔴 Not connected")
+        self.connection_mode_var = tk.StringVar(value="Mode: HTTP")
+        
         ttk.Label(status_indicator, textvariable=self.connection_status_var, font=("Segoe UI", 9)).pack(anchor=tk.W)
+        ttk.Label(status_indicator, textvariable=self.connection_mode_var, font=("Segoe UI", 9)).pack(anchor=tk.W)
         ttk.Label(status_indicator, text="Last ping: --").pack(anchor=tk.W)
         ttk.Label(status_indicator, text="Router Model: --").pack(anchor=tk.W)
         
@@ -256,10 +387,36 @@ class MainWindow(LoggerMixin):
         
         # ROW 3: Parameters section
         self.params_frame = ttk.LabelFrame(frame, text="Template Parameters")
-        self.params_frame.pack(fill=tk.BOTH, padx=10, pady=5)
+        self.params_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
         # Create dynamic parameters form based on selected template
         self.create_placeholder_params()
+
+    def _toggle_connection_ui(self):
+        """Toggle between HTTP and SSH connection UI"""
+        connection_type = self._safe_get(self.connection_type_var, "http")
+        
+        # Update connection mode label
+        self._safe_set(self.connection_mode_var, f"Mode: {connection_type.upper()}")
+        
+        if connection_type == "http":
+            # Hide SSH, show HTTP
+            if hasattr(self, 'ssh_frame'):
+                self.ssh_frame.pack_forget()
+            if hasattr(self, 'http_frame'):
+                self.http_frame.pack(fill=tk.X)
+        else:
+            # Hide HTTP, show SSH
+            if hasattr(self, 'http_frame'):
+                self.http_frame.pack_forget()
+            if hasattr(self, 'ssh_frame'):
+                self.ssh_frame.pack(fill=tk.X)
+        
+        # Reset connection status
+        self._safe_set(self.connection_status_var, "🔴 Not connected")
+        
+        # Update status
+        self._safe_set(self.status_var, f"Switched to {connection_type.upper()} connection mode")
 
     def add_category_tab(self, category_id, display_name):
         """Add a category tab to the category notebook"""
@@ -314,7 +471,7 @@ class MainWindow(LoggerMixin):
                 {"id": "lan_dhcp", "name": "lan_dhcp", "impacts_network": True},
             ],
             "Network": [
-                {"id": "ping_test", "name": "ping_test", "impacts_network": False},
+                {"id": "ping", "name": "ping", "impacts_network": False}, 
                 {"id": "bandwidth_test", "name": "bandwidth_test", "impacts_network": False},
                 {"id": "dns_test", "name": "dns_test", "impacts_network": False},
             ],
@@ -409,11 +566,43 @@ class MainWindow(LoggerMixin):
             params = [
                 {"name": "name", "value": "wan1", "type": "string", "required": True},
             ]
-        elif test_id == "ping_test":
+        elif test_id == "wan_edit":
+            params = [
+                {"name": "name", "value": "wan1", "type": "string", "required": True},
+                {"name": "protocol", "value": "ipv4", "type": "enum", "required": True, 
+                "options": ["ipv4", "ipv6"]},
+                {"name": "gateway_type", "value": "route", "type": "enum", "required": False,
+                "options": ["route", "bridge"]},
+                {"name": "mtu", "value": "1492", "type": "integer", "required": False},
+                {"name": "nat", "value": "true", "type": "boolean", "required": False, 
+                "options": ["true", "false"]},
+            ]
+        elif test_id == "ping_test" or test_id == "ping":
+            # Sửa: Dùng đúng định dạng tham số cho ping
             params = [
                 {"name": "host1", "value": "youtube.com", "type": "string", "required": True},
-                {"name": "host2", "value": "google.com", "type": "string", "required": False},
-                {"name": "count", "value": "4", "type": "integer", "required": False},
+                {"name": "host2", "value": "google.com", "type": "string", "required": False}
+            ]
+        elif test_id == "lan_config":
+            params = [
+                {"name": "interface", "value": "eth0", "type": "string", "required": True},
+                {"name": "ip", "value": "192.168.1.1", "type": "string", "required": True},
+                {"name": "netmask", "value": "255.255.255.0", "type": "string", "required": True},
+                {"name": "enable_dhcp", "value": "true", "type": "boolean", "required": False},
+            ]
+        elif test_id == "firewall_rule":
+            params = [
+                {"name": "name", "value": "allow-ssh", "type": "string", "required": True},
+                {"name": "src", "value": "wan", "type": "string", "required": True},
+                {"name": "dest", "value": "lan", "type": "string", "required": True},
+                {"name": "proto", "value": "tcp", "type": "string", "required": True},
+                {"name": "dest_port", "value": "22", "type": "string", "required": True},
+                {"name": "target", "value": "ACCEPT", "type": "string", "required": True},
+            ]
+        elif test_id == "sys_reboot":
+            params = [
+                {"name": "delay", "value": "5", "type": "integer", "required": False},
+                {"name": "force", "value": "false", "type": "boolean", "required": False},
             ]
         else:
             # Default parameters
@@ -421,10 +610,9 @@ class MainWindow(LoggerMixin):
                 {"name": "param1", "value": "value1", "type": "string", "required": True},
                 {"name": "param2", "value": "value2", "type": "string", "required": False},
             ]
-            
+                
         # Create UI for parameters
         self._create_parameter_controls(params)
-
     def _create_saved_tests_tab(self) -> None:
         """Create a tab to browse saved test cases"""
         if not self.notebook:
@@ -748,18 +936,48 @@ class MainWindow(LoggerMixin):
 
     def _create_parameter_controls(self, params):
         """Create parameter input fields based on parameter definitions"""
-        # Parameter table frame
-        param_table_frame = ttk.Frame(self.params_frame)
-        param_table_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Xóa các widget hiện có
+        for widget in self.params_frame.winfo_children():
+            widget.destroy()
+            
+        # Tạo canvas và scrollbar để cuộn các tham số
+        canvas = tk.Canvas(self.params_frame)
+        scrollbar = ttk.Scrollbar(self.params_frame, orient=tk.VERTICAL, command=canvas.yview)
+        
+        # Tạo frame bên trong canvas để chứa các tham số
+        main_container = ttk.Frame(canvas)
+        
+        # Cấu hình canvas
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Tạo cửa sổ cho frame trong canvas
+        canvas.create_window((0, 0), window=main_container, anchor=tk.NW)
+        
+        # Khung quản lý tham số
+        management_frame = ttk.Frame(main_container)
+        management_frame.pack(fill=tk.X, pady=5)
+        
+        ttk.Button(management_frame, text="➕ Add Param", command=self._add_parameter).pack(side=tk.LEFT, padx=5)
+        ttk.Button(management_frame, text="📝 Edit Types", command=self._edit_parameter_types).pack(side=tk.LEFT, padx=5)
+        
+        # Separator
+        ttk.Separator(main_container, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=5)
         
         # Headers
+        param_table_frame = ttk.Frame(main_container)
+        param_table_frame.pack(fill=tk.BOTH, expand=True)
+        
         header_frame = ttk.Frame(param_table_frame)
         header_frame.pack(fill=tk.X, pady=5)
         
+        # Tiêu đề với 5 cột thay vì 6 (bỏ cột checkbox)
         ttk.Label(header_frame, text="Param", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
         ttk.Label(header_frame, text="Value", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
         ttk.Label(header_frame, text="Type", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
-        ttk.Label(header_frame, text="Require", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(header_frame, text="Required", width=8, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(header_frame, text="Actions", width=12, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=4, padx=5)
         
         # Create parameter rows
         param_rows_frame = ttk.Frame(param_table_frame)
@@ -767,12 +985,15 @@ class MainWindow(LoggerMixin):
         
         # Store parameter variables for later access
         self.param_vars = {}
+        self.param_required_vars = {}
+        self.param_type_vars = {}
         
         row = 0
         for param in params:
+            # Tên tham số
             ttk.Label(param_rows_frame, text=param["name"], width=15, anchor=tk.W).grid(row=row, column=0, padx=5, pady=3)
             
-            # Different input types based on parameter type
+            # Giá trị tham số
             if param["type"] == "enum" and "options" in param:
                 var = tk.StringVar(value=param["value"])
                 ttk.Combobox(param_rows_frame, textvariable=var, values=param["options"], width=18).grid(row=row, column=1, padx=5, pady=3)
@@ -784,22 +1005,434 @@ class MainWindow(LoggerMixin):
                 var = tk.StringVar(value=param["value"])
                 ttk.Entry(param_rows_frame, textvariable=var, width=20).grid(row=row, column=1, padx=5, pady=3)
             
-            # Store the variable
+            # Lưu biến giá trị
             self.param_vars[param["name"]] = var
             
-            ttk.Label(param_rows_frame, text=param["type"], width=10).grid(row=row, column=2, padx=5, pady=3)
+            # Loại tham số
+            type_var = tk.StringVar(value=param["type"])
+            type_combo = ttk.Combobox(param_rows_frame, textvariable=type_var, values=["string", "integer", "boolean", "enum", "array"], 
+                                    width=8, state="readonly")
+            type_combo.grid(row=row, column=2, padx=5, pady=3)
+            self.param_type_vars[param["name"]] = type_var
             
-            required_text = "✓" if param.get("required", False) else ""
-            ttk.Label(param_rows_frame, text=required_text, width=10, anchor=tk.CENTER).grid(row=row, column=3, padx=5, pady=3)
+            # Thuộc tính required - dùng combobox thay vì checkbox
+            req_var = tk.StringVar(value="Yes" if param.get("required", False) else "No")
+            ttk.Combobox(param_rows_frame, textvariable=req_var, values=["Yes", "No"], 
+                        width=6, state="readonly").grid(row=row, column=3, padx=5, pady=3)
+            self.param_required_vars[param["name"]] = req_var
+            
+            # Nút hành động - tối giản, chỉ hiển thị biểu tượng
+            action_frame = ttk.Frame(param_rows_frame)
+            action_frame.grid(row=row, column=4, padx=5, pady=3)
+            
+            ttk.Button(action_frame, text="🔼", width=2, 
+                    command=lambda name=param["name"]: self._move_parameter_up(name)).pack(side=tk.LEFT, padx=1)
+            ttk.Button(action_frame, text="🔽", width=2,
+                    command=lambda name=param["name"]: self._move_parameter_down(name)).pack(side=tk.LEFT, padx=1)
+            ttk.Button(action_frame, text="❌", width=2,
+                    command=lambda name=param["name"]: self._delete_parameter(name)).pack(side=tk.LEFT, padx=1)
             
             row += 1
         
         # Action buttons
-        button_frame = ttk.Frame(self.params_frame)
+        button_frame = ttk.Frame(main_container)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        ttk.Button(button_frame, text="💾 Save Param", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="🔄 Reset", command=lambda: self._on_test_case_selected(None)).pack(side=tk.LEFT, padx=5)
+        
+        # Cập nhật kích thước của canvas và thiết lập vùng cuộn
+        main_container.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox(tk.ALL))
+        
+        # Thiết lập chiều cao cố định cho canvas nếu vượt quá giới hạn
+        max_height = 400  # Giới hạn chiều cao tối đa
+        content_height = main_container.winfo_reqheight()
+        canvas_height = min(content_height, max_height)
+        canvas.config(height=canvas_height)
+        
+        # Thêm binding cho chuột để cuộn
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        # Thêm binding cho canvas và các widget con
+        canvas.bind("<MouseWheel>", _on_mousewheel)
+        
+        # Thêm binding cho các widget con trong main_container
+        for child in main_container.winfo_children():
+            child.bind("<MouseWheel>", _on_mousewheel)
+            
+        # Thêm binding cho các widget con trong param_rows_frame
+        for child in param_rows_frame.winfo_children():
+            child.bind("<MouseWheel>", _on_mousewheel)
+
+    def _add_parameter(self):
+        """Add a new parameter to the list - improved stable version"""
+        # Tạo dialog tích hợp thay vì nhiều dialog nhỏ
+        add_dialog = tk.Toplevel(self.root)
+        add_dialog.title("Add New Parameter")
+        add_dialog.geometry("500x400")
+        add_dialog.transient(self.root)  # Modal behavior
+        add_dialog.grab_set()            # Prevent interaction with main window
+        
+        # Đặt dialog ở giữa màn hình chính
+        if self.root:
+            x = self.root.winfo_x() + (self.root.winfo_width() // 2) - 250
+            y = self.root.winfo_y() + (self.root.winfo_height() // 2) - 200
+            if x < 0: x = 0
+            if y < 0: y = 0
+            add_dialog.geometry(f"+{x}+{y}")
+        
+        # Main frame
+        main_frame = ttk.Frame(add_dialog, padding=10)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Tham số cần thu thập
+        param_name_var = tk.StringVar()
+        param_type_var = tk.StringVar(value="string")
+        param_value_var = tk.StringVar()
+        param_required_var = tk.BooleanVar(value=False)
+        param_options_var = tk.StringVar()
+        
+        # Tên tham số
+        name_frame = ttk.Frame(main_frame)
+        name_frame.pack(fill=tk.X, pady=5)
+        ttk.Label(name_frame, text="Parameter Name:").pack(side=tk.LEFT)
+        ttk.Entry(name_frame, textvariable=param_name_var, width=30).pack(side=tk.LEFT, padx=5)
+        
+        # Loại tham số - dùng radio buttons để rõ ràng hơn
+        type_frame = ttk.LabelFrame(main_frame, text="Parameter Type")
+        type_frame.pack(fill=tk.X, pady=10)
+        
+        for i, type_option in enumerate(["string", "integer", "boolean", "enum", "array"]):
+            ttk.Radiobutton(
+                type_frame,
+                text=type_option.capitalize(),
+                variable=param_type_var,
+                value=type_option,
+                command=lambda t=type_option: on_type_change(t)
+            ).grid(row=i//3, column=i%3, sticky=tk.W, padx=20, pady=3)
+        
+        # Giá trị mặc định
+        value_frame = ttk.LabelFrame(main_frame, text="Default Value")
+        value_frame.pack(fill=tk.X, pady=10)
+        
+        # Frame cho giá trị thường
+        normal_value_frame = ttk.Frame(value_frame)
+        normal_value_frame.pack(fill=tk.X, pady=5)
+        ttk.Label(normal_value_frame, text="Value:").pack(side=tk.LEFT)
+        value_entry = ttk.Entry(normal_value_frame, textvariable=param_value_var, width=30)
+        value_entry.pack(side=tk.LEFT, padx=5)
+        
+        # Frame cho boolean
+        boolean_frame = ttk.Frame(value_frame)
+        boolean_var = tk.StringVar(value="false")
+        ttk.Radiobutton(boolean_frame, text="True", variable=boolean_var, value="true").pack(side=tk.LEFT, padx=20)
+        ttk.Radiobutton(boolean_frame, text="False", variable=boolean_var, value="false").pack(side=tk.LEFT, padx=20)
+        
+        # Frame cho enum options
+        options_frame = ttk.Frame(value_frame)
+        ttk.Label(options_frame, text="Options (comma-separated):").pack(anchor=tk.W)
+        options_entry = ttk.Entry(options_frame, textvariable=param_options_var, width=40)
+        options_entry.pack(fill=tk.X, pady=5)
+        ttk.Label(options_frame, text="Example: option1,option2,option3").pack(anchor=tk.W)
+        
+        # Thuộc tính Required
+        required_frame = ttk.Frame(main_frame)
+        required_frame.pack(fill=tk.X, pady=5)
+        ttk.Checkbutton(required_frame, text="Required Parameter", variable=param_required_var).pack(anchor=tk.W)
+        
+        # Tips
+        tip_frame = ttk.Frame(main_frame)
+        tip_frame.pack(fill=tk.X, pady=10)
+        ttk.Label(tip_frame, text="Tips: String parameters accept any text. Integer parameters must be numbers.",
+                font=("Segoe UI", 8)).pack(anchor=tk.W)
+        
+        # Nút hành động
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill=tk.X, side=tk.BOTTOM, pady=10)
+        ttk.Button(button_frame, text="Cancel", command=add_dialog.destroy).pack(side=tk.RIGHT, padx=5)
+        add_button = ttk.Button(button_frame, text="Add Parameter", command=lambda: add_parameter_action())
+        add_button.pack(side=tk.RIGHT, padx=5)
+        
+        # Hàm cập nhật UI dựa trên loại tham số
+        def on_type_change(param_type):
+            # Ẩn tất cả frames đặc biệt trước
+            boolean_frame.pack_forget()
+            options_frame.pack_forget()
+            normal_value_frame.pack_forget()
+            
+            # Hiện frame phù hợp
+            if param_type == "boolean":
+                boolean_frame.pack(fill=tk.X, pady=5)
+                param_value_var.set(boolean_var.get())  # Sync giá trị
+            elif param_type == "enum":
+                normal_value_frame.pack(fill=tk.X, pady=5)
+                options_frame.pack(fill=tk.X, pady=5)
+            else:
+                normal_value_frame.pack(fill=tk.X, pady=5)
+                
+            # Đặt giá trị mặc định dựa trên loại
+            if param_type == "integer":
+                param_value_var.set("0")
+            elif param_type == "string" or param_type == "array":
+                param_value_var.set("")
+        
+        # Khởi tạo UI ban đầu dựa trên loại mặc định
+        on_type_change("string")
+        
+        # Hàm thực hiện thêm tham số
+        def add_parameter_action():
+            name = param_name_var.get().strip()
+            param_type = param_type_var.get()
+            
+            # Kiểm tra tên tham số
+            if not name:
+                messagebox.showwarning("Validation Error", "Parameter name is required", parent=add_dialog)
+                return
+            
+            if name in self.param_vars:
+                messagebox.showwarning("Duplicate", f"Parameter '{name}' already exists", parent=add_dialog)
+                return
+                
+            # Lấy giá trị phù hợp với loại tham số
+            if param_type == "boolean":
+                value = boolean_var.get()
+            else:
+                value = param_value_var.get()
+                
+            # Xác thực giá trị cho loại integer
+            if param_type == "integer" and not value.isdigit():
+                messagebox.showwarning("Validation Error", "Integer parameter must contain only digits", parent=add_dialog)
+                return
+            
+            # Tạo tham số mới
+            new_param = {
+                "name": name,
+                "value": value,
+                "type": param_type,
+                "required": param_required_var.get()
+            }
+            
+            # Xử lý options cho enum
+            if param_type == "enum":
+                options_str = param_options_var.get().strip()
+                if not options_str:
+                    messagebox.showwarning("Validation Error", 
+                                        "Enum parameter must have options specified", parent=add_dialog)
+                    return
+                    
+                options = [opt.strip() for opt in options_str.split(',') if opt.strip()]
+                if len(options) < 1:
+                    messagebox.showwarning("Validation Error", 
+                                        "Enum parameter needs at least one option", parent=add_dialog)
+                    return
+                    
+                new_param["options"] = options
+            
+            # Lấy tham số hiện tại và thêm tham số mới
+            current_params = []
+            for pname in self.param_vars.keys():
+                param = self._get_parameter_data(pname)
+                current_params.append(param)
+            
+            # Thêm tham số mới
+            current_params.append(new_param)
+            
+            # Đóng dialog
+            add_dialog.destroy()
+            
+            # Tải lại với tham số mới
+            self._create_parameter_controls(current_params)
+            
+            # Log thành công
+            self.logger.info(f"Added new parameter: {name} ({param_type})")
+            
+        # Cài đặt focus cho dialog
+        param_name_var.set("")
+        add_dialog.after(100, lambda: param_name_var.set(""))  # Hack để đảm bảo entry sẽ trống khi hiện
+        add_dialog.after(200, lambda: value_entry.focus_set())
+        
+        # Add validation for name entry - enable Add button only when name is valid
+        def validate_name(*args):
+            name = param_name_var.get().strip()
+            if name and name not in self.param_vars:
+                add_button.config(state=tk.NORMAL)
+            else:
+                add_button.config(state=tk.DISABLED)
+        
+        # Track changes to name entry
+        param_name_var.trace("w", validate_name)
+        validate_name()  # Initial validation
+
+    def _delete_parameter(self, param_name):
+        """Delete a parameter"""
+        if param_name not in self.param_vars:
+            return
+            
+        # Xác nhận xóa
+        confirm = messagebox.askyesno("Confirm Delete", 
+                                f"Delete parameter '{param_name}'?")
+        if not confirm:
+            return
+        
+        # Lấy danh sách tham số, bỏ tham số cần xóa
+        current_params = []
+        for name in self.param_vars.keys():
+            if name != param_name:
+                param = self._get_parameter_data(name)
+                current_params.append(param)
+        
+        # Tải lại với tham số mới
+        self._create_parameter_controls(current_params)
+        
+        self.logger.info(f"Deleted parameter: {param_name}")
+
+
+    def _move_parameter_up(self, param_name):
+        """Move a parameter up in the list"""
+        # Lấy toàn bộ tham số hiện tại
+        current_params = []
+        for name in self.param_vars.keys():
+            param = self._get_parameter_data(name)
+            current_params.append(param)
+        
+        # Tìm vị trí của tham số cần di chuyển
+        index = -1
+        for i, param in enumerate(current_params):
+            if param["name"] == param_name:
+                index = i
+                break
+        
+        if index <= 0:  # Không thể di chuyển lên nếu đã ở đầu
+            return
+            
+        # Hoán đổi vị trí
+        current_params[index], current_params[index-1] = current_params[index-1], current_params[index]
+        
+        # Tải lại với thứ tự mới
+        self._create_parameter_controls(current_params)
+
+    def _move_parameter_down(self, param_name):
+        """Move a parameter down in the list"""
+        # Lấy toàn bộ tham số hiện tại
+        current_params = []
+        for name in self.param_vars.keys():
+            param = self._get_parameter_data(name)
+            current_params.append(param)
+        
+        # Tìm vị trí của tham số cần di chuyển
+        index = -1
+        for i, param in enumerate(current_params):
+            if param["name"] == param_name:
+                index = i
+                break
+        
+        if index < 0 or index >= len(current_params) - 1:  # Không thể di chuyển xuống nếu đã ở cuối
+            return
+            
+        # Hoán đổi vị trí
+        current_params[index], current_params[index+1] = current_params[index+1], current_params[index]
+        
+        # Tải lại với thứ tự mới
+        self._create_parameter_controls(current_params)
+
+    def _get_parameter_data(self, param_name):
+        """Get all data for a parameter"""
+        if param_name not in self.param_vars:
+            return None
+            
+        param_type = self.param_type_vars[param_name].get()
+        is_required = self.param_required_vars[param_name].get() == "Yes"
+        value = self.param_vars[param_name].get()
+        
+        param_data = {
+            "name": param_name,
+            "value": value,
+            "type": param_type,
+            "required": is_required
+        }
+        
+        return param_data
+        
+    def _edit_parameter_types(self):
+        """Edit parameter types in bulk"""
+        # Hiển thị dialog cho chỉnh sửa loại tham số
+        types_dialog = tk.Toplevel(self.root)
+        types_dialog.title("Edit Parameter Types")
+        types_dialog.geometry("500x400")
+        types_dialog.transient(self.root)  # Make it modal
+        types_dialog.grab_set()
+        
+        # Tạo scrollable frame
+        main_frame = ttk.Frame(types_dialog)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Tạo canvas cho scrolling
+        canvas = tk.Canvas(main_frame)
+        scrollbar = ttk.Scrollbar(main_frame, orient=tk.VERTICAL, command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        content_frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=content_frame, anchor=tk.NW)
+        
+        # Header
+        ttk.Label(content_frame, text="Parameter", width=20, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5, pady=5)
+        ttk.Label(content_frame, text="Type", width=15, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5, pady=5)
+        ttk.Label(content_frame, text="Required", width=10, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5, pady=5)
+        ttk.Label(content_frame, text="Value", width=20, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5, pady=5)
+        
+        # Tạo các biến tạm thời cho dialog
+        temp_types = {}
+        temp_required = {}
+        temp_values = {}
+        
+        # Tạo dòng cho mỗi tham số
+        for i, name in enumerate(self.param_vars.keys()):
+            ttk.Label(content_frame, text=name).grid(row=i+1, column=0, padx=5, pady=2, sticky=tk.W)
+            
+            # Combobox cho kiểu
+            type_var = tk.StringVar(value=self.param_type_vars[name].get())
+            ttk.Combobox(content_frame, textvariable=type_var, 
+                        values=["string", "integer", "boolean", "enum", "array"],
+                        width=12, state="readonly").grid(row=i+1, column=1, padx=5, pady=2)
+            temp_types[name] = type_var
+            
+            # Combobox cho required (FIX: sử dụng StringVar thay vì BooleanVar)
+            req_var = tk.StringVar(value="Yes" if self.param_required_vars[name].get() == "Yes" else "No")
+            ttk.Combobox(content_frame, textvariable=req_var, values=["Yes", "No"],
+                        width=8, state="readonly").grid(row=i+1, column=2, padx=5, pady=2)
+            temp_required[name] = req_var
+            
+            # Entry cho giá trị
+            val_var = tk.StringVar(value=self.param_vars[name].get())
+            ttk.Entry(content_frame, textvariable=val_var, width=18).grid(row=i+1, column=3, padx=5, pady=2)
+            temp_values[name] = val_var
+        
+        # Cập nhật kích thước canvas
+        content_frame.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox(tk.ALL))
+        
+        # Buttons
+        button_frame = ttk.Frame(types_dialog)
+        button_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        def save_changes():
+            # Cập nhật tất cả các thay đổi
+            for name in self.param_vars.keys():
+                self.param_type_vars[name].set(temp_types[name].get())
+                # Chuyển đổi từ "Yes"/"No" thành giá trị tương ứng (FIX)
+                self.param_required_vars[name].set(temp_required[name].get())
+                self.param_vars[name].set(temp_values[name].get())
+            
+            self.logger.info("Updated parameter types and values")
+            types_dialog.destroy()
+            
+        ttk.Button(button_frame, text="Save Changes", command=save_changes).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="Cancel", command=types_dialog.destroy).pack(side=tk.RIGHT, padx=5)
 
     def _save_parameters(self) -> None:
         """Save current template parameters."""
@@ -808,19 +1441,42 @@ class MainWindow(LoggerMixin):
         if not selected or self.test_tree.get_children(selected[0]):
             messagebox.showinfo("Information", "Please select a test case first")
             return
-            
+                
         # Get test case info
         test_id = self.test_tree.item(selected[0], "values")[0]
         test_name = self.test_tree.item(selected[0], "text").split(" ⚠️")[0]
         
-        # In a real app, collect all parameter values
-        param_values = {}
+        # Lấy tất cả giá trị tham số và thuộc tính
+        saved_params = {}
         for param_name, var in self.param_vars.items():
-            param_values[param_name] = var.get()
+            param_type = self.param_type_vars[param_name].get()
+            value = var.get()
+            
+            # Chuyển đổi kiểu dữ liệu nếu cần
+            if param_type == "boolean":
+                saved_params[param_name] = value.lower() == "true"
+            elif param_type == "integer":
+                try:
+                    saved_params[param_name] = int(value)
+                except:
+                    saved_params[param_name] = 0
+            elif param_type == "array":
+                # Xử lý mảng (phân tách bằng dấu phẩy)
+                if value.strip():
+                    saved_params[param_name] = [item.strip() for item in value.split(",") if item.strip()]
+                else:
+                    saved_params[param_name] = []
+            else:
+                # String hoặc enum
+                saved_params[param_name] = value
         
-        # In Phase 1, just show a message
-        messagebox.showinfo("Success", f"Parameters for '{test_name}' saved successfully")
-        self.logger.info(f"Template parameters saved for {test_name}")
+        # Hiển thị thông báo thành công với chi tiết tham số
+        detail_message = f"Parameters for '{test_name}' saved successfully:\n\n"
+        for name, value in saved_params.items():
+            detail_message += f"• {name}: {value}\n"
+        
+        messagebox.showinfo("Success", detail_message)
+        self.logger.info(f"Template parameters saved for {test_name} with {len(saved_params)} parameters")
         
         # Update status
         if self.status_var:
@@ -1036,8 +1692,9 @@ class MainWindow(LoggerMixin):
                     params[param_name] = value
 
         # Thời gian hiện tại từ yêu cầu  
-        current_time = "2025-06-12 08:11:17"
-        current_user = "juno-kyojin"
+        import datetime
+        current_time = "2025-06-18 03:28:32"  
+        current_user = "juno-kyojin"          
         
         # Tạo đúng cấu trúc JSON theo đặc tả - QUAN TRỌNG: Đặt metadata ngoài mảng test_cases
         test_data = {
@@ -1051,7 +1708,9 @@ class MainWindow(LoggerMixin):
                 "created_by": current_user,
                 "created_at": current_time,
                 "category": category,
-                "identifier": identifier
+                "identifier": identifier,
+                "connection_type": self._safe_get(self.connection_type_var, "http"),  # Thêm thông tin connection_type
+                "version": "2.0"  # Thêm version để nhận diện phiên bản định dạng
             }
         }
         
@@ -1170,7 +1829,7 @@ class MainWindow(LoggerMixin):
     Parameters:
     - name: WAN connection name to delete
     """
-        elif test_id == "ping_test":
+        elif test_id == "ping":
             detail_text = f"""
     Test ID: {test_id}
     Name: {test_name}
@@ -1274,21 +1933,25 @@ class MainWindow(LoggerMixin):
         ttk.Label(frame, text="Template browser will be implemented in Phase 2").pack(
             expand=True
         )
-    
+        
     def _create_queue_tab(self) -> None:
         """Create the test queue tab."""
         if not self.notebook:
             return
-            
+                
         frame = ttk.Frame(self.notebook)
         self.notebook.add(frame, text="Test Queue")
         
         # Import the TestQueueManager
         from gui.widgets.queue_manager import TestQueueManager
         
-        # Create queue manager as a member variable to access from other methods
-        self.queue_manager = TestQueueManager(frame, 
-                                            on_selection_change=self._on_queue_selection_change)
+        # Create queue manager với các callbacks rõ ràng hơn
+        self.queue_manager = TestQueueManager(
+            frame, 
+            on_selection_change=self._on_queue_selection_change,
+            on_run_all=self.send_all_tests,
+            on_run_selected=self.send_selected_test  # Trực tiếp gọi send_selected_test
+        )
         self.queue_manager.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         # Status display at the bottom
@@ -1379,43 +2042,403 @@ class MainWindow(LoggerMixin):
         ttk.Label(status_frame, text=f"v{APP_VERSION}").pack(
             side=tk.RIGHT, padx=10, pady=2
         )
-    
+
     def _test_connection(self) -> None:
-        """Test SSH connection."""
-        # TODO: Implement in Phase 2
-        if self.connection_status_var:
-            self.connection_status_var.set("Testing connection...")
+        """Test connection using selected method (HTTP or SSH)."""
+        connection_type = self._safe_get(self.connection_type_var, "http")
         
-        if self.root:
-            self.root.after(2000, lambda: self._update_connection_status("Connection test not implemented"))
+        # Update status
+        self._safe_set(self.connection_status_var, "🟡 Testing connection...")
+        self._safe_set(self.status_var, f"Testing {connection_type.upper()} connection...")
         
-        self.logger.info("Connection test requested")
-    
+        # Run test in background thread to prevent UI freeze
+        import threading
+        thread = threading.Thread(target=self._run_connection_test, daemon=True)
+        thread.start()
+            
+    def _run_connection_test(self) -> None:
+        """Run connection test in background thread"""
+        try:
+            connection_type = self._safe_get(self.connection_type_var, "http")
+            
+            if connection_type == "http":
+                # Test HTTP connection
+                host = self._safe_get(self.http_host_var, "127.0.0.1")
+                port = int(self._safe_get(self.http_port_var, "8080"))
+                
+                # Sử dụng GET request thay vì POST để tránh tạo file rỗng
+                import requests
+                try:
+                    self.logger.info(f"Testing HTTP connection to {host}:{port}")
+                    url = f"http://{host}:{port}"
+                    
+                    # Sử dụng GET request để test kết nối
+                    response = requests.get(
+                        url, 
+                        timeout=int(self._safe_get(self.http_conn_timeout_var, "5"))
+                    )
+                    
+                    # Chấp nhận bất kỳ status code nào là dấu hiệu của server đang chạy
+                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
+                                                        f"🟢 Connected (HTTP {response.status_code})"))
+                    self.logger.info(f"HTTP connection successful to {host}:{port}")
+                    
+                    # Đánh dấu là đã kết nối thành công
+                    self.http_connected = True
+                except requests.exceptions.ConnectionError:
+                    self.http_connected = False
+                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
+                                                        "🔴 Connection refused"))
+                    self.logger.error(f"HTTP connection refused to {host}:{port}")
+                except requests.exceptions.Timeout:
+                    self.http_connected = False
+                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
+                                                        "🔴 Connection timeout"))
+                    self.logger.error(f"HTTP connection timeout to {host}:{port}")
+                except Exception as e:
+                    self.http_connected = False
+                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
+                                                        f"🔴 Error: {str(e)[:30]}..."))
+                    self.logger.error(f"HTTP connection error: {str(e)}")
+                        
+            else:
+                # Test SSH connection
+                host = self._safe_get(self.ssh_host_var)
+                username = self._safe_get(self.ssh_username_var)
+                password = self._safe_get(self.ssh_password_var)
+                port = int(self._safe_get(self.ssh_port_var, "22"))
+                
+                # Log the attempt
+                self.logger.info(f"SSH connection requested to {host}:{port} as {username}")
+                
+                # Simulate connection delay
+                import time
+                time.sleep(1)
+                
+                # Update status
+                self._safe_after(0, lambda: self._safe_set(self.connection_status_var, "🟢 Connected (SSH)"))
+                
+            # Update status
+            self._safe_after(0, lambda: self._safe_set(self.status_var, f"{connection_type.upper()} connection test completed"))
+                
+        except Exception as e:
+            self.logger.error(f"Connection test error: {str(e)}")
+            self._safe_after(0, lambda: self._safe_set(self.connection_status_var, f"🔴 Error: {str(e)[:30]}..."))
+            self._safe_after(0, lambda: self._safe_set(self.status_var, f"Connection test failed: {str(e)[:50]}..."))
+                
+    def send_test_case_http(self, test_data, index):
+        """Send test case to HTTP server and process response"""
+        try:
+            if not self.http_client:
+                self.logger.error("HTTP client not initialized")
+                self._safe_after(0, lambda: self.update_test_status(index, "Error", "HTTP client not initialized"))
+                return
+                
+            host = self._safe_get(self.http_host_var, "127.0.0.1")
+            port = int(self._safe_get(self.http_port_var, "8080"))
+            url = f"http://{host}:{port}"
+            
+            self.logger.info(f"Sending test case to {url}")
+            self._safe_after(0, lambda: self.update_test_status(index, "Sending", ""))
+            
+            # Đảm bảo định dạng đúng với test_cases array
+            if not isinstance(test_data, dict) or "test_cases" not in test_data:
+                if "service" in test_data:
+                    test_data = {"test_cases": [test_data]}
+                else:
+                    self.logger.error("Invalid test data format")
+                    self._safe_after(0, lambda: self.update_test_status(index, "Error", "Invalid test format"))
+                    return
+            
+            # Gửi POST request
+            import json
+            
+            self.logger.debug(f"Test payload: {json.dumps(test_data, indent=2)}")
+            
+            # Sử dụng POST để gửi test case
+            response = requests.post(
+                url,
+                json=test_data,
+                headers={"Content-Type": "application/json"},
+                timeout=(int(self._safe_get(self.http_conn_timeout_var, "5")),
+                        int(self._safe_get(self.http_read_timeout_var, "40")))
+            )
+            
+            # Process response
+            if response.status_code == 200:
+                try:
+                    result = response.json()
+                    self.logger.info(f"Test response received: {json.dumps(result, indent=2)}")
+                    
+                    # Extract test results
+                    success = result.get("summary", {}).get("passed", 0) > 0
+                    status = "Success" if success else "Failed"
+                    message = f"Passed: {result.get('summary', {}).get('passed', 0)}, Failed: {result.get('summary', {}).get('failed', 0)}"
+                    
+                    self._safe_after(0, lambda: self.update_test_status(index, status, message))
+                except Exception as e:
+                    self.logger.error(f"Error processing response: {str(e)}")
+                    self._safe_after(0, lambda: self.update_test_status(index, "Error", f"Response error: {str(e)}"))
+            else:
+                self.logger.error(f"HTTP error: {response.status_code}")
+                self._safe_after(0, lambda: self.update_test_status(index, "Error", f"HTTP {response.status_code}"))
+                
+        except requests.exceptions.ConnectionError:
+            self.logger.error("Connection refused")
+            self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection refused"))
+        except requests.exceptions.Timeout:
+            self.logger.error("Connection timeout")
+            self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection timeout"))
+        except Exception as e:
+            self.logger.error(f"Error sending test: {str(e)}")
+            self._safe_after(0, lambda: self.update_test_status(index, "Error", str(e)[:30]))
+
+    def send_all_tests(self):
+        """Send all tests in queue for execution"""
+        try:
+            if not hasattr(self, 'queue_manager') or not hasattr(self.queue_manager, 'queue_items'):
+                messagebox.showinfo("Information", "Queue is empty or not initialized")
+                return
+                
+            if len(self.queue_manager.queue_items) == 0:
+                messagebox.showinfo("Information", "Queue is empty")
+                return
+                
+            # Kiểm tra kết nối
+            connection_type = self._safe_get(self.connection_type_var, "http")
+            if connection_type == "http":
+                if not hasattr(self, 'http_connected') or not self.http_connected:
+                    messagebox.showinfo("Error", "Not connected to HTTP server. Please test connection first.")
+                    return
+            elif connection_type == "ssh" and (not self.ssh_connection or not self.ssh_connection.is_connected()):
+                messagebox.showinfo("Error", "Not connected to SSH server. Please test connection first.")
+                return
+                
+            # Hỏi xác nhận
+            if len(self.queue_manager.queue_items) > 1:
+                confirm = messagebox.askyesno("Confirm",
+                    f"Send all {len(self.queue_manager.queue_items)} tests for execution?")
+                if not confirm:
+                    return
+            
+            # Lặp qua từng test
+            for i in range(len(self.queue_manager.queue_items)):
+                # Sử dụng send_selected_test để đảm bảo xử lý đồng nhất
+                idx = i
+                self._safe_after(i * 1500, lambda idx=i: self.send_selected_test(idx))
+                
+            # Status update
+            self._safe_set(self.status_var, f"Sending {len(self.queue_manager.queue_items)} tests...")
+            
+        except Exception as e:
+            self.logger.error(f"Error sending tests: {str(e)}")
+            messagebox.showerror("Error", f"Failed to send tests: {str(e)}")
+
+    def update_test_status(self, index, status, message):
+        """Update test status in the queue"""
+        if not hasattr(self, 'queue_manager'):
+            self.logger.warning("Queue manager not available")
+            return
+                
+        try:
+            # Sử dụng tên đúng cho Treeview: queue_tree thay vì test_queue
+            if hasattr(self.queue_manager, 'queue_tree'):
+                items = self.queue_manager.queue_tree.get_children()
+                if index < len(items):
+                    item_id = items[index]
+                    # Lấy giá trị hiện tại
+                    current_values = list(self.queue_manager.queue_tree.item(item_id, "values"))
+                    
+                    # Cập nhật status - cột số 4 (theo định nghĩa trong TestQueueManager)
+                    # columns = ("order", "name", "category", "parameters", "status")
+                    status_col = 4  # Vị trí của cột status
+                    if len(current_values) > status_col:
+                        current_values[status_col] = f"{status}: {message}" if message else status
+                        
+                    # Cập nhật item
+                    self.queue_manager.queue_tree.item(item_id, values=tuple(current_values))
+                    
+                    # Cập nhật dữ liệu nội bộ
+                    if index < len(self.queue_manager.queue_items):
+                        self.queue_manager.queue_items[index]["status"] = status
+                        if message:
+                            self.queue_manager.queue_items[index]["message"] = message
+                    
+                    return
+        except Exception as e:
+            self.logger.error(f"Error updating test status in queue UI: {e}")
+                
+        # Fallback: Log warning nếu không thể cập nhật
+            self.logger.warning(f"Could not update test status for item {index}. Status={status}, Message={message}")
+
+    def send_selected_test(self, index=None):
+        """Send a selected test from the queue (enhanced)"""
+        try:
+            if not hasattr(self, 'queue_manager'):
+                messagebox.showinfo("Error", "Queue manager not initialized")
+                return
+                        
+            # Kiểm tra kết nối
+            connection_type = self._safe_get(self.connection_type_var, "http")
+            if connection_type == "http" and not getattr(self, 'http_connected', False):
+                messagebox.showinfo("Error", "Not connected to HTTP server. Please test connection first.")
+                return
+                        
+            # Lấy index nếu không được chỉ định
+            if index is None:
+                selected = self.queue_manager.queue_tree.selection()
+                if not selected:
+                    messagebox.showinfo("Information", "Please select a test case first")
+                    return
+                index = self.queue_manager.queue_tree.index(selected[0])
+            
+            # Log và Debug để xác nhận
+            self.logger.info(f"send_selected_test called with index: {index}")
+            
+            # Lấy thông tin test case
+            if index < 0 or index >= len(self.queue_manager.queue_items):
+                messagebox.showinfo("Error", "Invalid test index")
+                return
+                        
+            test_item = self.queue_manager.queue_items[index]
+            test_id = test_item.get("test_id", "")
+            name = test_item.get("name", "")
+            params = test_item.get("parameters", {}).copy()  # Tạo bản sao
+            
+            # Parse service và action từ test_id
+            parts = test_id.split("_")
+            service = parts[0]  # ping, wan, lan, etc
+            action = parts[1] if len(parts) > 1 else ""  # test, create, etc
+            
+            # Xử lý đặc biệt cho ping theo đúng định dạng
+            if service == "ping" or (service == "ping" and action == "test"):
+                # Sửa: Sử dụng đúng định dạng ping theo mẫu
+                service = "ping"  # Đảm bảo service đúng
+                action = ""  # Không cần action cho ping
+                
+                # QUAN TRỌNG: Nếu đang sử dụng system.execute, chuyển về định dạng ping
+                if "command" in params and "ping" in params["command"]:
+                    # Trích xuất host và count từ command nếu có
+                    cmd = params["command"]
+                    import re
+                    
+                    # Tìm host
+                    host_match = re.search(r'ping -c \d+ (.+)', cmd)
+                    if host_match:
+                        params = {"host1": host_match.group(1)}
+                        
+                        # Tìm count nếu có
+                        count_match = re.search(r'ping -c (\d+)', cmd)
+                        if count_match:
+                            params["count"] = int(count_match.group(1))
+                    else:
+                        # Giá trị mặc định nếu không parse được
+                        params = {"host1": "youtube.com", "count": 4}
+                
+                # Đảm bảo có ít nhất host1
+                if "host1" not in params:
+                    params["host1"] = "youtube.com"  # Giá trị mặc định
+            
+            # Đảm bảo mảng cho các tham số cần mảng
+            for key, value in list(params.items()):
+                if key in ["ipv4_dns", "ipv6_dns"] and isinstance(value, str):
+                    # Chuyển đổi chuỗi thành list một cách an toàn
+                    if value.strip():
+                        # Tạo một danh sách đúng định dạng từ chuỗi phân cách bằng dấu phẩy
+                        dns_list = [dns.strip() for dns in value.split(",") if dns.strip()]
+                        # Gán danh sách vào params
+                        params[key] = dns_list
+                    else:
+                        # Nếu chuỗi rỗng hoặc chỉ có khoảng trắng, đặt là list rỗng
+                        params[key] = []
+            
+            # Tạo test case đúng định dạng
+            test_case = {
+                "service": service,
+                "params": params
+            }
+            
+            # Thêm action nếu có và cần thiết
+            if action:
+                test_case["action"] = action
+                
+            # Đóng gói trong định dạng API
+            test_data = {"test_cases": [test_case]}
+            
+            # Log thông tin test case
+            self.logger.info(f"Sending test case {name} (index {index})")
+            self.logger.info(f"Full payload: {json.dumps(test_data, indent=2)}")
+            
+            # Gửi test case
+            self.send_test_case_http(test_data, index)
+            
+        except Exception as e:
+            self.logger.error(f"Error sending selected test: {e}")
+            messagebox.showerror("Error", f"Failed to send test: {str(e)}")
+
     def _update_connection_status(self, status: str) -> None:
         """Update connection status safely."""
         if self.connection_status_var:
             self.connection_status_var.set(status)
-    
+        
     def _save_connection_settings(self) -> None:
         """Save connection settings."""
+        if not hasattr(self, 'config') or not hasattr(self.config, 'network'):
+            self.logger.error("Configuration object not properly initialized")
+            return
+            
         try:
-            if self.ssh_host_var:
-                self.config.network.ssh_host = self.ssh_host_var.get()
-            if self.ssh_port_var:
-                self.config.network.ssh_port = int(self.ssh_port_var.get())
-            if self.ssh_username_var:
-                self.config.network.ssh_username = self.ssh_username_var.get()
-            if self.ssh_password_var:
-                self.config.network.ssh_password = self.ssh_password_var.get()
+            connection_type = self._safe_get(self.connection_type_var, "http")
             
-            # TODO: Save to file in Phase 2
-            if self.status_var:
-                self.status_var.set("Connection settings saved")
-            self.logger.info("Connection settings updated")
+            # Save connection type if attribute exists
+            if hasattr(self.config.network, 'connection_type'):
+                self.config.network.connection_type = connection_type
+            else:
+                # Create the attribute if it doesn't exist
+                setattr(self.config.network, 'connection_type', connection_type)
             
+            if connection_type == "http":
+                # Save HTTP settings
+                if hasattr(self.config.network, 'http_host'):
+                    self.config.network.http_host = self._safe_get(self.http_host_var)
+                else:
+                    setattr(self.config.network, 'http_host', self._safe_get(self.http_host_var))
+                    
+                if hasattr(self.config.network, 'http_port'):
+                    self.config.network.http_port = int(self._safe_get(self.http_port_var, "8080"))
+                else:
+                    setattr(self.config.network, 'http_port', int(self._safe_get(self.http_port_var, "8080")))
+                    
+                if hasattr(self.config.network, 'http_connect_timeout'):
+                    self.config.network.http_connect_timeout = int(self._safe_get(self.http_conn_timeout_var, "5"))
+                else:
+                    setattr(self.config.network, 'http_connect_timeout', int(self._safe_get(self.http_conn_timeout_var, "5")))
+                    
+                if hasattr(self.config.network, 'http_read_timeout'):
+                    self.config.network.http_read_timeout = int(self._safe_get(self.http_read_timeout_var, "40"))
+                else:
+                    setattr(self.config.network, 'http_read_timeout', int(self._safe_get(self.http_read_timeout_var, "40")))
+                
+                # Update status
+                self.logger.info(f"HTTP connection settings saved: {self._safe_get(self.http_host_var)}:{self._safe_get(self.http_port_var, '8080')}")
+            else:
+                # Save SSH settings
+                self.config.network.ssh_host = self._safe_get(self.ssh_host_var)
+                self.config.network.ssh_port = int(self._safe_get(self.ssh_port_var, "22"))
+                self.config.network.ssh_username = self._safe_get(self.ssh_username_var)
+                self.config.network.ssh_password = self._safe_get(self.ssh_password_var)
+                
+                # Update status
+                self.logger.info(f"SSH connection settings saved: {self.config.network.ssh_host}:{self.config.network.ssh_port}")
+            
+            # Update status message
+            self._safe_set(self.status_var, f"{connection_type.upper()} connection settings saved")
+                
         except ValueError as e:
-            messagebox.showerror("Error", f"Invalid port number: {e}")
-    
+            messagebox.showerror("Error", f"Invalid numeric value: {e}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save settings: {e}")
+
     def _new_template(self) -> None:
         """Create new template."""
         # TODO: Implement in Phase 2

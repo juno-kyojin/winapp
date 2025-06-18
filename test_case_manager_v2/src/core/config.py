@@ -33,6 +33,10 @@ from .exceptions import ConfigurationError, FileOperationError
 class NetworkConfig:
     """Network connection configuration."""
     
+    # Connection type - HTTP or SSH
+    connection_type: str = "http"  # Default to HTTP
+    
+    # SSH configuration
     ssh_host: str = "192.168.88.1"
     ssh_port: int = DEFAULT_SSH_PORT
     ssh_username: str = "root"
@@ -40,7 +44,13 @@ class NetworkConfig:
     connection_timeout: int = CONNECTION_TIMEOUT
     remote_config_path: str = DEFAULT_REMOTE_CONFIG_PATH
     remote_result_path: str = DEFAULT_REMOTE_RESULT_PATH
-    middleware_url: str = "http://192.168.88.10:5000"
+    
+    # HTTP configuration
+    http_host: str = "192.168.88.1"  # Default to same IP as SSH
+    http_port: int = 8080            # Default HTTP port
+    http_connect_timeout: int = 5    # Default connect timeout in seconds
+    http_read_timeout: int = 40      # Default read timeout in seconds
+    middleware_url: str = "http://192.168.88.10:5000"  # Existing setting
 
 
 @dataclass  

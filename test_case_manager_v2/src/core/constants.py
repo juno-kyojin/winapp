@@ -38,6 +38,25 @@ TEMP_DIR = DATA_DIR / "temp"
 DATABASE_NAME = "test_manager.db"
 DATABASE_PATH = DATABASE_DIR / DATABASE_NAME
 
+# HTTP Client-Server Constants
+DEFAULT_HTTP_API_PORT = 8080      # Port mặc định cho API server (khác với port 80 web thông thường)
+HTTP_CONNECT_TIMEOUT = 5          # Thời gian timeout khi kết nối HTTP (giây)
+HTTP_READ_TIMEOUT = 40            # Thời gian timeout khi đọc response HTTP (giây)
+HTTP_API_VERSION = "v1"           # API version
+DEFAULT_HTTP_ENDPOINT = "/api"    # Endpoint mặc định
+HTTP_RETRY_ATTEMPTS = 2           # Số lần thử lại kết nối HTTP
+HTTP_RETRY_DELAY = 2              # Thời gian giữa các lần thử lại (giây)
+# API Result Status Codes
+HTTP_STATUS_SUCCESS = 200
+HTTP_STATUS_BAD_REQUEST = 400
+HTTP_STATUS_UNAUTHORIZED = 401
+HTTP_STATUS_NOT_FOUND = 404
+HTTP_STATUS_TIMEOUT = 408
+HTTP_STATUS_SERVER_ERROR = 500
+
+# Connection Types
+CONNECTION_TYPE_HTTP = "http"     # Sử dụng HTTP API
+CONNECTION_TYPE_SSH = "ssh"       # Sử dụng SSH legacy
 # Network Constants
 DEFAULT_SSH_PORT = 22
 DEFAULT_HTTP_PORT = 80
