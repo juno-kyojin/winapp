@@ -18,6 +18,7 @@ out/
 *.log
 *.tmp
 *.temp
+**/*.log
 
 # File môi trường
 .env
@@ -28,7 +29,9 @@ node_modules/
 
 # Python
 __pycache__/
+**/__pycache__/
 *.pyc
+**/*.pyc
 
 # Các file khác không cần thiết
 *.swp
