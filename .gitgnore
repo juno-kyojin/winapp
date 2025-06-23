@@ -1,0 +1,37 @@
+# Thư mục và file hệ thống
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Thư mục build/output
+bin/
+obj/
+build/
+dist/
+out/
+
+# File cấu hình IDE
+.vscode/
+*.code-workspace
+
+# File log và tạm
+*.log
+*.tmp
+*.temp
+
+# File môi trường
+.env
+.env.*
+
+# Node.js
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# Các file khác không cần thiết
+*.swp
+*.swo
+*.bak
+*.old
