@@ -3,7 +3,7 @@
 
 # Module: connection_manager.py
 # Purpose: Unified connection manager for SSH and HTTP
-# Last updated: 2025-06-17 07:53:10 by juno-kyojin
+# Last updated: 2025-06-23 06:50:07 by juno-kyojin
 
 import logging
 import json
@@ -25,9 +25,9 @@ class ConnectionManager:
         self.logger = get_logger(__name__)
         self.connection_type = self.HTTP_MODE  # Default to HTTP
         
-        # Initialize HTTP client
-        from network.http_client import HTTPClient
-        self.http_client = HTTPClient()
+        # Initialize HTTP client - Sửa tên class để phù hợp với định nghĩa
+        from network.http_client import HTTPTestClient
+        self.http_client = HTTPTestClient()
         
         # SSH client will be lazy loaded when needed
         self.ssh_connection = None
@@ -47,7 +47,7 @@ class ConnectionManager:
         self.result_path = None
         
         # Timestamp for metadata
-        self.timestamp = "2025-06-17 07:53:10"
+        self.timestamp = "2025-06-23 06:50:07"
         self.username = "juno-kyojin"
     
     def set_connection_type(self, conn_type: str) -> None:
@@ -59,20 +59,30 @@ class ConnectionManager:
         self.connection_type = conn_type.lower()
         self.logger.info(f"Connection type set to {self.connection_type}")
         
-        # Initialize SSH if needed
+        # Initialize SSH if needed - Sửa import dựa trên tên file và class thực tế của bạn
         if conn_type.lower() == self.SSH_MODE and self.ssh_connection is None:
-            from network.ssh_connection import SSHConnection
-            self.ssh_connection = SSHConnection()
+            try:
+                # Dùng importlib để import động tránh lỗi nếu module không tồn tại
+                ssh_module = importlib.import_module('network.ssh_connection')
+                SSHConnection = getattr(ssh_module, 'SSHConnection')
+                self.ssh_connection = SSHConnection()
+            except (ImportError, AttributeError) as e:
+                self.logger.error(f"Could not load SSH module: {e}")
     
     def connect(self, hostname: str, **kwargs) -> bool:
         """Connect to remote host using selected connection type"""
         self.hostname = hostname
         
         if self.connection_type == self.SSH_MODE:
-            # Lazy load SSH module
+            # Lazy load SSH module - Sửa tương tự như trên
             if self.ssh_connection is None:
-                from network.ssh_connection import SSHConnection
-                self.ssh_connection = SSHConnection()
+                try:
+                    ssh_module = importlib.import_module('network.ssh_connection')
+                    SSHConnection = getattr(ssh_module, 'SSHConnection')
+                    self.ssh_connection = SSHConnection()
+                except (ImportError, AttributeError) as e:
+                    self.logger.error(f"Could not load SSH module: {e}")
+                    return False
             
             # SSH connection requires more parameters
             self.username = kwargs.get('username')
@@ -93,7 +103,7 @@ class ConnectionManager:
             self.http_read_timeout = kwargs.get('read_timeout', 40)
             
             return self.http_client.connect(
-                hostname=hostname,
+                host=hostname,  # Sửa tham số để phù hợp với HTTPTestClient.connect
                 port=self.port,
                 connect_timeout=self.http_connect_timeout,
                 read_timeout=self.http_read_timeout
@@ -113,7 +123,7 @@ class ConnectionManager:
         else:
             self.http_client.disconnect()
     
-    def send_test(self, test_data: Dict[str, Any], test_file_path: str = None, 
+    def send_test(self, test_data: Dict[str, Any], test_file_path: Optional[str] = "", 
                 affects_network: bool = False) -> Tuple[bool, Optional[Dict], str]:
         """
         Send test to remote host and wait for result
@@ -124,8 +134,13 @@ class ConnectionManager:
             # If SSH is needed but not initialized
             if self.ssh_connection is None:
                 self.logger.warning("SSH connection requested but not initialized")
-                from network.ssh_connection import SSHConnection
-                self.ssh_connection = SSHConnection()
+                try:
+                    ssh_module = importlib.import_module('network.ssh_connection')
+                    SSHConnection = getattr(ssh_module, 'SSHConnection')
+                    self.ssh_connection = SSHConnection()
+                except (ImportError, AttributeError) as e:
+                    self.logger.error(f"Could not load SSH module: {e}")
+                    return False, None, f"SSH module error: {e}"
                 
             # Legacy SSH method (not fully implemented here)
             # Would need implementation if SSH fallback is required
