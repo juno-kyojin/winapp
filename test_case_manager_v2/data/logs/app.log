@@ -1,0 +1,3300 @@
+[2025-06-12 09:53:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 09:53:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 09:53:50] INFO - __main__: Configuration loaded successfully
+[2025-06-12 09:53:50] INFO - __main__: Starting GUI...
+[2025-06-12 09:53:50] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 09:53:50] INFO - __main__: Application ready
+[2025-06-12 09:53:50] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 09:53:53] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 09:54:03] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 09:54:14] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 09:54:21] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 09:54:35] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 09:54:35] INFO - __main__: Application shutdown complete
+[2025-06-12 09:59:00] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 09:59:00] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 09:59:00] INFO - __main__: Configuration loaded successfully
+[2025-06-12 09:59:00] INFO - __main__: Starting GUI...
+[2025-06-12 09:59:00] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 09:59:00] INFO - __main__: Application ready
+[2025-06-12 09:59:00] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 09:59:02] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 09:59:14] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 09:59:14] INFO - __main__: Application shutdown complete
+[2025-06-12 10:01:46] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:01:46] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:01:46] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:01:46] INFO - __main__: Starting GUI...
+[2025-06-12 10:01:46] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:01:46] INFO - __main__: Application ready
+[2025-06-12 10:01:46] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:02:00] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:04] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 10:02:04] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 10:02:18] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:19] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:19] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:19] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:53] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:02:56] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 10:02:58] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:07:00] INFO - root: Application interrupted by user
+[2025-06-12 10:07:07] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:07:07] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:07:07] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:07:07] INFO - __main__: Starting GUI...
+[2025-06-12 10:07:07] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:07:07] INFO - __main__: Application ready
+[2025-06-12 10:07:07] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:07:50] INFO - root: Application interrupted by user
+[2025-06-12 10:08:00] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:08:00] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:08:00] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:08:00] INFO - __main__: Starting GUI...
+[2025-06-12 10:08:00] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:08:00] INFO - __main__: Application ready
+[2025-06-12 10:08:00] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:08:18] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:08:19] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 10:09:49] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:15:38] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 10:15:38] INFO - __main__: Application shutdown complete
+[2025-06-12 10:16:31] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:16:31] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:16:31] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:16:31] INFO - __main__: Starting GUI...
+[2025-06-12 10:16:32] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:16:32] INFO - __main__: Application ready
+[2025-06-12 10:16:32] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:16:38] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:18:50] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:18:54] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:27:13] INFO - root: Application interrupted by user
+[2025-06-12 10:27:14] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:27:14] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:27:14] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:27:14] INFO - __main__: Starting GUI...
+[2025-06-12 10:27:14] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:27:14] INFO - __main__: Application ready
+[2025-06-12 10:27:14] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:29:55] INFO - root: Application interrupted by user
+[2025-06-12 10:29:59] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:29:59] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:29:59] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:29:59] INFO - __main__: Starting GUI...
+[2025-06-12 10:30:00] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:30:00] INFO - __main__: Application ready
+[2025-06-12 10:30:00] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:30:03] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:30:09] INFO - gui.main_window.MainWindow: Connection test requested
+[2025-06-12 10:30:10] INFO - gui.main_window.MainWindow: Connection settings updated
+[2025-06-12 10:34:54] INFO - root: Application interrupted by user
+[2025-06-12 10:34:56] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:34:56] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:34:56] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:34:56] INFO - __main__: Starting GUI...
+[2025-06-12 10:34:56] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:34:56] INFO - __main__: Application ready
+[2025-06-12 10:34:56] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:35:35] INFO - gui.main_window.MainWindow: Template parameters saved for Tạo WAN mới
+[2025-06-12 10:35:42] INFO - gui.main_window.MainWindow: Generated test case: wan_create_20250612_103538.json
+[2025-06-12 10:37:13] INFO - root: Application interrupted by user
+[2025-06-12 10:40:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:40:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:40:50] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:40:50] INFO - __main__: Starting GUI...
+[2025-06-12 10:40:50] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:40:50] INFO - __main__: Application ready
+[2025-06-12 10:40:50] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:44:33] INFO - root: Application interrupted by user
+[2025-06-12 10:44:34] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:44:34] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:44:34] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:44:34] INFO - __main__: Starting GUI...
+[2025-06-12 10:44:35] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:44:35] INFO - __main__: Application ready
+[2025-06-12 10:44:35] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:49:15] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 10:49:15] INFO - __main__: Application shutdown complete
+[2025-06-12 10:50:32] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:50:32] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:50:32] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:50:32] INFO - __main__: Starting GUI...
+[2025-06-12 10:50:32] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:50:32] INFO - __main__: Application ready
+[2025-06-12 10:50:32] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:52:14] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 10:52:14] INFO - __main__: Application shutdown complete
+[2025-06-12 10:52:35] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:52:35] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:52:35] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:52:35] INFO - __main__: Starting GUI...
+[2025-06-12 10:52:36] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:52:36] INFO - __main__: Application ready
+[2025-06-12 10:52:36] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 10:54:24] INFO - root: Application interrupted by user
+[2025-06-12 10:54:25] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 10:54:25] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 10:54:25] INFO - __main__: Configuration loaded successfully
+[2025-06-12 10:54:25] INFO - __main__: Starting GUI...
+[2025-06-12 10:54:26] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 10:54:26] INFO - __main__: Application ready
+[2025-06-12 10:54:26] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 11:00:46] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 11:00:46] INFO - __main__: Application shutdown complete
+[2025-06-12 11:00:47] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 11:00:47] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 11:00:47] INFO - __main__: Configuration loaded successfully
+[2025-06-12 11:00:47] INFO - __main__: Starting GUI...
+[2025-06-12 11:00:48] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 11:00:48] INFO - __main__: Application ready
+[2025-06-12 11:00:48] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 11:00:54] INFO - gui.main_window.MainWindow: Generated test case: wan_create_20250612_110052.json
+[2025-06-12 11:17:13] INFO - root: Application interrupted by user
+[2025-06-12 11:23:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 11:23:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 11:23:50] INFO - __main__: Configuration loaded successfully
+[2025-06-12 11:23:50] INFO - __main__: Starting GUI...
+[2025-06-12 11:23:50] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 11:23:50] INFO - __main__: Application ready
+[2025-06-12 11:23:50] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 11:24:00] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 11:24:09] INFO - gui.main_window.MainWindow: Generated test case: wan_create_20250612_112408.json
+[2025-06-12 11:24:15] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 11:24:22] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 11:24:28] INFO - gui.main_window.MainWindow: Generated test case: wan_delete_20250612_112426.json
+[2025-06-12 11:24:29] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 11:24:42] INFO - root: Application interrupted by user
+[2025-06-12 13:47:35] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 13:47:35] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 13:47:35] INFO - __main__: Configuration loaded successfully
+[2025-06-12 13:47:35] INFO - __main__: Starting GUI...
+[2025-06-12 13:47:35] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 13:47:35] INFO - __main__: Application ready
+[2025-06-12 13:47:35] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 13:47:45] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 13:47:49] INFO - gui.main_window.MainWindow: Added test case to queue: Configure LAN (lan_config)
+[2025-06-12 13:47:58] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 13:48:16] INFO - gui.main_window.MainWindow: Generated test case: wan_delete_20250612_134814.json
+[2025-06-12 13:48:21] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 13:48:26] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 13:54:31] INFO - root: Application interrupted by user
+[2025-06-12 13:54:33] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 13:54:33] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 13:54:33] INFO - __main__: Configuration loaded successfully
+[2025-06-12 13:54:33] INFO - __main__: Starting GUI...
+[2025-06-12 13:54:33] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 13:54:33] INFO - __main__: Application ready
+[2025-06-12 13:54:33] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 13:54:39] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612_135439.json
+[2025-06-12 13:54:40] INFO - gui.main_window.MainWindow: Added newly created test to queue: wan_create_20250612_135439.json
+[2025-06-12 13:54:56] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 13:55:02] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 13:56:08] INFO - gui.main_window.MainWindow: Added saved test to queue: data\temp\generated_tests\wan\wan_create_20250612_135439.json
+[2025-06-12 13:56:16] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612_135616.json
+[2025-06-12 13:56:17] INFO - gui.main_window.MainWindow: Added newly created test to queue: wan_create_20250612_135616.json
+[2025-06-12 13:57:06] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612_135706.json
+[2025-06-12 13:57:10] INFO - gui.main_window.MainWindow: Added newly created test to queue: wan_create_20250612_135706.json
+[2025-06-12 13:57:13] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612_135713.json
+[2025-06-12 13:57:17] INFO - gui.main_window.MainWindow: Added newly created test to queue: wan_create_20250612_135713.json
+[2025-06-12 13:58:01] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612_135801.json
+[2025-06-12 13:58:02] INFO - gui.main_window.MainWindow: Added newly created test to queue: wan_create_20250612_135801.json
+[2025-06-12 14:01:33] INFO - root: Application interrupted by user
+[2025-06-12 14:17:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:17:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:17:12] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:17:12] INFO - __main__: Starting GUI...
+[2025-06-12 14:17:12] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:17:12] INFO - __main__: Application ready
+[2025-06-12 14:17:12] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:17:16] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612141716.json
+[2025-06-12 14:17:28] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:17:49] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_20250612141716.json
+[2025-06-12 14:17:56] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_delete_20250612141756.json
+[2025-06-12 14:18:00] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_delete_20250612141756.json
+[2025-06-12 14:18:11] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\lan\lan_config_20250612141811.json
+[2025-06-12 14:18:14] INFO - gui.main_window.MainWindow: Added saved test to queue: lan_config_20250612141811.json
+[2025-06-12 14:18:39] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_20250612141839.json
+[2025-06-12 14:23:24] INFO - root: Application interrupted by user
+[2025-06-12 14:23:25] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:23:25] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:23:25] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:23:25] INFO - __main__: Starting GUI...
+[2025-06-12 14:23:26] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:23:26] INFO - __main__: Application ready
+[2025-06-12 14:23:26] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:23:36] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_20250612141839.json
+[2025-06-12 14:23:46] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612141716.json
+[2025-06-12 14:23:52] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_delete_20250612141756.json
+[2025-06-12 14:24:00] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612_135801.json
+[2025-06-12 14:24:02] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612_135713.json
+[2025-06-12 14:24:04] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612_135706.json
+[2025-06-12 14:24:05] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612_135616.json
+[2025-06-12 14:24:10] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612_135439.json
+[2025-06-12 14:24:13] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\lan\lan_config_20250612141811.json
+[2025-06-12 14:24:30] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:24:44] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:30:01] INFO - root: Application interrupted by user
+[2025-06-12 14:30:02] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:30:02] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:30:02] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:30:02] INFO - __main__: Starting GUI...
+[2025-06-12 14:30:03] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:30:03] INFO - __main__: Application ready
+[2025-06-12 14:30:03] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:30:06] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:30:17] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_20250612141839.json
+[2025-06-12 14:30:20] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:30:39] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_delete_wan_delete_1.json
+[2025-06-12 14:30:49] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_delete_wan_delete_1.json
+[2025-06-12 14:31:02] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:31:18] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 14:31:18] INFO - __main__: Application shutdown complete
+[2025-06-12 14:36:51] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:36:51] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:36:51] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:36:51] INFO - __main__: Starting GUI...
+[2025-06-12 14:36:51] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:36:51] INFO - __main__: Application ready
+[2025-06-12 14:36:51] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:36:56] INFO - gui.main_window.MainWindow: Added test case to queue: Create WAN (wan_create)
+[2025-06-12 14:37:17] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_20250612141839.json
+[2025-06-12 14:37:21] INFO - gui.main_window.MainWindow: Added test case to queue: Delete WAN (wan_delete)
+[2025-06-12 14:37:42] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_wan_delete_1.json
+[2025-06-12 14:37:48] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_delete_wan_delete_1.json
+[2025-06-12 14:42:30] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 14:42:30] INFO - __main__: Application shutdown complete
+[2025-06-12 14:44:36] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:44:36] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:44:36] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:44:36] INFO - __main__: Starting GUI...
+[2025-06-12 14:44:37] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:44:37] INFO - __main__: Application ready
+[2025-06-12 14:44:37] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:44:48] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 14:44:55] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_wan_delete_1.json
+[2025-06-12 14:44:58] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_delete_wan_delete_1.json
+[2025-06-12 14:45:04] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_wan_create1.json
+[2025-06-12 14:47:34] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 14:47:34] INFO - __main__: Application shutdown complete
+[2025-06-12 14:48:18] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:48:18] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:48:18] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:48:18] INFO - __main__: Starting GUI...
+[2025-06-12 14:48:19] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:48:19] INFO - __main__: Application ready
+[2025-06-12 14:48:19] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:48:29] INFO - gui.main_window.MainWindow: Generated filename: wan_create_wan_create1.json
+[2025-06-12 14:48:30] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_wan_create1.json
+[2025-06-12 14:48:42] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 14:48:42] INFO - __main__: Application shutdown complete
+[2025-06-12 14:49:10] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:49:10] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:49:10] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:49:10] INFO - __main__: Starting GUI...
+[2025-06-12 14:49:10] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:49:10] INFO - __main__: Application ready
+[2025-06-12 14:49:10] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:49:15] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_wan_create1.json
+[2025-06-12 14:49:23] INFO - gui.main_window.MainWindow: Generated filename: wan_create_wan_create1.json
+[2025-06-12 14:49:23] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_wan_create1.json
+[2025-06-12 14:49:58] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 14:52:57] INFO - root: Application interrupted by user
+[2025-06-12 14:52:58] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:52:58] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:52:58] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:52:58] INFO - __main__: Starting GUI...
+[2025-06-12 14:52:59] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:52:59] INFO - __main__: Application ready
+[2025-06-12 14:52:59] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:53:03] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 14:53:15] INFO - gui.main_window.MainWindow: Generated filename: wan_create_1.json
+[2025-06-12 14:53:15] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-12 14:53:26] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_wan_create1.json
+[2025-06-12 14:53:31] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-12 14:53:34] INFO - gui.main_window.MainWindow: Generated filename: wan_create_1.json
+[2025-06-12 14:53:34] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-12 14:53:42] INFO - gui.main_window.MainWindow: Generated filename: wan_create_2.json
+[2025-06-12 14:53:42] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_2.json
+[2025-06-12 14:53:59] INFO - gui.main_window.MainWindow: Generated filename: wan_delete_1.json
+[2025-06-12 14:53:59] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_delete_1.json
+[2025-06-12 14:54:04] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_delete_1.json
+[2025-06-12 14:54:09] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_1.json
+[2025-06-12 14:54:14] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 14:57:10] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 14:57:10] INFO - __main__: Application shutdown complete
+[2025-06-12 14:58:41] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 14:58:41] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 14:58:41] INFO - __main__: Configuration loaded successfully
+[2025-06-12 14:58:41] INFO - __main__: Starting GUI...
+[2025-06-12 14:58:42] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 14:58:42] INFO - __main__: Application ready
+[2025-06-12 14:58:42] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 14:58:44] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 14:58:51] INFO - gui.main_window.MainWindow: Generated filename: wan_create_3.json
+[2025-06-12 14:58:51] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_3.json
+[2025-06-12 14:58:56] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_3.json
+[2025-06-12 15:00:09] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-12 15:00:15] INFO - gui.main_window.MainWindow: Generated filename: ping_test_1.json
+[2025-06-12 15:00:15] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\network\ping_test_1.json
+[2025-06-12 15:04:09] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:04:09] INFO - __main__: Application shutdown complete
+[2025-06-12 15:04:52] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:04:52] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:04:52] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:04:52] INFO - __main__: Starting GUI...
+[2025-06-12 15:04:52] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:04:52] INFO - __main__: Application ready
+[2025-06-12 15:04:52] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:04:57] INFO - gui.main_window.MainWindow: Generated filename: wan_create_4.json
+[2025-06-12 15:04:57] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_4.json
+[2025-06-12 15:05:23] INFO - gui.main_window.MainWindow: Generated filename: wan_edit_1.json
+[2025-06-12 15:05:23] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_edit_1.json
+[2025-06-12 15:05:27] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:05:27] INFO - __main__: Application shutdown complete
+[2025-06-12 15:05:58] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:05:58] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:05:58] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:05:58] INFO - __main__: Starting GUI...
+[2025-06-12 15:05:58] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:05:58] INFO - __main__: Application ready
+[2025-06-12 15:05:58] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:06:04] INFO - gui.main_window.MainWindow: Generated filename: wan_edit_2.json
+[2025-06-12 15:06:04] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_edit_2.json
+[2025-06-12 15:06:07] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:06:07] INFO - __main__: Application shutdown complete
+[2025-06-12 15:06:17] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:06:17] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:06:17] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:06:17] INFO - __main__: Starting GUI...
+[2025-06-12 15:06:18] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:06:18] INFO - __main__: Application ready
+[2025-06-12 15:06:18] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:10:16] INFO - root: Application interrupted by user
+[2025-06-12 15:10:17] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:10:17] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:10:17] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:10:17] INFO - __main__: Starting GUI...
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_edit_2.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_edit_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_4.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from ping_test_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_3.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_delete_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_2.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:17] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:10:17] INFO - __main__: Application ready
+[2025-06-12 15:10:17] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:10:26] INFO - gui.main_window.MainWindow: Generated filename: wan_create_5.json
+[2025-06-12 15:10:26] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_5.json
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_5.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_edit_2.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_edit_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_4.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from ping_test_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_3.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_delete_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_2.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:28] ERROR - gui.main_window.MainWindow: Error reading timestamp from wan_create_1.json: 'list' object has no attribute 'keys'
+[2025-06-12 15:10:37] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_5.json
+[2025-06-12 15:10:42] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 15:10:45] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:10:45] INFO - __main__: Application shutdown complete
+[2025-06-12 15:15:59] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:15:59] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:15:59] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:15:59] INFO - __main__: Starting GUI...
+[2025-06-12 15:16:00] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:16:00] INFO - __main__: Application ready
+[2025-06-12 15:16:00] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:16:05] INFO - gui.main_window.MainWindow: Generated filename: wan_delete_2.json
+[2025-06-12 15:16:05] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_delete_2.json
+[2025-06-12 15:16:19] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_delete_2.json
+[2025-06-12 15:16:21] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_5.json
+[2025-06-12 15:16:22] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_edit_2.json
+[2025-06-12 15:16:25] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_edit_1.json
+[2025-06-12 15:16:27] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_4.json
+[2025-06-12 15:16:29] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\network\ping_test_1.json
+[2025-06-12 15:16:30] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_3.json
+[2025-06-12 15:16:32] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_delete_1.json
+[2025-06-12 15:16:41] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_2.json
+[2025-06-12 15:16:45] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-12 15:16:48] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 15:16:55] INFO - gui.main_window.MainWindow: Generated filename: wan_delete_1.json
+[2025-06-12 15:16:55] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_delete_1.json
+[2025-06-12 15:17:15] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:17:15] INFO - __main__: Application shutdown complete
+[2025-06-12 15:59:04] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 15:59:04] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 15:59:04] INFO - __main__: Configuration loaded successfully
+[2025-06-12 15:59:04] INFO - __main__: Starting GUI...
+[2025-06-12 15:59:05] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 15:59:05] INFO - __main__: Application ready
+[2025-06-12 15:59:05] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 15:59:11] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 15:59:11] INFO - __main__: Application shutdown complete
+[2025-06-12 16:16:17] INFO - root: Logging initialized - Level: INFO
+[2025-06-12 16:16:17] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-12 16:16:17] INFO - __main__: Configuration loaded successfully
+[2025-06-12 16:16:17] INFO - __main__: Starting GUI...
+[2025-06-12 16:16:18] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-12 16:16:18] INFO - __main__: Application ready
+[2025-06-12 16:16:18] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-12 16:23:12] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-12 16:52:35] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-12 16:52:35] INFO - __main__: Application shutdown complete
+[2025-06-17 14:44:45] INFO - root: Logging initialized - Level: INFO
+[2025-06-17 14:44:45] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-17 14:44:45] INFO - __main__: Configuration loaded successfully
+[2025-06-17 14:44:45] INFO - __main__: Starting GUI...
+[2025-06-17 14:44:47] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-17 14:44:47] INFO - __main__: Application ready
+[2025-06-17 14:44:47] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-17 14:52:05] INFO - root: Application interrupted by user
+[2025-06-17 17:14:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-17 17:14:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-17 17:14:12] INFO - __main__: Configuration loaded successfully
+[2025-06-17 17:14:12] INFO - __main__: Starting GUI...
+[2025-06-17 17:14:13] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-17 17:14:14] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-17 17:14:14] INFO - __main__: Application ready
+[2025-06-17 17:14:14] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-17 17:14:20] ERROR - network.http_client: Connection refused when connecting to http://192.168.88.1:8080
+[2025-06-17 17:14:20] ERROR - gui.main_window.MainWindow: Failed to initialize HTTP client
+[2025-06-17 17:14:47] ERROR - network.http_client: Connection refused when connecting to http://192.168.1.4:8080
+[2025-06-17 17:14:47] ERROR - gui.main_window.MainWindow: Failed to initialize HTTP client
+[2025-06-17 17:15:01] INFO - gui.main_window.MainWindow: SSH connection requested to 192.168.88.1:22 as root
+[2025-06-17 17:16:44] INFO - gui.main_window.MainWindow: SSH connection requested to 192.168.88.1:22 as root
+[2025-06-17 17:16:53] INFO - gui.main_window.MainWindow: SSH connection requested to 192.168.88.1:22 as root
+[2025-06-17 17:17:47] INFO - network.http_client: HTTP client successfully connected to http://192.168.1.4:8080
+[2025-06-17 17:17:48] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.1.4:8080
+[2025-06-17 17:18:01] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-17 17:20:08] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-17 17:22:15] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-17 17:22:15] INFO - __main__: Application shutdown complete
+[2025-06-18 09:07:25] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:07:25] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:07:25] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:07:25] INFO - __main__: Starting GUI...
+[2025-06-18 09:07:26] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:07:27] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:07:27] INFO - __main__: Application ready
+[2025-06-18 09:07:27] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:08:49] INFO - network.http_client: HTTP client successfully connected to http://192.168.88.1:8080
+[2025-06-18 09:08:50] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:14:12] INFO - root: Application interrupted by user
+[2025-06-18 09:14:15] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:14:15] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:14:15] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:14:15] INFO - __main__: Starting GUI...
+[2025-06-18 09:14:15] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:14:16] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:14:16] INFO - __main__: Application ready
+[2025-06-18 09:14:16] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:14:19] INFO - network.http_client: HTTP client successfully connected to http://192.168.88.1:8080
+[2025-06-18 09:14:20] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:18:42] INFO - root: Application interrupted by user
+[2025-06-18 09:18:44] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:18:44] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:18:44] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:18:44] INFO - __main__: Starting GUI...
+[2025-06-18 09:18:44] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:18:45] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:18:45] INFO - __main__: Application ready
+[2025-06-18 09:18:45] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:18:48] INFO - network.http_client: HTTP client successfully connected to http://192.168.88.1:8080
+[2025-06-18 09:18:49] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:19:54] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-18 09:36:55] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 09:36:55] INFO - __main__: Application shutdown complete
+[2025-06-18 09:39:57] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:39:57] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:39:57] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:39:57] INFO - __main__: Starting GUI...
+[2025-06-18 09:39:57] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:39:58] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:39:58] INFO - __main__: Application ready
+[2025-06-18 09:39:58] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:40:04] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 09:40:05] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:40:15] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-18 09:41:26] INFO - gui.main_window.MainWindow: Template parameters saved for ping_test
+[2025-06-18 09:41:28] INFO - gui.main_window.MainWindow: Generated filename: ping_test_1.json
+[2025-06-18 09:41:28] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\network\ping_test_1.json
+[2025-06-18 09:41:33] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_test_1.json
+[2025-06-18 09:45:21] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 09:45:21] INFO - __main__: Application shutdown complete
+[2025-06-18 09:48:48] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:48:48] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:48:48] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:48:48] INFO - __main__: Starting GUI...
+[2025-06-18 09:48:48] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:48:48] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:48:48] INFO - __main__: Application ready
+[2025-06-18 09:48:48] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:48:50] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 09:48:51] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:48:57] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_test_1.json
+[2025-06-18 09:49:33] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-18 09:49:45] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-18 09:49:52] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 09:49:53] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:51:52] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 09:51:52] INFO - __main__: Application shutdown complete
+[2025-06-18 09:53:33] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 09:53:33] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 09:53:33] INFO - __main__: Configuration loaded successfully
+[2025-06-18 09:53:33] INFO - __main__: Starting GUI...
+[2025-06-18 09:53:33] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 09:53:33] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 09:53:33] INFO - __main__: Application ready
+[2025-06-18 09:53:33] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 09:53:35] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 09:53:36] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 09:53:39] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_test_1.json
+[2025-06-18 09:53:42] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 09:53:43] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "ping"
+    ]
+  },
+  "failed_by_service": {
+    "ping": [
+      {
+        "id": 0,
+        "service": "ping",
+        "action": "test",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 09:54:21",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 09:53:51] INFO - gui.main_window.MainWindow: Sending test case ping_test (index 0)
+[2025-06-18 09:53:51] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 09:53:52] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "ping"
+    ]
+  },
+  "failed_by_service": {
+    "ping": [
+      {
+        "id": 0,
+        "service": "ping",
+        "action": "test",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 09:54:29",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 09:54:05] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 09:54:06] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:06:28] INFO - root: Application interrupted by user
+[2025-06-18 10:06:29] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:06:29] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:06:29] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:06:29] INFO - __main__: Starting GUI...
+[2025-06-18 10:06:29] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:06:30] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:06:30] INFO - __main__: Application ready
+[2025-06-18 10:06:30] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:06:31] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:06:32] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:06:35] INFO - gui.main_window.MainWindow: Added test case to queue: ping_test (ping_test)
+[2025-06-18 10:06:37] INFO - gui.main_window.MainWindow: Sending test case ping_test (index 0)
+[2025-06-18 10:06:37] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "system",
+      "action": "execute",
+      "params": {
+        "command": "ping -c 4 youtube.com"
+      }
+    }
+  ]
+}
+[2025-06-18 10:06:37] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:06:38] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "system"
+    ]
+  },
+  "failed_by_service": {
+    "system": [
+      {
+        "id": 0,
+        "service": "system",
+        "action": "execute",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 10:07:15",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 10:06:49] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 10:06:51] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 10:06:51] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "action": "create",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      }
+    }
+  ]
+}
+[2025-06-18 10:06:51] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:06:59] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:07:28] INFO - gui.main_window.MainWindow: Sending test case ping_test (index 0)
+[2025-06-18 10:07:28] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "system",
+      "action": "execute",
+      "params": {
+        "command": "ping -c 4 youtube.com"
+      }
+    }
+  ]
+}
+[2025-06-18 10:07:28] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:07:29] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "system"
+    ]
+  },
+  "failed_by_service": {
+    "system": [
+      {
+        "id": 0,
+        "service": "system",
+        "action": "execute",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 10:08:06",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 10:07:47] INFO - gui.main_window.MainWindow: Generated filename: wan_create_1.json
+[2025-06-18 10:07:47] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-18 10:07:51] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_1.json
+[2025-06-18 10:08:31] INFO - root: Application interrupted by user
+[2025-06-18 10:08:32] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:08:32] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:08:32] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:08:32] INFO - __main__: Starting GUI...
+[2025-06-18 10:08:32] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:08:32] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:08:32] INFO - __main__: Application ready
+[2025-06-18 10:08:32] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:08:34] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:08:35] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:08:41] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_delete_1.json
+[2025-06-18 10:08:43] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\network\ping_test_1.json
+[2025-06-18 10:08:48] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 10:08:50] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 10:08:50] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "system",
+      "action": "execute",
+      "params": {
+        "command": "ping -c 4 youtube.com"
+      }
+    }
+  ]
+}
+[2025-06-18 10:08:50] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:08:51] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "system"
+    ]
+  },
+  "failed_by_service": {
+    "system": [
+      {
+        "id": 0,
+        "service": "system",
+        "action": "execute",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 10:09:28",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 10:09:25] INFO - gui.main_window.MainWindow: Template parameters saved for ping
+[2025-06-18 10:09:27] INFO - gui.main_window.MainWindow: Generated filename: ping_1.json
+[2025-06-18 10:09:27] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\network\ping_1.json
+[2025-06-18 10:09:36] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_1.json
+[2025-06-18 10:09:42] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 10:09:42] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "system",
+      "action": "execute",
+      "params": {
+        "command": "ping -c 4 youtube.com"
+      }
+    }
+  ]
+}
+[2025-06-18 10:09:42] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:09:43] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "system"
+    ]
+  },
+  "failed_by_service": {
+    "system": [
+      {
+        "id": 0,
+        "service": "system",
+        "action": "execute",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 10:10:20",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-18 10:16:33] INFO - root: Application interrupted by user
+[2025-06-18 10:16:35] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:16:35] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:16:35] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:16:35] INFO - __main__: Starting GUI...
+[2025-06-18 10:16:35] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:16:35] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:16:35] INFO - __main__: Application ready
+[2025-06-18 10:16:35] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:16:37] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:16:38] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:16:42] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 10:16:44] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 10:16:44] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "count": 4
+      }
+    }
+  ]
+}
+[2025-06-18 10:16:44] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:16:54] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:17:23] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_1.json
+[2025-06-18 10:17:26] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 10:17:26] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 10:17:26] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:17:34] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:19:06] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.1.4:8080
+[2025-06-18 10:19:11] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.1.4:8080
+[2025-06-18 10:19:19] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.1.1:8080
+[2025-06-18 10:19:24] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.1.1:8080
+[2025-06-18 10:19:39] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:19:40] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:21:55] INFO - root: Application interrupted by user
+[2025-06-18 10:21:56] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:21:56] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:21:56] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:21:56] INFO - __main__: Starting GUI...
+[2025-06-18 10:21:56] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:21:56] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:21:56] INFO - __main__: Application ready
+[2025-06-18 10:21:56] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:21:57] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:21:58] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:22:22] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create
+[2025-06-18 10:22:26] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create
+[2025-06-18 10:22:31] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create
+[2025-06-18 10:22:35] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create
+[2025-06-18 10:22:39] INFO - gui.main_window.MainWindow: Generated filename: wan_create_2.json
+[2025-06-18 10:22:39] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_2.json
+[2025-06-18 10:22:43] INFO - gui.main_window.MainWindow: Added saved test to queue: wan_create_2.json
+[2025-06-18 10:22:56] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-18 10:22:56] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan2",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.50",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 10:22:56] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:23:04] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:26:08] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 10:26:08] INFO - __main__: Application shutdown complete
+[2025-06-18 10:30:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:30:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:30:12] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:30:12] INFO - __main__: Starting GUI...
+[2025-06-18 10:30:12] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:30:12] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:30:12] INFO - __main__: Application ready
+[2025-06-18 10:30:12] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:30:51] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 10:30:51] INFO - __main__: Application shutdown complete
+[2025-06-18 10:31:10] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:31:10] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:31:10] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:31:10] INFO - __main__: Starting GUI...
+[2025-06-18 10:31:10] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:31:11] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:31:11] INFO - __main__: Application ready
+[2025-06-18 10:31:11] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:31:19] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:31:20] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:31:23] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 10:31:24] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-18 10:31:24] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "pppoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 10:31:24] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:31:32] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:32:14] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create
+[2025-06-18 10:32:15] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 10:32:23] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 10:32:23] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan3",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 10:32:23] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:32:31] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:32:43] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 10:32:51] INFO - gui.main_window.MainWindow: Sending test case ping (index 2)
+[2025-06-18 10:32:51] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "count": 4
+      }
+    }
+  ]
+}
+[2025-06-18 10:32:51] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:33:00] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:40:54] INFO - root: Application interrupted by user
+[2025-06-18 10:40:55] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:40:55] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:40:55] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:40:55] INFO - __main__: Starting GUI...
+[2025-06-18 10:40:55] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:40:56] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:40:56] INFO - __main__: Application ready
+[2025-06-18 10:40:56] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:42:32] INFO - gui.main_window.MainWindow: Added new parameter: host3 (string)
+[2025-06-18 10:42:36] INFO - gui.main_window.MainWindow: Deleted parameter: count
+[2025-06-18 10:42:43] INFO - gui.main_window.MainWindow: Template parameters saved for ping with 3 parameters
+[2025-06-18 10:42:45] INFO - gui.main_window.MainWindow: Generated filename: ping_2.json
+[2025-06-18 10:42:45] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\network\ping_2.json
+[2025-06-18 10:42:52] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_2.json
+[2025-06-18 10:42:58] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 10:42:59] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 10:43:04] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 10:43:04] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "host3": "facebook.com"
+      }
+    }
+  ]
+}
+[2025-06-18 10:43:04] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 10:43:17] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 10:49:11] INFO - root: Application interrupted by user
+[2025-06-18 10:49:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:49:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:49:12] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:49:12] INFO - __main__: Starting GUI...
+[2025-06-18 10:49:12] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:49:13] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:49:13] INFO - __main__: Application ready
+[2025-06-18 10:49:13] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 10:49:39] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 10:49:39] INFO - __main__: Application shutdown complete
+[2025-06-18 10:59:28] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 10:59:28] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 10:59:28] INFO - __main__: Configuration loaded successfully
+[2025-06-18 10:59:28] INFO - __main__: Starting GUI...
+[2025-06-18 10:59:28] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 10:59:29] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 10:59:29] INFO - __main__: Application ready
+[2025-06-18 10:59:29] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 11:00:18] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create with 11 parameters
+[2025-06-18 11:00:20] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 11:00:22] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:00:23] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:00:27] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-18 11:00:27] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 11:00:27] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:00:35] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 11:00:50] INFO - gui.main_window.MainWindow: Deleted parameter: count
+[2025-06-18 11:01:17] INFO - gui.main_window.MainWindow: Added new parameter: host3 (string)
+[2025-06-18 11:05:49] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 11:05:49] INFO - __main__: Application shutdown complete
+[2025-06-18 11:07:26] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 11:07:26] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 11:07:26] INFO - __main__: Configuration loaded successfully
+[2025-06-18 11:07:26] INFO - __main__: Starting GUI...
+[2025-06-18 11:07:26] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 11:07:26] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 11:07:26] INFO - __main__: Application ready
+[2025-06-18 11:07:26] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 11:07:27] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:07:27] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:07:28] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:07:29] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:08:01] INFO - gui.main_window.MainWindow: Added new parameter: host3 (string)
+[2025-06-18 11:08:04] INFO - gui.main_window.MainWindow: Deleted parameter: count
+[2025-06-18 11:08:38] INFO - root: Application interrupted by user
+[2025-06-18 11:08:39] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 11:08:39] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 11:08:39] INFO - __main__: Configuration loaded successfully
+[2025-06-18 11:08:39] INFO - __main__: Starting GUI...
+[2025-06-18 11:08:39] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 11:08:40] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 11:08:40] INFO - __main__: Application ready
+[2025-06-18 11:08:40] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 11:09:13] INFO - gui.main_window.MainWindow: Added new parameter: host3 (string)
+[2025-06-18 11:09:17] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 11:09:26] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:09:27] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:09:28] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 11:09:28] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "host3": "facebook.com"
+      }
+    }
+  ]
+}
+[2025-06-18 11:09:28] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:09:41] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 11:09:58] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 11:10:01] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-18 11:10:13] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-18 11:10:13] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 11:10:13] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:10:21] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 11:10:21] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 1)
+[2025-06-18 11:10:21] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-18 11:10:21] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:10:45] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 11:11:36] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:11:37] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:11:49] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-18 11:11:49] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 11:11:49] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:11:57] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 11:19:25] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 11:19:25] INFO - __main__: Application shutdown complete
+[2025-06-18 11:19:27] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 11:19:27] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 11:19:27] INFO - __main__: Configuration loaded successfully
+[2025-06-18 11:19:27] INFO - __main__: Starting GUI...
+[2025-06-18 11:19:27] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 11:19:28] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 11:19:28] INFO - __main__: Application ready
+[2025-06-18 11:19:28] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 11:19:33] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 11:19:40] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 11:19:43] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-18 11:19:54] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 11:19:54] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:8080
+[2025-06-18 11:20:00] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 11:20:00] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-18 11:20:00] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:20:00] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "unknown"
+    ]
+  },
+  "failed_by_service": {
+    "unknown": [
+      {
+        "id": 0,
+        "service": "unknown",
+        "action": "unknown",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-18 11:20:33",
+        "status": false,
+        "message": "Failed to parse test case file"
+      }
+    ]
+  }
+}
+[2025-06-18 11:20:02] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 11:20:02] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 11:20:02] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:20:09] ERROR - gui.main_window.MainWindow: Error sending test: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-06-18 11:20:09] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 2)
+[2025-06-18 11:20:09] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-18 11:20:09] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:8080
+[2025-06-18 11:20:17] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 13:47:50] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-18 13:47:50] INFO - __main__: Application shutdown complete
+[2025-06-18 13:47:54] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 13:47:54] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 13:47:54] INFO - __main__: Configuration loaded successfully
+[2025-06-18 13:47:54] INFO - __main__: Starting GUI...
+[2025-06-18 13:47:54] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 13:47:55] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 13:47:55] INFO - __main__: Application ready
+[2025-06-18 13:47:55] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 13:48:01] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 13:48:19] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 13:48:21] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.88.1:8080
+[2025-06-18 13:48:23] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 13:48:25] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.88.1:8080
+[2025-06-18 13:49:15] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.1.4:8080
+[2025-06-18 13:49:20] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.1.4:8080
+[2025-06-18 13:49:22] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.1.4:8080
+[2025-06-18 13:49:27] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.1.4:8080
+[2025-06-18 13:49:36] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:8080
+[2025-06-18 13:49:40] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.88.1:8080
+[2025-06-18 13:50:03] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-18 13:50:04] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-18 13:50:25] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 13:50:25] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-18 13:50:25] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 13:50:34] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 13:50:45] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 13:50:50] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-18 13:51:02] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 13:51:02] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-18 13:51:02] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 13:51:11] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 13:51:11] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 13:51:11] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 13:51:11] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 13:51:19] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 13:51:19] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 2)
+[2025-06-18 13:51:19] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-18 13:51:19] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 13:51:48] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 14:03:34] INFO - root: Application interrupted by user
+[2025-06-18 14:03:36] INFO - root: Logging initialized - Level: INFO
+[2025-06-18 14:03:36] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-18 14:03:36] INFO - __main__: Configuration loaded successfully
+[2025-06-18 14:03:36] INFO - __main__: Starting GUI...
+[2025-06-18 14:03:36] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-18 14:03:36] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-18 14:03:36] INFO - __main__: Application ready
+[2025-06-18 14:03:36] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-18 14:03:54] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-18 14:03:55] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-18 14:04:08] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-18 14:04:11] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-18 14:04:11] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 14:04:11] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-18 14:04:11] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 14:04:20] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 14:04:25] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-18 14:04:26] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-18 14:04:43] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-18 14:04:46] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-18 14:04:51] INFO - gui.main_window.MainWindow: Added test case to queue: wan_edit (wan_edit)
+[2025-06-18 14:04:54] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-18 14:04:54] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-18 14:04:54] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-18 14:04:54] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 14:05:03] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 14:05:03] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-18 14:05:03] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-18 14:05:03] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-18 14:05:03] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 14:05:12] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 14:05:12] INFO - gui.main_window.MainWindow: send_selected_test called with index: 2
+[2025-06-18 14:05:12] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 2)
+[2025-06-18 14:05:12] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-18 14:05:12] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 14:05:41] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-18 14:05:41] INFO - gui.main_window.MainWindow: send_selected_test called with index: 3
+[2025-06-18 14:05:41] INFO - gui.main_window.MainWindow: Sending test case wan_edit (index 3)
+[2025-06-18 14:05:41] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true
+      },
+      "action": "edit"
+    }
+  ]
+}
+[2025-06-18 14:05:41] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-18 14:06:05] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "wan"
+    ]
+  },
+  "failed_by_service": {
+    "wan": [
+      {
+        "id": 0,
+        "service": "wan",
+        "action": "edit",
+        "execution_time_ms": 24000,
+        "timestamp": "2025-06-18 14:06:19",
+        "status": false,
+        "message": "WAN check failed"
+      }
+    ]
+  }
+}
+[2025-06-18 14:06:31] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-18 14:06:32] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-18 14:06:51] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-18 14:06:52] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-18 14:09:51] INFO - root: Application interrupted by user
+[2025-06-23 09:43:43] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 09:43:43] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 09:43:43] INFO - __main__: Configuration loaded successfully
+[2025-06-23 09:43:43] INFO - __main__: Starting GUI...
+[2025-06-23 09:43:43] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 09:43:43] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 09:43:43] INFO - __main__: Application ready
+[2025-06-23 09:43:43] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 09:44:13] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 09:44:14] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-23 09:44:20] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 09:44:21] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 09:44:21] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-23 09:44:21] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-23 09:44:21] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 09:44:30] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 09:45:05] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 09:45:07] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 09:45:07] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-23 09:45:07] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-23 09:45:07] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 09:45:17] ERROR - gui.main_window.MainWindow: Connection refused
+[2025-06-23 09:45:17] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 09:45:17] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 1)
+[2025-06-23 09:45:17] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-23 09:45:17] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 09:45:22] ERROR - gui.main_window.MainWindow: Connection refused
+[2025-06-23 09:45:28] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 09:45:28] INFO - __main__: Application shutdown complete
+[2025-06-23 10:40:45] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 10:40:45] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 10:40:45] INFO - __main__: Configuration loaded successfully
+[2025-06-23 10:40:45] INFO - __main__: Starting GUI...
+[2025-06-23 10:40:45] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 10:40:45] CRITICAL - root: Unexpected error: 'MainWindow' object has no attribute '_create_test_tab'
+Traceback (most recent call last):
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\main.py", line 80, in main
+    app = MainWindow(config)
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\gui\main_window.py", line 79, in __init__
+    self._create_tabs()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\gui\main_window.py", line 215, in _create_tabs
+    self._create_test_tab()          # Manage and run tests
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute '_create_test_tab'. Did you mean: '_create_logs_tab'?
+[2025-06-23 10:46:20] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 10:46:20] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 10:46:20] INFO - __main__: Configuration loaded successfully
+[2025-06-23 10:46:20] INFO - __main__: Starting GUI...
+[2025-06-23 10:46:20] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 10:46:20] CRITICAL - root: Unexpected error: 'MainWindow' object has no attribute '_create_test_tab'
+Traceback (most recent call last):
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\main.py", line 80, in main
+    app = MainWindow(config)
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\gui\main_window.py", line 79, in __init__
+    self._create_tabs()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\gui\main_window.py", line 215, in _create_tabs
+    self._create_test_tab()          # Manage and run tests
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute '_create_test_tab'. Did you mean: '_create_logs_tab'?
+[2025-06-23 10:46:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 10:46:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 10:46:50] INFO - __main__: Configuration loaded successfully
+[2025-06-23 10:46:50] INFO - __main__: Starting GUI...
+[2025-06-23 10:46:50] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 10:46:50] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 10:46:50] INFO - __main__: Application ready
+[2025-06-23 10:46:50] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 10:51:41] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 10:51:41] INFO - __main__: Application shutdown complete
+[2025-06-23 10:52:08] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 10:52:08] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 10:52:08] INFO - __main__: Configuration loaded successfully
+[2025-06-23 10:52:08] INFO - __main__: Starting GUI...
+[2025-06-23 10:52:08] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 10:52:08] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 10:52:08] INFO - __main__: Application ready
+[2025-06-23 10:52:08] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 10:56:15] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 10:56:15] INFO - __main__: Application shutdown complete
+[2025-06-23 10:56:47] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 10:56:47] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 10:56:47] INFO - __main__: Configuration loaded successfully
+[2025-06-23 10:56:47] INFO - __main__: Starting GUI...
+[2025-06-23 10:56:47] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 10:56:48] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 10:56:48] INFO - __main__: Application ready
+[2025-06-23 10:56:48] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 10:57:01] INFO - gui.main_window.MainWindow: Added new parameter: q (string)
+[2025-06-23 10:59:33] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 10:59:33] INFO - __main__: Application shutdown complete
+[2025-06-23 11:00:02] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 11:00:02] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 11:00:02] INFO - __main__: Configuration loaded successfully
+[2025-06-23 11:00:02] INFO - __main__: Starting GUI...
+[2025-06-23 11:00:02] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 11:00:02] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 11:00:02] INFO - __main__: Application ready
+[2025-06-23 11:00:02] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 11:00:26] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 11:00:27] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-23 11:00:30] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 11:00:32] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 11:00:32] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0)
+[2025-06-23 11:00:32] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-23 11:00:32] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 11:00:40] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 11:09:39] INFO - root: Application interrupted by user
+[2025-06-23 11:09:41] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 11:09:41] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 11:09:41] INFO - __main__: Configuration loaded successfully
+[2025-06-23 11:09:41] INFO - __main__: Starting GUI...
+[2025-06-23 11:09:41] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 11:09:42] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 11:09:42] INFO - __main__: Application ready
+[2025-06-23 11:09:42] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 11:09:56] INFO - gui.main_window.MainWindow: Added new parameter: dđ (string)
+[2025-06-23 11:10:00] INFO - gui.main_window.MainWindow: Deleted parameter: dđ
+[2025-06-23 11:10:11] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 11:10:26] INFO - root: Application interrupted by user
+[2025-06-23 11:16:20] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 11:16:20] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 11:16:20] INFO - __main__: Configuration loaded successfully
+[2025-06-23 11:16:20] INFO - __main__: Starting GUI...
+[2025-06-23 11:16:20] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 11:16:21] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 11:16:21] INFO - __main__: Application ready
+[2025-06-23 11:16:21] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 11:16:25] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 11:16:33] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 11:16:35] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.88.1:6262
+[2025-06-23 11:16:45] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 11:16:47] ERROR - gui.main_window.MainWindow: HTTP connection refused to 192.168.88.1:6262
+[2025-06-23 11:16:56] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 11:16:57] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-23 11:17:01] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 11:17:01] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 11:17:01] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-23 11:17:01] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 11:17:02] ERROR - gui.main_window.MainWindow: Error sending test: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-06-23 11:17:44] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 11:17:44] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 11:17:44] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-23 11:17:44] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 11:17:53] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 11:55:39] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 11:55:39] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 11:55:39] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-23 11:55:39] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 11:55:40] ERROR - gui.main_window.MainWindow: Error sending test: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-06-23 11:55:43] INFO - root: Application interrupted by user
+[2025-06-23 11:55:45] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 11:55:45] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 11:55:45] INFO - __main__: Configuration loaded successfully
+[2025-06-23 11:55:45] INFO - __main__: Starting GUI...
+[2025-06-23 11:55:45] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 11:55:46] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 11:55:46] INFO - __main__: Application ready
+[2025-06-23 11:55:46] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 11:55:49] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 11:55:50] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-23 11:55:53] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 11:55:55] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 11:55:55] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 11:55:55] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-23 11:55:55] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 11:56:04] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 12:02:26] INFO - gui.main_window.MainWindow: Added test case to queue: lan_config (lan_config)
+[2025-06-23 12:02:29] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 12:02:29] INFO - gui.main_window.MainWindow: Sending test case lan_config (index 1)
+[2025-06-23 12:02:29] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "params": {
+        "interface": "eth0",
+        "ip": "192.168.1.1",
+        "netmask": "255.255.255.0",
+        "enable_dhcp": true
+      },
+      "action": "config"
+    }
+  ]
+}
+[2025-06-23 12:02:29] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 12:02:30] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "lan"
+    ]
+  },
+  "failed_by_service": {
+    "lan": [
+      {
+        "id": 0,
+        "service": "lan",
+        "action": "config",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 12:03:23",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-23 13:40:37] INFO - root: Application interrupted by user
+[2025-06-23 13:40:38] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 13:40:38] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 13:40:38] INFO - __main__: Configuration loaded successfully
+[2025-06-23 13:40:38] INFO - __main__: Starting GUI...
+[2025-06-23 13:40:38] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 13:40:39] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 13:40:39] INFO - __main__: Application ready
+[2025-06-23 13:40:39] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 13:40:52] INFO - gui.main_window.MainWindow: Testing HTTP connection to 192.168.88.1:6262
+[2025-06-23 13:40:53] INFO - gui.main_window.MainWindow: HTTP connection successful to 192.168.88.1:6262
+[2025-06-23 13:43:51] INFO - root: Application interrupted by user
+[2025-06-23 13:43:53] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 13:43:53] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 13:43:53] INFO - __main__: Configuration loaded successfully
+[2025-06-23 13:43:53] INFO - __main__: Starting GUI...
+[2025-06-23 13:43:53] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 13:43:54] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 13:43:54] INFO - __main__: Application ready
+[2025-06-23 13:43:54] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 13:44:03] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 13:44:03] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 13:44:28] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 13:44:30] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 13:44:30] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 13:44:30] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      }
+    }
+  ]
+}
+[2025-06-23 13:44:30] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:44:39] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:45:18] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 13:45:19] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 13:45:19] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-23 13:45:19] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-23 13:45:19] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:45:27] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:46:09] INFO - gui.main_window.MainWindow: Template parameters saved for wan_create with 11 parameters
+[2025-06-23 13:46:10] INFO - gui.main_window.MainWindow: Generated filename: wan_create_3.json
+[2025-06-23 13:46:10] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\wan\wan_create_3.json
+[2025-06-23 13:46:32] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 13:46:32] INFO - __main__: Application shutdown complete
+[2025-06-23 13:50:35] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 13:50:35] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 13:50:35] INFO - __main__: Configuration loaded successfully
+[2025-06-23 13:50:35] INFO - __main__: Starting GUI...
+[2025-06-23 13:50:35] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 13:50:35] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 13:50:35] INFO - __main__: Application ready
+[2025-06-23 13:50:35] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 13:50:42] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 13:50:42] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 13:50:48] INFO - gui.main_window.MainWindow: Added saved test to queue: ping_1.json
+[2025-06-23 13:50:52] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 13:50:52] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 13:50:52] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "count": 5
+      }
+    }
+  ]
+}
+[2025-06-23 13:50:52] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:51:01] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:51:24] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 13:51:27] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 13:51:37] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 13:51:37] INFO - gui.main_window.MainWindow: Sending test case ping (index 0)
+[2025-06-23 13:51:37] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com",
+        "count": 5
+      }
+    }
+  ]
+}
+[2025-06-23 13:51:37] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:51:46] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:51:46] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 13:51:46] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1)
+[2025-06-23 13:51:46] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "action": "create"
+    }
+  ]
+}
+[2025-06-23 13:51:46] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:51:54] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:51:54] INFO - gui.main_window.MainWindow: send_selected_test called with index: 2
+[2025-06-23 13:51:54] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 2)
+[2025-06-23 13:51:54] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "action": "delete"
+    }
+  ]
+}
+[2025-06-23 13:51:54] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 13:52:21] INFO - gui.main_window.MainWindow: Test response received: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 13:55:30] INFO - root: Application interrupted by user
+[2025-06-23 14:04:05] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:04:05] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:04:05] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:04:05] INFO - __main__: Starting GUI...
+[2025-06-23 14:04:05] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:04:05] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:04:05] INFO - __main__: Application ready
+[2025-06-23 14:04:05] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:04:21] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 14:04:21] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 14:04:27] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 14:04:30] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 14:04:32] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Scheduling 3 tests with delays: 10.0s, 30.0s, 30.0s
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Scheduling test #1 after 0.0s delay
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Scheduling test #2 after 10.0s delay
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Scheduling test #3 after 40.0s delay
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Sending test case ping (index 0, transaction_id: tx-100c252a)
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      },
+      "client_id": "tx-100c252a",
+      "client_timestamp": "2025-06-23 14:04:34"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-100c252a",
+    "client_timestamp": "2025-06-23 14:04:34",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:04:34"
+  }
+}
+[2025-06-23 14:04:34] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:04:43] INFO - gui.main_window.MainWindow: Test response received in 9.12s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:04:44] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 14:04:44] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 1, transaction_id: tx-7e34bceb)
+[2025-06-23 14:04:44] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "client_id": "tx-7e34bceb",
+      "client_timestamp": "2025-06-23 14:04:44",
+      "action": "create"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-7e34bceb",
+    "client_timestamp": "2025-06-23 14:04:44",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:04:44"
+  }
+}
+[2025-06-23 14:04:44] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:04:52] INFO - gui.main_window.MainWindow: Test response received in 8.14s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:05:14] INFO - gui.main_window.MainWindow: send_selected_test called with index: 2
+[2025-06-23 14:05:14] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 2, transaction_id: tx-38a36bbf)
+[2025-06-23 14:05:14] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "client_id": "tx-38a36bbf",
+      "client_timestamp": "2025-06-23 14:05:14",
+      "action": "delete"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-38a36bbf",
+    "client_timestamp": "2025-06-23 14:05:14",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:05:14"
+  }
+}
+[2025-06-23 14:05:14] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:05:26] INFO - gui.main_window.MainWindow: Test response received in 12.12s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:16:03] INFO - root: Application interrupted by user
+[2025-06-23 14:16:05] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:16:05] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:16:05] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:16:05] INFO - __main__: Starting GUI...
+[2025-06-23 14:16:05] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:16:05] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:16:05] INFO - __main__: Application ready
+[2025-06-23 14:16:05] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:16:11] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 14:16:11] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 14:16:24] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 14:20:05] INFO - root: Application interrupted by user
+[2025-06-23 14:20:07] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:20:07] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:20:07] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:20:07] INFO - __main__: Starting GUI...
+[2025-06-23 14:20:07] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:20:08] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:20:08] INFO - __main__: Application ready
+[2025-06-23 14:20:08] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:20:26] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:20:26] INFO - __main__: Application shutdown complete
+[2025-06-23 14:20:28] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:20:28] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:20:28] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:20:28] INFO - __main__: Starting GUI...
+[2025-06-23 14:20:28] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:20:28] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:20:28] INFO - __main__: Application ready
+[2025-06-23 14:20:28] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:20:40] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:20:40] INFO - __main__: Application shutdown complete
+[2025-06-23 14:20:57] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:20:57] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:20:57] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:20:57] INFO - __main__: Starting GUI...
+[2025-06-23 14:20:57] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:20:58] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:20:58] INFO - __main__: Application ready
+[2025-06-23 14:20:58] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:21:05] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 14:21:08] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 14:21:10] INFO - gui.main_window.MainWindow: Added test case to queue: wan_edit (wan_edit)
+[2025-06-23 14:21:12] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 14:21:17] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 14:21:17] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Scheduling 4 tests with delays: 30.0s, 30.0s, 30.0s, 10.0s
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Scheduling test #1 after 0.0s delay
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Scheduling test #2 after 30.0s delay
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Scheduling test #3 after 60.0s delay
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Scheduling test #4 after 90.0s delay
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 0, transaction_id: tx-6dba0319)
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "client_id": "tx-6dba0319",
+      "client_timestamp": "2025-06-23 14:21:20",
+      "action": "create"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-6dba0319",
+    "client_timestamp": "2025-06-23 14:21:20",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:21:20"
+  }
+}
+[2025-06-23 14:21:20] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:21:28] INFO - gui.main_window.MainWindow: Test response received in 8.12s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:21:50] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 14:21:50] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 1, transaction_id: tx-063ae840)
+[2025-06-23 14:21:50] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "client_id": "tx-063ae840",
+      "client_timestamp": "2025-06-23 14:21:50",
+      "action": "delete"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-063ae840",
+    "client_timestamp": "2025-06-23 14:21:50",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:21:50"
+  }
+}
+[2025-06-23 14:21:50] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:22:02] INFO - gui.main_window.MainWindow: Test response received in 12.16s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:22:20] INFO - gui.main_window.MainWindow: send_selected_test called with index: 2
+[2025-06-23 14:22:20] INFO - gui.main_window.MainWindow: Sending test case wan_edit (index 2, transaction_id: tx-8d48d7f4)
+[2025-06-23 14:22:20] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true
+      },
+      "client_id": "tx-8d48d7f4",
+      "client_timestamp": "2025-06-23 14:22:20",
+      "action": "edit"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-8d48d7f4",
+    "client_timestamp": "2025-06-23 14:22:20",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:22:20"
+  }
+}
+[2025-06-23 14:22:20] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:22:21] INFO - gui.main_window.MainWindow: Test response received in 1.04s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "wan"
+    ]
+  },
+  "failed_by_service": {
+    "wan": [
+      {
+        "id": 0,
+        "service": "wan",
+        "action": "edit",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 14:23:14",
+        "status": false,
+        "message": "UCI operation failed"
+      }
+    ]
+  }
+}
+[2025-06-23 14:22:50] INFO - gui.main_window.MainWindow: send_selected_test called with index: 3
+[2025-06-23 14:22:50] INFO - gui.main_window.MainWindow: Sending test case ping (index 3, transaction_id: tx-d25489e7)
+[2025-06-23 14:22:50] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "youtube.com",
+        "host2": "google.com"
+      },
+      "client_id": "tx-d25489e7",
+      "client_timestamp": "2025-06-23 14:22:50"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-d25489e7",
+    "client_timestamp": "2025-06-23 14:22:50",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 14:22:50"
+  }
+}
+[2025-06-23 14:22:50] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 14:22:59] INFO - gui.main_window.MainWindow: Test response received in 9.11s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 14:23:26] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 14:23:26] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 14:24:11] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:24:11] INFO - __main__: Application shutdown complete
+[2025-06-23 14:24:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:24:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:24:12] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:24:12] INFO - __main__: Starting GUI...
+[2025-06-23 14:24:13] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:24:13] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:24:13] INFO - __main__: Application ready
+[2025-06-23 14:24:13] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:24:36] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:24:36] INFO - __main__: Application shutdown complete
+[2025-06-23 14:24:38] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:24:38] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:24:38] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:24:38] INFO - __main__: Starting GUI...
+[2025-06-23 14:24:38] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:24:38] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:24:38] INFO - __main__: Application ready
+[2025-06-23 14:24:38] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:26:45] INFO - root: Application interrupted by user
+[2025-06-23 14:26:46] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:26:46] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:26:46] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:26:46] INFO - __main__: Starting GUI...
+[2025-06-23 14:26:46] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:26:46] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:26:46] INFO - __main__: Application ready
+[2025-06-23 14:26:46] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:28:02] INFO - root: Application interrupted by user
+[2025-06-23 14:28:03] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:28:03] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:28:03] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:28:03] INFO - __main__: Starting GUI...
+[2025-06-23 14:28:03] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:28:04] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:28:04] INFO - __main__: Application ready
+[2025-06-23 14:28:04] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:28:06] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:28:06] INFO - __main__: Application shutdown complete
+[2025-06-23 14:28:37] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:28:37] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:28:37] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:28:37] INFO - __main__: Starting GUI...
+[2025-06-23 14:28:37] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:28:38] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:28:38] INFO - __main__: Application ready
+[2025-06-23 14:28:38] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:28:46] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:28:47] INFO - __main__: Application shutdown complete
+[2025-06-23 14:28:49] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:28:49] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:28:49] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:28:49] INFO - __main__: Starting GUI...
+[2025-06-23 14:28:49] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:28:49] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:28:49] INFO - __main__: Application ready
+[2025-06-23 14:28:49] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:28:54] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:8080
+[2025-06-23 14:28:56] ERROR - gui.main_window.MainWindow: Socket connection error to 192.168.88.1:8080: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-23 14:29:24] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:29:25] INFO - __main__: Application shutdown complete
+[2025-06-23 14:29:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:29:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:29:50] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:29:50] INFO - __main__: Starting GUI...
+[2025-06-23 14:29:50] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:29:51] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:29:51] INFO - __main__: Application ready
+[2025-06-23 14:29:51] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:30:14] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:30:14] INFO - __main__: Application shutdown complete
+[2025-06-23 14:33:10] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:33:10] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:33:10] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:33:10] INFO - __main__: Starting GUI...
+[2025-06-23 14:33:10] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:33:10] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:33:10] INFO - __main__: Application ready
+[2025-06-23 14:33:10] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:33:27] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 14:33:34] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 14:33:36] INFO - gui.main_window.MainWindow: Added test case to queue: wan_edit (wan_edit)
+[2025-06-23 14:33:44] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:33:44] INFO - __main__: Application shutdown complete
+[2025-06-23 14:34:50] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:34:50] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:34:50] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:34:50] INFO - __main__: Starting GUI...
+[2025-06-23 14:34:50] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:34:51] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:34:51] INFO - __main__: Application ready
+[2025-06-23 14:34:51] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:34:56] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:34:56] INFO - __main__: Application shutdown complete
+[2025-06-23 14:35:01] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:35:01] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:35:01] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:35:01] INFO - __main__: Starting GUI...
+[2025-06-23 14:35:01] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:35:02] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:35:02] INFO - __main__: Application ready
+[2025-06-23 14:35:02] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:38:14] INFO - root: Application interrupted by user
+[2025-06-23 14:43:06] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:43:06] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:43:06] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:43:06] INFO - __main__: Starting GUI...
+[2025-06-23 14:43:06] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:43:07] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:43:07] INFO - __main__: Application ready
+[2025-06-23 14:43:07] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:43:42] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:8080
+[2025-06-23 14:43:44] ERROR - gui.main_window.MainWindow: Socket connection error to 192.168.88.1:8080: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-23 14:43:45] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:8080
+[2025-06-23 14:43:47] ERROR - gui.main_window.MainWindow: Socket connection error to 192.168.88.1:8080: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-23 14:43:50] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 14:43:50] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 14:44:13] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:44:13] INFO - __main__: Application shutdown complete
+[2025-06-23 14:44:15] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:44:15] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:44:15] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:44:15] INFO - __main__: Starting GUI...
+[2025-06-23 14:44:15] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:44:16] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:44:16] INFO - __main__: Application ready
+[2025-06-23 14:44:16] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:44:28] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 14:44:29] INFO - __main__: Application shutdown complete
+[2025-06-23 14:56:14] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 14:56:14] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 14:56:14] INFO - __main__: Configuration loaded successfully
+[2025-06-23 14:56:14] INFO - __main__: Starting GUI...
+[2025-06-23 14:56:14] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 14:56:15] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 14:56:15] INFO - __main__: Application ready
+[2025-06-23 14:56:15] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 14:57:58] INFO - root: Application interrupted by user
+[2025-06-23 15:06:57] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:06:57] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:06:57] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:06:57] INFO - __main__: Starting GUI...
+[2025-06-23 15:06:57] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:06:58] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:06:58] INFO - __main__: Application ready
+[2025-06-23 15:06:58] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:08:18] INFO - gui.main_window.MainWindow: Added new parameter: dsa
+[2025-06-23 15:08:21] INFO - gui.main_window.MainWindow: Deleted parameter: dsa
+[2025-06-23 15:21:21] INFO - root: Application interrupted by user
+[2025-06-23 15:21:22] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:21:22] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:21:22] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:21:22] INFO - __main__: Starting GUI...
+[2025-06-23 15:21:22] INFO - core.test_case_loader: Creating sample tests for LAN category
+[2025-06-23 15:21:22] INFO - core.test_case_loader: Created sample test: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\lan\lan_config.json
+[2025-06-23 15:21:22] INFO - core.test_case_loader: Creating sample tests for NETWORK category
+[2025-06-23 15:21:22] INFO - core.test_case_loader: Created sample test: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:21:22] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:21:23] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:21:23] INFO - __main__: Application ready
+[2025-06-23 15:21:23] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:21:34] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:21:35] INFO - __main__: Application shutdown complete
+[2025-06-23 15:21:48] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:21:48] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:21:48] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:21:48] INFO - __main__: Starting GUI...
+[2025-06-23 15:21:48] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:21:49] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:21:49] INFO - __main__: Application ready
+[2025-06-23 15:21:49] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:22:30] INFO - root: Application interrupted by user
+[2025-06-23 15:22:31] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:22:31] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:22:31] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:22:31] INFO - __main__: Starting GUI...
+[2025-06-23 15:22:31] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:22:32] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:22:32] INFO - __main__: Application ready
+[2025-06-23 15:22:32] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:22:47] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:22:47] INFO - __main__: Application shutdown complete
+[2025-06-23 15:22:53] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:22:53] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:22:53] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:22:53] INFO - __main__: Starting GUI...
+[2025-06-23 15:22:53] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:22:53] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:22:53] INFO - __main__: Application ready
+[2025-06-23 15:22:53] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:27:26] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:27:26] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:27:26] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:27:26] INFO - __main__: Starting GUI...
+[2025-06-23 15:27:26] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:27:26] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:27:26] INFO - __main__: Application ready
+[2025-06-23 15:27:26] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:31:11] INFO - root: Application interrupted by user
+[2025-06-23 15:31:12] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:31:12] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:31:12] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:31:12] INFO - __main__: Starting GUI...
+[2025-06-23 15:31:12] CRITICAL - root: Unexpected error: cannot import name 'TestCaseLoader' from 'core.test_case_loader' (C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\core\test_case_loader.py)
+Traceback (most recent call last):
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\main.py", line 80, in main
+    app = MainWindow(config)
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\gui\main_window.py", line 52, in __init__
+    from core.test_case_loader import TestCaseLoader
+ImportError: cannot import name 'TestCaseLoader' from 'core.test_case_loader' (C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\src\core\test_case_loader.py). Did you mean: 'test_case_loader'?
+[2025-06-23 15:32:40] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:32:40] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:32:40] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:32:40] INFO - __main__: Starting GUI...
+[2025-06-23 15:32:40] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, SYSTEM, WAN, WIRELESS
+[2025-06-23 15:32:40] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:32:40] INFO - core.test_case_loader: Found 5 categories
+[2025-06-23 15:32:40] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:32:41] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:32:41] INFO - __main__: Application ready
+[2025-06-23 15:32:41] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:33:02] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:33:02] INFO - __main__: Application shutdown complete
+[2025-06-23 15:33:35] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:33:35] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:33:35] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:33:35] INFO - __main__: Starting GUI...
+[2025-06-23 15:33:35] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, SYSTEM, WAN, WIRELESS
+[2025-06-23 15:33:35] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:33:35] INFO - core.test_case_loader: Found 5 categories
+[2025-06-23 15:33:35] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:33:36] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:33:36] INFO - __main__: Application ready
+[2025-06-23 15:33:36] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:33:38] INFO - gui.main_window.MainWindow: Added test case to queue: wireless_config_ap (wireless_config_ap)
+[2025-06-23 15:33:43] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 15:33:43] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 15:33:47] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 15:33:47] INFO - gui.main_window.MainWindow: Sending test case wireless_config_ap (index 0, transaction_id: tx-110798ff)
+[2025-06-23 15:33:47] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wireless",
+      "params": {
+        "frequency": "24G",
+        "wifi_mode": "ap",
+        "encryption": "psk2+ccmp",
+        "ssid": "1.test_ssid",
+        "password": 1234567890,
+        "disable_mode": 0
+      },
+      "client_id": "tx-110798ff",
+      "client_timestamp": "2025-06-23 15:33:47",
+      "action": "config"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-110798ff",
+    "client_timestamp": "2025-06-23 15:33:47",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:33:47"
+  }
+}
+[2025-06-23 15:33:47] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:33:48] INFO - gui.main_window.MainWindow: Test response received in 1.02s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "wireless"
+    ]
+  },
+  "failed_by_service": {
+    "wireless": [
+      {
+        "id": 0,
+        "service": "wireless",
+        "action": "config",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 15:34:41",
+        "status": false,
+        "message": "Unknown service or action"
+      }
+    ]
+  }
+}
+[2025-06-23 15:35:07] INFO - gui.main_window.MainWindow: Added test case to queue: wireless_config_radio (wireless_config_radio)
+[2025-06-23 15:35:14] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:35:14] INFO - __main__: Application shutdown complete
+[2025-06-23 15:37:27] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:37:27] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:37:27] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:37:27] INFO - __main__: Starting GUI...
+[2025-06-23 15:37:27] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, SYSTEM, WAN, WIRELESS
+[2025-06-23 15:37:27] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:37:27] INFO - core.test_case_loader: Found 5 categories
+[2025-06-23 15:37:27] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:37:28] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:37:28] INFO - __main__: Application ready
+[2025-06-23 15:37:28] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:37:31] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:37:31] INFO - __main__: Application shutdown complete
+[2025-06-23 15:38:34] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:38:34] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:38:34] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:38:34] INFO - __main__: Starting GUI...
+[2025-06-23 15:38:34] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, SYSTEM, WAN, WIRELESS
+[2025-06-23 15:38:34] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:38:34] INFO - core.test_case_loader: Found 5 categories
+[2025-06-23 15:38:34] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:38:34] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:38:34] INFO - __main__: Application ready
+[2025-06-23 15:38:34] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:39:28] INFO - gui.main_window.MainWindow: Added new parameter: host3
+[2025-06-23 15:39:32] INFO - gui.main_window.MainWindow: Saved parameters for ping in NETWORK
+[2025-06-23 15:39:42] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:39:42] INFO - __main__: Application shutdown complete
+[2025-06-23 15:43:26] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:43:26] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:43:26] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:43:26] INFO - __main__: Starting GUI...
+[2025-06-23 15:43:26] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, SYSTEM, WAN, WIRELESS
+[2025-06-23 15:43:26] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:43:26] INFO - core.test_case_loader: Found 5 categories
+[2025-06-23 15:43:26] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:43:26] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:43:26] INFO - __main__: Application ready
+[2025-06-23 15:43:26] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:44:15] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\wan\wan_create.json
+[2025-06-23 15:44:18] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\wan\wan_create.json
+[2025-06-23 15:44:24] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\wan\wan_edit.json
+[2025-06-23 15:44:30] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\wireless\wireless_config_radio_testcase.json
+[2025-06-23 15:44:34] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-23 15:44:34] INFO - __main__: Application shutdown complete
+[2025-06-23 15:44:37] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:44:37] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:44:37] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:44:37] INFO - __main__: Starting GUI...
+[2025-06-23 15:44:37] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-06-23 15:44:37] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:44:37] INFO - core.test_case_loader: Found 4 categories
+[2025-06-23 15:44:37] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:44:38] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:44:38] INFO - __main__: Application ready
+[2025-06-23 15:44:38] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:46:34] INFO - root: Application interrupted by user
+[2025-06-23 15:47:31] INFO - root: Logging initialized - Level: INFO
+[2025-06-23 15:47:31] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-23 15:47:31] INFO - __main__: Configuration loaded successfully
+[2025-06-23 15:47:31] INFO - __main__: Starting GUI...
+[2025-06-23 15:47:31] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-06-23 15:47:31] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-23 15:47:31] INFO - core.test_case_loader: Found 4 categories
+[2025-06-23 15:47:31] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-23 15:47:32] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-23 15:47:32] INFO - __main__: Application ready
+[2025-06-23 15:47:32] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-23 15:47:35] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 11 parameters
+[2025-06-23 15:47:36] INFO - gui.main_window.MainWindow: Loaded parameters for wan_delete in WAN: 1 parameters
+[2025-06-23 15:47:36] INFO - gui.main_window.MainWindow: Loaded parameters for wan_edit in WAN: 22 parameters
+[2025-06-23 15:47:38] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_ap in WIRELESS: 6 parameters
+[2025-06-23 15:47:38] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_radio in WIRELESS: 7 parameters
+[2025-06-23 15:47:39] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_radio_testcase in WIRELESS: 7 parameters
+[2025-06-23 15:47:41] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_sta in WIRELESS: 6 parameters
+[2025-06-23 15:47:48] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_radio in WIRELESS: 7 parameters
+[2025-06-23 15:47:51] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_radio_testcase in WIRELESS: 7 parameters
+[2025-06-23 15:47:51] INFO - gui.main_window.MainWindow: Loaded parameters for wireless_config_radio in WIRELESS: 7 parameters
+[2025-06-23 15:47:53] INFO - gui.main_window.MainWindow: Loaded parameters for wan_edit in WAN: 22 parameters
+[2025-06-23 15:47:53] INFO - gui.main_window.MainWindow: Loaded parameters for wan_delete in WAN: 1 parameters
+[2025-06-23 15:47:53] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 11 parameters
+[2025-06-23 15:47:55] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 3 parameters
+[2025-06-23 15:47:56] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_ip in LAN: 3 parameters
+[2025-06-23 15:47:56] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_leasetime in LAN: 2 parameters
+[2025-06-23 15:47:57] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_start in LAN: 5 parameters
+[2025-06-23 15:47:57] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_start in LAN: 5 parameters
+[2025-06-23 15:47:58] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_leasetime in LAN: 2 parameters
+[2025-06-23 15:47:58] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_ip in LAN: 3 parameters
+[2025-06-23 15:47:59] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_start in LAN: 5 parameters
+[2025-06-23 15:47:59] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_start in LAN: 5 parameters
+[2025-06-23 15:48:00] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_leasetime in LAN: 2 parameters
+[2025-06-23 15:48:00] INFO - gui.main_window.MainWindow: Loaded parameters for lan_edit_change_ip in LAN: 3 parameters
+[2025-06-23 15:48:01] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 3 parameters
+[2025-06-23 15:48:04] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:48:04] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 3 parameters
+[2025-06-23 15:48:05] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 3 parameters
+[2025-06-23 15:48:09] INFO - gui.main_window.MainWindow: Deleted parameter: host3
+[2025-06-23 15:48:10] INFO - gui.main_window.MainWindow: Saved parameters for ping in NETWORK
+[2025-06-23 15:48:11] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:48:11] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 2 parameters
+[2025-06-23 15:48:13] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:48:13] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 2 parameters
+[2025-06-23 15:48:14] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:48:14] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 2 parameters
+[2025-06-23 15:48:26] INFO - gui.main_window.MainWindow: Added new parameter: host3
+[2025-06-23 15:48:32] INFO - gui.main_window.MainWindow: Reset: Loaded test data directly from C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates\network\ping.json
+[2025-06-23 15:48:32] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 2 parameters
+[2025-06-23 15:48:50] INFO - gui.main_window.MainWindow: Generated filename: ping_3.json
+[2025-06-23 15:48:50] INFO - gui.main_window.MainWindow: Generated test case saved to: data\temp\generated_tests\network\ping_3.json
+[2025-06-23 15:49:11] INFO - gui.main_window.MainWindow: Deleted test file: data\temp\generated_tests\wan\wan_create_1.json
+[2025-06-23 15:49:19] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.88.1:6262
+[2025-06-23 15:49:19] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.88.1:6262
+[2025-06-23 15:49:20] INFO - gui.main_window.MainWindow: Loaded parameters for ping in NETWORK: 2 parameters
+[2025-06-23 15:49:30] INFO - gui.main_window.MainWindow: Added new parameter: host3
+[2025-06-23 15:49:33] INFO - gui.main_window.MainWindow: Added test case to queue: ping (ping)
+[2025-06-23 15:49:38] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 15:49:38] INFO - gui.main_window.MainWindow: Sending test case ping (index 0, transaction_id: tx-3c611fc6)
+[2025-06-23 15:49:38] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "google.com",
+        "host2": "youtube.com",
+        "host3": "facebook.com"
+      },
+      "client_id": "tx-3c611fc6",
+      "client_timestamp": "2025-06-23 15:49:38"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-3c611fc6",
+    "client_timestamp": "2025-06-23 15:49:38",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:49:38"
+  }
+}
+[2025-06-23 15:49:38] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:49:51] INFO - gui.main_window.MainWindow: Test response received in 13.16s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 15:50:03] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 11 parameters
+[2025-06-23 15:50:04] INFO - gui.main_window.MainWindow: Loaded parameters for wan_delete in WAN: 1 parameters
+[2025-06-23 15:50:06] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 15:50:08] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 11 parameters
+[2025-06-23 15:50:08] INFO - gui.main_window.MainWindow: Added test case to queue: wan_create (wan_create)
+[2025-06-23 15:50:10] INFO - gui.main_window.MainWindow: Loaded parameters for wan_edit in WAN: 22 parameters
+[2025-06-23 15:50:11] INFO - gui.main_window.MainWindow: Added test case to queue: wan_edit (wan_edit)
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Scheduling 4 tests with delays: 10.0s, 30.0s, 30.0s, 30.0s
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Scheduling test #1 after 0.0s delay
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Scheduling test #2 after 10.0s delay
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Scheduling test #3 after 40.0s delay
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Scheduling test #4 after 70.0s delay
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: send_selected_test called with index: 0
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Sending test case ping (index 0, transaction_id: tx-4caf75f8)
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "ping",
+      "params": {
+        "host1": "google.com",
+        "host2": "youtube.com",
+        "host3": "facebook.com"
+      },
+      "client_id": "tx-4caf75f8",
+      "client_timestamp": "2025-06-23 15:50:13"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-4caf75f8",
+    "client_timestamp": "2025-06-23 15:50:13",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:50:13"
+  }
+}
+[2025-06-23 15:50:13] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:50:26] INFO - gui.main_window.MainWindow: Test response received in 13.15s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 15:50:26] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 15:50:26] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 1, transaction_id: tx-e60f12cd)
+[2025-06-23 15:50:26] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "client_id": "tx-e60f12cd",
+      "client_timestamp": "2025-06-23 15:50:26",
+      "action": "delete"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-e60f12cd",
+    "client_timestamp": "2025-06-23 15:50:26",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:50:26"
+  }
+}
+[2025-06-23 15:50:26] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:50:27] INFO - gui.main_window.MainWindow: Test response received in 1.07s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "unknown"
+    ]
+  },
+  "failed_by_service": {
+    "unknown": [
+      {
+        "id": 0,
+        "service": "unknown",
+        "action": "unknown",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 15:51:20",
+        "status": false,
+        "message": "Failed to parse test case file"
+      }
+    ]
+  }
+}
+[2025-06-23 15:50:53] INFO - gui.main_window.MainWindow: send_selected_test called with index: 2
+[2025-06-23 15:50:53] INFO - gui.main_window.MainWindow: Sending test case wan_create (index 2, transaction_id: tx-f59204b7)
+[2025-06-23 15:50:53] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1",
+        "protocol": "ipv4",
+        "gateway_type": "route",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "ipv4_alloc": "dhcp",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ]
+      },
+      "client_id": "tx-f59204b7",
+      "client_timestamp": "2025-06-23 15:50:53",
+      "action": "create"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-f59204b7",
+    "client_timestamp": "2025-06-23 15:50:53",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:50:53"
+  }
+}
+[2025-06-23 15:50:53] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:51:01] INFO - gui.main_window.MainWindow: Test response received in 8.11s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-23 15:51:23] INFO - gui.main_window.MainWindow: send_selected_test called with index: 3
+[2025-06-23 15:51:23] INFO - gui.main_window.MainWindow: Sending test case wan_edit (index 3, transaction_id: tx-2bc0de71)
+[2025-06-23 15:51:23] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan",
+        "protocol": "ipv4",
+        "gateway_type": "bridge",
+        "vlan_type": "",
+        "vlan_id": "-1",
+        "mtu": 1492,
+        "nat": true,
+        "link_mode": "ipoe",
+        "pppoe_username": "",
+        "pppoe_password": "",
+        "ipv4_alloc": "static",
+        "ipv4_ip": "192.168.1.100",
+        "ipv4_mask": "255.255.255.0",
+        "ipv4_gw": "192.168.1.1",
+        "ipv4_dns": [
+          "8.8.8.8",
+          "8.8.4.4"
+        ],
+        "ipv6_alloc": "",
+        "ipv6_gw": "",
+        "ipv6_dns": [],
+        "ipv6_prefix_mode": "",
+        "ipv6_prefix_value": "",
+        "ipv6_prefix_primaryTime": "",
+        "ipv6_prefix_leaseTime": ""
+      },
+      "client_id": "tx-2bc0de71",
+      "client_timestamp": "2025-06-23 15:51:23",
+      "action": "edit"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-2bc0de71",
+    "client_timestamp": "2025-06-23 15:51:23",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:51:23"
+  }
+}
+[2025-06-23 15:51:23] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:51:24] INFO - gui.main_window.MainWindow: Test response received in 1.02s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "wan"
+    ]
+  },
+  "failed_by_service": {
+    "wan": [
+      {
+        "id": 0,
+        "service": "wan",
+        "action": "edit",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 15:52:17",
+        "status": false,
+        "message": "UCI operation failed"
+      }
+    ]
+  }
+}
+[2025-06-23 15:56:10] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 11 parameters
+[2025-06-23 15:56:10] INFO - gui.main_window.MainWindow: Loaded parameters for wan_delete in WAN: 1 parameters
+[2025-06-23 15:56:12] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete)
+[2025-06-23 15:56:16] INFO - gui.main_window.MainWindow: send_selected_test called with index: 1
+[2025-06-23 15:56:16] INFO - gui.main_window.MainWindow: Sending test case wan_delete (index 1, transaction_id: tx-7b5452a6)
+[2025-06-23 15:56:16] INFO - gui.main_window.MainWindow: Full payload: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "client_id": "tx-7b5452a6",
+      "client_timestamp": "2025-06-23 15:56:16",
+      "action": "delete"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-7b5452a6",
+    "client_timestamp": "2025-06-23 15:56:16",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-23 15:56:16"
+  }
+}
+[2025-06-23 15:56:16] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.88.1:6262
+[2025-06-23 15:56:16] INFO - gui.main_window.MainWindow: Test response received in 0.04s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 0,
+    "failed": 1,
+    "failed_services": [
+      "wan"
+    ]
+  },
+  "failed_by_service": {
+    "wan": [
+      {
+        "id": 0,
+        "service": "wan",
+        "action": "delete",
+        "execution_time_ms": 0,
+        "timestamp": "2025-06-23 15:56:19",
+        "status": false,
+        "message": "UCI operation failed"
+      }
+    ]
+  }
+}
+[2025-06-23 16:01:12] INFO - root: Application interrupted by user

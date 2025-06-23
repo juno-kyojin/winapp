@@ -1,0 +1,19 @@
+{
+    "test_cases": [
+        {
+            "service": "ping",
+            "params": {
+                "host1": "google.com",
+                "host2": "youtube.com"
+            }
+        }
+    ],
+    "metadata": {
+        "created_by": "juno-kyojin",
+        "created_at": "2025-06-18 03:28:32",
+        "category": "NETWORK",
+        "identifier": "3",
+        "connection_type": "http",
+        "version": "2.0"
+    }
+}

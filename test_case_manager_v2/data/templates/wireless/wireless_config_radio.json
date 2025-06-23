@@ -1,0 +1,17 @@
+{
+  "test_cases": [
+    {
+      "service": "wireless",
+      "action": "wireless_config_radio",
+      "params": {
+        "frequency": "24G",
+        "status": "enable",
+        "mac": "4c:12:e8:43:c2:36",
+        "mode": "11axg",
+        "channel": "auto",
+        "band": "20MHz",
+        "Power": "23"
+      }
+    }
+  ]
+}
