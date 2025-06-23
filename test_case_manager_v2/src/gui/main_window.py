@@ -126,7 +126,7 @@ class MainWindow(LoggerMixin):
             self.http_client = None
     
     def _setup_window(self) -> None:
-        """Setup the main window properties."""
+        """Setup the main window properties with improved layout management."""
         self.root = tk.Tk()
         self.root.title(f"{APP_NAME} v{APP_VERSION}")
         
@@ -142,6 +142,11 @@ class MainWindow(LoggerMixin):
         
         self.root.geometry(f"{width}x{height}+{x}+{y}")
         self.root.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
+        
+        # Đặt trọng số cho mở rộng - quan trọng cho status bar!
+        self.root.rowconfigure(0, weight=1)  # Main content expands
+        self.root.rowconfigure(1, weight=0)  # Status bar fixed height
+        self.root.columnconfigure(0, weight=1)  # Expand horizontally
         
         # Set window icon (if available)
         try:
@@ -310,7 +315,7 @@ class MainWindow(LoggerMixin):
         button_frame = ttk.Frame(conn_frame)
         button_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        ttk.Button(button_frame, text="Test Connection", command=self._test_connection).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Connect", command=self._test_connection).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Save", command=self._save_connection_settings).pack(side=tk.LEFT, padx=5)
         
         # Status panel
@@ -511,7 +516,7 @@ class MainWindow(LoggerMixin):
                 )
 
     def _on_test_case_selected(self, event):
-        """Handler for test case selection from TreeView"""
+        """Handler for test case selection from TreeView with improved UI stability"""
         # Get the selected item
         selection = self.test_tree.selection()
         if not selection:
@@ -530,11 +535,23 @@ class MainWindow(LoggerMixin):
             
             # Load parameters for the selected test case
             self._load_test_parameters(test_id, category)
+            
+            # Đặt status message để đảm bảo hiển thị đúng
+            # Sửa: Sử dụng _safe_set thay vì truy cập trực tiếp đến set
+            self._safe_set(self.status_var, f"Selected test: {test_name}")
+                
+            # Đảm bảo UI được cập nhật
+            # Sửa: Kiểm tra self.root trước khi gọi update_idletasks
+            if self.root:
+                self.root.update_idletasks()
         else:
             # It's a category - clear parameters
             self.params_frame.configure(text="Template Parameters")
             self._clear_parameters()
-
+            
+            # Đặt status message
+            # Sửa: Sử dụng _safe_set thay vì truy cập trực tiếp đến set
+            self._safe_set(self.status_var, f"Selected category: {self.test_tree.item(selection[0], 'text')}")
     def _load_test_parameters(self, test_id, category):
         """Load parameters for selected test case"""
         # Clear existing parameters
@@ -933,97 +950,82 @@ class MainWindow(LoggerMixin):
         """Clear all parameters from the parameters frame"""
         for widget in self.params_frame.winfo_children():
             widget.destroy()
-
     def _create_parameter_controls(self, params):
         """Create parameter input fields based on parameter definitions"""
         # Xóa các widget hiện có
         for widget in self.params_frame.winfo_children():
             widget.destroy()
-            
-        # Tạo canvas và scrollbar để cuộn các tham số
-        canvas = tk.Canvas(self.params_frame)
-        scrollbar = ttk.Scrollbar(self.params_frame, orient=tk.VERTICAL, command=canvas.yview)
         
-        # Tạo frame bên trong canvas để chứa các tham số
-        main_container = ttk.Frame(canvas)
+        # ===== PHẦN 1: FRAME CỐ ĐỊNH CHO CÁC NÚT ĐIỀU KHIỂN =====
+        control_frame = ttk.Frame(self.params_frame)
+        control_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        # Cấu hình canvas
+        # Đưa các nút điều khiển vào frame này
+        ttk.Button(control_frame, text="➕ Add Param", command=self._add_parameter).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(control_frame, text="🔄 Reset", command=lambda: self._on_test_case_selected(None)).pack(side=tk.RIGHT, padx=5)
+    
+        
+        # ===== PHẦN 2: FRAME CỐ ĐỊNH CHO TIÊU ĐỀ CỘT =====
+        header_frame = ttk.Frame(self.params_frame)
+        header_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        # Thiết lập grid columns - chỉ còn 3 cột
+        header_frame.columnconfigure(0, weight=0, minsize=150)  # Param
+        header_frame.columnconfigure(1, weight=1, minsize=250)  # Value
+        header_frame.columnconfigure(2, weight=0, minsize=100)  # Actions
+
+        # Tiêu đề với 3 cột
+        ttk.Label(header_frame, text="Parameter", font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5, sticky=tk.W)
+        ttk.Label(header_frame, text="Value", font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5, sticky=tk.W)
+        ttk.Label(header_frame, text="Actions", font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5, sticky=tk.W)
+        
+        # Separator sau tiêu đề
+        ttk.Separator(self.params_frame, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=3)
+        
+        # ===== PHẦN 3: KHUNG CUỘN CHO NỘI DUNG =====
+        # Frame chứa canvas và scrollbar
+        scroll_frame = ttk.Frame(self.params_frame)
+        scroll_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Tạo canvas
+        canvas = tk.Canvas(scroll_frame, borderwidth=0, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(scroll_frame, orient=tk.VERTICAL, command=canvas.yview)
+        
+        # Cấu hình và đặt vị trí cho canvas và scrollbar
         canvas.configure(yscrollcommand=scrollbar.set)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        # Tạo cửa sổ cho frame trong canvas
-        canvas.create_window((0, 0), window=main_container, anchor=tk.NW)
+        # Tạo frame con bên trong canvas để chứa các tham số
+        param_frame = ttk.Frame(canvas)
         
-        # Khung quản lý tham số
-        management_frame = ttk.Frame(main_container)
-        management_frame.pack(fill=tk.X, pady=5)
+        # Thiết lập grid columns đồng nhất với header - chỉ 3 cột
+        param_frame.columnconfigure(0, weight=0, minsize=150)  # Param
+        param_frame.columnconfigure(1, weight=1, minsize=250)  # Value
+        param_frame.columnconfigure(2, weight=0, minsize=100)  # Actions
         
-        ttk.Button(management_frame, text="➕ Add Param", command=self._add_parameter).pack(side=tk.LEFT, padx=5)
-        ttk.Button(management_frame, text="📝 Edit Types", command=self._edit_parameter_types).pack(side=tk.LEFT, padx=5)
-        
-        # Separator
-        ttk.Separator(main_container, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=5)
-        
-        # Headers
-        param_table_frame = ttk.Frame(main_container)
-        param_table_frame.pack(fill=tk.BOTH, expand=True)
-        
-        header_frame = ttk.Frame(param_table_frame)
-        header_frame.pack(fill=tk.X, pady=5)
-        
-        # Tiêu đề với 5 cột thay vì 6 (bỏ cột checkbox)
-        ttk.Label(header_frame, text="Param", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
-        ttk.Label(header_frame, text="Value", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
-        ttk.Label(header_frame, text="Type", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
-        ttk.Label(header_frame, text="Required", width=8, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
-        ttk.Label(header_frame, text="Actions", width=12, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=4, padx=5)
-        
-        # Create parameter rows
-        param_rows_frame = ttk.Frame(param_table_frame)
-        param_rows_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+        # Tạo window trong canvas để hiển thị frame con
+        canvas_window = canvas.create_window(0, 0, window=param_frame, anchor=tk.NW, tags="param_frame")
         
         # Store parameter variables for later access
         self.param_vars = {}
-        self.param_required_vars = {}
-        self.param_type_vars = {}
         
-        row = 0
-        for param in params:
+        # ===== PHẦN 4: TẠO CÁC DÒNG THAM SỐ =====
+        for i, param in enumerate(params):
             # Tên tham số
-            ttk.Label(param_rows_frame, text=param["name"], width=15, anchor=tk.W).grid(row=row, column=0, padx=5, pady=3)
+            ttk.Label(param_frame, text=param["name"]).grid(row=i, column=0, padx=5, pady=6, sticky=tk.W)
             
-            # Giá trị tham số
-            if param["type"] == "enum" and "options" in param:
-                var = tk.StringVar(value=param["value"])
-                ttk.Combobox(param_rows_frame, textvariable=var, values=param["options"], width=18).grid(row=row, column=1, padx=5, pady=3)
-            elif param["type"] == "boolean":
-                var = tk.StringVar(value=param["value"])
-                options = ["true", "false"]
-                ttk.Combobox(param_rows_frame, textvariable=var, values=options, width=18).grid(row=row, column=1, padx=5, pady=3)
-            else:
-                var = tk.StringVar(value=param["value"])
-                ttk.Entry(param_rows_frame, textvariable=var, width=20).grid(row=row, column=1, padx=5, pady=3)
+            # Giá trị tham số - sử dụng giá trị hiện có, không quan tâm đến type nữa
+            var = tk.StringVar(value=param["value"])
+            ttk.Entry(param_frame, textvariable=var, width=35).grid(row=i, column=1, padx=5, pady=6, sticky=tk.W+tk.E)
             
             # Lưu biến giá trị
             self.param_vars[param["name"]] = var
             
-            # Loại tham số
-            type_var = tk.StringVar(value=param["type"])
-            type_combo = ttk.Combobox(param_rows_frame, textvariable=type_var, values=["string", "integer", "boolean", "enum", "array"], 
-                                    width=8, state="readonly")
-            type_combo.grid(row=row, column=2, padx=5, pady=3)
-            self.param_type_vars[param["name"]] = type_var
-            
-            # Thuộc tính required - dùng combobox thay vì checkbox
-            req_var = tk.StringVar(value="Yes" if param.get("required", False) else "No")
-            ttk.Combobox(param_rows_frame, textvariable=req_var, values=["Yes", "No"], 
-                        width=6, state="readonly").grid(row=row, column=3, padx=5, pady=3)
-            self.param_required_vars[param["name"]] = req_var
-            
-            # Nút hành động - tối giản, chỉ hiển thị biểu tượng
-            action_frame = ttk.Frame(param_rows_frame)
-            action_frame.grid(row=row, column=4, padx=5, pady=3)
+            # Nút hành động
+            action_frame = ttk.Frame(param_frame)
+            action_frame.grid(row=i, column=2, padx=5, pady=6, sticky=tk.W)
             
             ttk.Button(action_frame, text="🔼", width=2, 
                     command=lambda name=param["name"]: self._move_parameter_up(name)).pack(side=tk.LEFT, padx=1)
@@ -1031,160 +1033,97 @@ class MainWindow(LoggerMixin):
                     command=lambda name=param["name"]: self._move_parameter_down(name)).pack(side=tk.LEFT, padx=1)
             ttk.Button(action_frame, text="❌", width=2,
                     command=lambda name=param["name"]: self._delete_parameter(name)).pack(side=tk.LEFT, padx=1)
-            
-            row += 1
+
+        # ===== PHẦN 5: CẤU HÌNH LINH HOẠT VÀ CUỘN =====
+        # Cập nhật kích thước của frame để tính toán scrollregion
+        param_frame.update_idletasks()
         
-        # Action buttons
-        button_frame = ttk.Frame(main_container)
-        button_frame.pack(fill=tk.X, padx=10, pady=10)
+        # Cập nhật scrollregion của canvas
+        canvas.config(scrollregion=canvas.bbox("all"))
         
-        ttk.Button(button_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="🔄 Reset", command=lambda: self._on_test_case_selected(None)).pack(side=tk.LEFT, padx=5)
+        # Đặt chiều rộng của window trong canvas bằng với chiều rộng của canvas
+        def _on_canvas_configure(event):
+            # Điều chỉnh chiều rộng của frame trong canvas khi canvas thay đổi kích thước
+            canvas.itemconfig(canvas_window, width=event.width)
+            # Cập nhật scrollregion
+            canvas.config(scrollregion=canvas.bbox("all"))
         
-        # Cập nhật kích thước của canvas và thiết lập vùng cuộn
-        main_container.update_idletasks()
-        canvas.config(scrollregion=canvas.bbox(tk.ALL))
-        
-        # Thiết lập chiều cao cố định cho canvas nếu vượt quá giới hạn
-        max_height = 400  # Giới hạn chiều cao tối đa
-        content_height = main_container.winfo_reqheight()
-        canvas_height = min(content_height, max_height)
-        canvas.config(height=canvas_height)
+        canvas.bind("<Configure>", _on_canvas_configure)
         
         # Thêm binding cho chuột để cuộn
         def _on_mousewheel(event):
             canvas.yview_scroll(int(-1*(event.delta/120)), "units")
         
-        # Thêm binding cho canvas và các widget con
+        # Bind mousewheel cho canvas
         canvas.bind("<MouseWheel>", _on_mousewheel)
         
-        # Thêm binding cho các widget con trong main_container
-        for child in main_container.winfo_children():
-            child.bind("<MouseWheel>", _on_mousewheel)
-            
-        # Thêm binding cho các widget con trong param_rows_frame
-        for child in param_rows_frame.winfo_children():
-            child.bind("<MouseWheel>", _on_mousewheel)
+        # Bind mousewheel cho tất cả widget trong param_frame
+        def _bind_mousewheel_to_children(widget):
+            widget.bind("<MouseWheel>", _on_mousewheel)
+            for child in widget.winfo_children():
+                _bind_mousewheel_to_children(child)
+        
+        _bind_mousewheel_to_children(param_frame)
 
+        # Ban đầu kích hoạt sự kiện configure để đảm bảo chiều rộng được đặt đúng
+        canvas.event_generate("<Configure>", width=canvas.winfo_width())
     def _add_parameter(self):
-        """Add a new parameter to the list - improved stable version"""
-        # Tạo dialog tích hợp thay vì nhiều dialog nhỏ
+        """Add a new parameter to the list - adaptive version for different screen sizes"""
+        # Tạo dialog thích ứng
         add_dialog = tk.Toplevel(self.root)
         add_dialog.title("Add New Parameter")
-        add_dialog.geometry("500x400")
         add_dialog.transient(self.root)  # Modal behavior
         add_dialog.grab_set()            # Prevent interaction with main window
         
-        # Đặt dialog ở giữa màn hình chính
-        if self.root:
-            x = self.root.winfo_x() + (self.root.winfo_width() // 2) - 250
-            y = self.root.winfo_y() + (self.root.winfo_height() // 2) - 200
-            if x < 0: x = 0
-            if y < 0: y = 0
-            add_dialog.geometry(f"+{x}+{y}")
+        # Đặt chế độ thay đổi kích thước để người dùng có thể điều chỉnh nếu cần
+        add_dialog.resizable(True, True)
         
-        # Main frame
-        main_frame = ttk.Frame(add_dialog, padding=10)
+        # Main frame với padding thích hợp
+        main_frame = ttk.Frame(add_dialog, padding=(20, 20, 20, 20))  # Padding lớn hơn cho không gian tốt hơn
         main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Sử dụng pack với expand để tận dụng không gian
+        form_frame = ttk.Frame(main_frame)
+        form_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+        
+        # Grid layout cho form để đảm bảo căn chỉnh chính xác
+        form_frame.columnconfigure(0, weight=0, minsize=120)  # Cột nhãn
+        form_frame.columnconfigure(1, weight=1, minsize=200)  # Cột nhập liệu
         
         # Tham số cần thu thập
         param_name_var = tk.StringVar()
-        param_type_var = tk.StringVar(value="string")
         param_value_var = tk.StringVar()
-        param_required_var = tk.BooleanVar(value=False)
-        param_options_var = tk.StringVar()
         
-        # Tên tham số
-        name_frame = ttk.Frame(main_frame)
-        name_frame.pack(fill=tk.X, pady=5)
-        ttk.Label(name_frame, text="Parameter Name:").pack(side=tk.LEFT)
-        ttk.Entry(name_frame, textvariable=param_name_var, width=30).pack(side=tk.LEFT, padx=5)
+        # Tên tham số - sử dụng grid để căn chỉnh chính xác
+        ttk.Label(form_frame, text="Parameter Name:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=10)
+        name_entry = ttk.Entry(form_frame, textvariable=param_name_var)
+        name_entry.grid(row=0, column=1, sticky=tk.EW, padx=5, pady=10)
         
-        # Loại tham số - dùng radio buttons để rõ ràng hơn
-        type_frame = ttk.LabelFrame(main_frame, text="Parameter Type")
-        type_frame.pack(fill=tk.X, pady=10)
+        # Giá trị tham số
+        ttk.Label(form_frame, text="Value:").grid(row=1, column=0, sticky=tk.W, padx=5, pady=10)
+        value_entry = ttk.Entry(form_frame, textvariable=param_value_var)
+        value_entry.grid(row=1, column=1, sticky=tk.EW, padx=5, pady=10)
         
-        for i, type_option in enumerate(["string", "integer", "boolean", "enum", "array"]):
-            ttk.Radiobutton(
-                type_frame,
-                text=type_option.capitalize(),
-                variable=param_type_var,
-                value=type_option,
-                command=lambda t=type_option: on_type_change(t)
-            ).grid(row=i//3, column=i%3, sticky=tk.W, padx=20, pady=3)
+        # Thông tin trợ giúp
+        ttk.Label(
+            main_frame, 
+            text="Enter parameter name and value to add to the test case.",
+            font=("Segoe UI", 9)
+        ).pack(anchor=tk.W, pady=(0, 15))
         
-        # Giá trị mặc định
-        value_frame = ttk.LabelFrame(main_frame, text="Default Value")
-        value_frame.pack(fill=tk.X, pady=10)
-        
-        # Frame cho giá trị thường
-        normal_value_frame = ttk.Frame(value_frame)
-        normal_value_frame.pack(fill=tk.X, pady=5)
-        ttk.Label(normal_value_frame, text="Value:").pack(side=tk.LEFT)
-        value_entry = ttk.Entry(normal_value_frame, textvariable=param_value_var, width=30)
-        value_entry.pack(side=tk.LEFT, padx=5)
-        
-        # Frame cho boolean
-        boolean_frame = ttk.Frame(value_frame)
-        boolean_var = tk.StringVar(value="false")
-        ttk.Radiobutton(boolean_frame, text="True", variable=boolean_var, value="true").pack(side=tk.LEFT, padx=20)
-        ttk.Radiobutton(boolean_frame, text="False", variable=boolean_var, value="false").pack(side=tk.LEFT, padx=20)
-        
-        # Frame cho enum options
-        options_frame = ttk.Frame(value_frame)
-        ttk.Label(options_frame, text="Options (comma-separated):").pack(anchor=tk.W)
-        options_entry = ttk.Entry(options_frame, textvariable=param_options_var, width=40)
-        options_entry.pack(fill=tk.X, pady=5)
-        ttk.Label(options_frame, text="Example: option1,option2,option3").pack(anchor=tk.W)
-        
-        # Thuộc tính Required
-        required_frame = ttk.Frame(main_frame)
-        required_frame.pack(fill=tk.X, pady=5)
-        ttk.Checkbutton(required_frame, text="Required Parameter", variable=param_required_var).pack(anchor=tk.W)
-        
-        # Tips
-        tip_frame = ttk.Frame(main_frame)
-        tip_frame.pack(fill=tk.X, pady=10)
-        ttk.Label(tip_frame, text="Tips: String parameters accept any text. Integer parameters must be numbers.",
-                font=("Segoe UI", 8)).pack(anchor=tk.W)
-        
-        # Nút hành động
+        # Nút hành động - sử dụng frame riêng để đảm bảo căn chỉnh
         button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, side=tk.BOTTOM, pady=10)
-        ttk.Button(button_frame, text="Cancel", command=add_dialog.destroy).pack(side=tk.RIGHT, padx=5)
+        button_frame.pack(fill=tk.X, side=tk.BOTTOM)
+        
+        # Sử dụng pack với fill=tk.X và side=RIGHT để đảm bảo nút luôn hiển thị đủ và theo thứ tự
+        ttk.Button(button_frame, text="Cancel", command=add_dialog.destroy).pack(side=tk.RIGHT, padx=(5, 0))
         add_button = ttk.Button(button_frame, text="Add Parameter", command=lambda: add_parameter_action())
-        add_button.pack(side=tk.RIGHT, padx=5)
-        
-        # Hàm cập nhật UI dựa trên loại tham số
-        def on_type_change(param_type):
-            # Ẩn tất cả frames đặc biệt trước
-            boolean_frame.pack_forget()
-            options_frame.pack_forget()
-            normal_value_frame.pack_forget()
-            
-            # Hiện frame phù hợp
-            if param_type == "boolean":
-                boolean_frame.pack(fill=tk.X, pady=5)
-                param_value_var.set(boolean_var.get())  # Sync giá trị
-            elif param_type == "enum":
-                normal_value_frame.pack(fill=tk.X, pady=5)
-                options_frame.pack(fill=tk.X, pady=5)
-            else:
-                normal_value_frame.pack(fill=tk.X, pady=5)
-                
-            # Đặt giá trị mặc định dựa trên loại
-            if param_type == "integer":
-                param_value_var.set("0")
-            elif param_type == "string" or param_type == "array":
-                param_value_var.set("")
-        
-        # Khởi tạo UI ban đầu dựa trên loại mặc định
-        on_type_change("string")
+        add_button.pack(side=tk.RIGHT, padx=(5, 5))
         
         # Hàm thực hiện thêm tham số
         def add_parameter_action():
             name = param_name_var.get().strip()
-            param_type = param_type_var.get()
+            value = param_value_var.get()
             
             # Kiểm tra tên tham số
             if not name:
@@ -1195,40 +1134,13 @@ class MainWindow(LoggerMixin):
                 messagebox.showwarning("Duplicate", f"Parameter '{name}' already exists", parent=add_dialog)
                 return
                 
-            # Lấy giá trị phù hợp với loại tham số
-            if param_type == "boolean":
-                value = boolean_var.get()
-            else:
-                value = param_value_var.get()
-                
-            # Xác thực giá trị cho loại integer
-            if param_type == "integer" and not value.isdigit():
-                messagebox.showwarning("Validation Error", "Integer parameter must contain only digits", parent=add_dialog)
-                return
-            
-            # Tạo tham số mới
+            # Tạo tham số mới với định dạng đơn giản
             new_param = {
                 "name": name,
                 "value": value,
-                "type": param_type,
-                "required": param_required_var.get()
+                "type": "string",        # Giá trị mặc định cho type
+                "required": False        # Giá trị mặc định cho required
             }
-            
-            # Xử lý options cho enum
-            if param_type == "enum":
-                options_str = param_options_var.get().strip()
-                if not options_str:
-                    messagebox.showwarning("Validation Error", 
-                                        "Enum parameter must have options specified", parent=add_dialog)
-                    return
-                    
-                options = [opt.strip() for opt in options_str.split(',') if opt.strip()]
-                if len(options) < 1:
-                    messagebox.showwarning("Validation Error", 
-                                        "Enum parameter needs at least one option", parent=add_dialog)
-                    return
-                    
-                new_param["options"] = options
             
             # Lấy tham số hiện tại và thêm tham số mới
             current_params = []
@@ -1246,12 +1158,10 @@ class MainWindow(LoggerMixin):
             self._create_parameter_controls(current_params)
             
             # Log thành công
-            self.logger.info(f"Added new parameter: {name} ({param_type})")
-            
-        # Cài đặt focus cho dialog
-        param_name_var.set("")
-        add_dialog.after(100, lambda: param_name_var.set(""))  # Hack để đảm bảo entry sẽ trống khi hiện
-        add_dialog.after(200, lambda: value_entry.focus_set())
+            self.logger.info(f"Added new parameter: {name}")
+        
+        # Cài đặt focus và validation
+        add_dialog.after(100, lambda: name_entry.focus_set())
         
         # Add validation for name entry - enable Add button only when name is valid
         def validate_name(*args):
@@ -1264,13 +1174,35 @@ class MainWindow(LoggerMixin):
         # Track changes to name entry
         param_name_var.trace("w", validate_name)
         validate_name()  # Initial validation
+        
+        # Tính toán và đặt kích thước tối thiểu hợp lý
+        add_dialog.update_idletasks()  # Cập nhật để có thể đo kích thước thực tế của các widget
+        
+        # Đặt kích thước tối thiểu
+        min_width = 400
+        min_height = 250
+        
+        # Đặt vị trí ở giữa màn hình chính
+        if self.root:
+            x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (min_width // 2)
+            y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (min_height // 2)
+            if x < 0: x = 0
+            if y < 0: y = 0
+            
+            # Đặt kích thước và vị trí
+            add_dialog.geometry(f"{min_width}x{min_height}+{x}+{y}")
+            
+        # Thêm một chút thêm padding cho các màn hình khác nhau    
+        add_dialog.minsize(min_width, min_height)
+        
+
 
     def _delete_parameter(self, param_name):
         """Delete a parameter"""
         if param_name not in self.param_vars:
             return
             
-        # Xác nhận xóa
+        # Xác nhận xóa  
         confirm = messagebox.askyesno("Confirm Delete", 
                                 f"Delete parameter '{param_name}'?")
         if not confirm:
@@ -1341,98 +1273,19 @@ class MainWindow(LoggerMixin):
         """Get all data for a parameter"""
         if param_name not in self.param_vars:
             return None
-            
-        param_type = self.param_type_vars[param_name].get()
-        is_required = self.param_required_vars[param_name].get() == "Yes"
+                
+        # Đã loại bỏ những dòng truy cập vào param_type_vars và param_required_vars
         value = self.param_vars[param_name].get()
         
         param_data = {
             "name": param_name,
             "value": value,
-            "type": param_type,
-            "required": is_required
+            "type": "string",  # Mặc định là string vì không còn lưu trữ type
+            "required": False  # Mặc định là False vì không còn lưu trữ required
         }
         
         return param_data
         
-    def _edit_parameter_types(self):
-        """Edit parameter types in bulk"""
-        # Hiển thị dialog cho chỉnh sửa loại tham số
-        types_dialog = tk.Toplevel(self.root)
-        types_dialog.title("Edit Parameter Types")
-        types_dialog.geometry("500x400")
-        types_dialog.transient(self.root)  # Make it modal
-        types_dialog.grab_set()
-        
-        # Tạo scrollable frame
-        main_frame = ttk.Frame(types_dialog)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        
-        # Tạo canvas cho scrolling
-        canvas = tk.Canvas(main_frame)
-        scrollbar = ttk.Scrollbar(main_frame, orient=tk.VERTICAL, command=canvas.yview)
-        canvas.configure(yscrollcommand=scrollbar.set)
-        
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        
-        content_frame = ttk.Frame(canvas)
-        canvas.create_window((0, 0), window=content_frame, anchor=tk.NW)
-        
-        # Header
-        ttk.Label(content_frame, text="Parameter", width=20, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5, pady=5)
-        ttk.Label(content_frame, text="Type", width=15, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5, pady=5)
-        ttk.Label(content_frame, text="Required", width=10, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5, pady=5)
-        ttk.Label(content_frame, text="Value", width=20, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5, pady=5)
-        
-        # Tạo các biến tạm thời cho dialog
-        temp_types = {}
-        temp_required = {}
-        temp_values = {}
-        
-        # Tạo dòng cho mỗi tham số
-        for i, name in enumerate(self.param_vars.keys()):
-            ttk.Label(content_frame, text=name).grid(row=i+1, column=0, padx=5, pady=2, sticky=tk.W)
-            
-            # Combobox cho kiểu
-            type_var = tk.StringVar(value=self.param_type_vars[name].get())
-            ttk.Combobox(content_frame, textvariable=type_var, 
-                        values=["string", "integer", "boolean", "enum", "array"],
-                        width=12, state="readonly").grid(row=i+1, column=1, padx=5, pady=2)
-            temp_types[name] = type_var
-            
-            # Combobox cho required (FIX: sử dụng StringVar thay vì BooleanVar)
-            req_var = tk.StringVar(value="Yes" if self.param_required_vars[name].get() == "Yes" else "No")
-            ttk.Combobox(content_frame, textvariable=req_var, values=["Yes", "No"],
-                        width=8, state="readonly").grid(row=i+1, column=2, padx=5, pady=2)
-            temp_required[name] = req_var
-            
-            # Entry cho giá trị
-            val_var = tk.StringVar(value=self.param_vars[name].get())
-            ttk.Entry(content_frame, textvariable=val_var, width=18).grid(row=i+1, column=3, padx=5, pady=2)
-            temp_values[name] = val_var
-        
-        # Cập nhật kích thước canvas
-        content_frame.update_idletasks()
-        canvas.config(scrollregion=canvas.bbox(tk.ALL))
-        
-        # Buttons
-        button_frame = ttk.Frame(types_dialog)
-        button_frame.pack(fill=tk.X, padx=10, pady=10)
-        
-        def save_changes():
-            # Cập nhật tất cả các thay đổi
-            for name in self.param_vars.keys():
-                self.param_type_vars[name].set(temp_types[name].get())
-                # Chuyển đổi từ "Yes"/"No" thành giá trị tương ứng (FIX)
-                self.param_required_vars[name].set(temp_required[name].get())
-                self.param_vars[name].set(temp_values[name].get())
-            
-            self.logger.info("Updated parameter types and values")
-            types_dialog.destroy()
-            
-        ttk.Button(button_frame, text="Save Changes", command=save_changes).pack(side=tk.RIGHT, padx=5)
-        ttk.Button(button_frame, text="Cancel", command=types_dialog.destroy).pack(side=tk.RIGHT, padx=5)
 
     def _save_parameters(self) -> None:
         """Save current template parameters."""
@@ -1446,28 +1299,23 @@ class MainWindow(LoggerMixin):
         test_id = self.test_tree.item(selected[0], "values")[0]
         test_name = self.test_tree.item(selected[0], "text").split(" ⚠️")[0]
         
-        # Lấy tất cả giá trị tham số và thuộc tính
+        # Lấy tất cả giá trị tham số và thực hiện chuyển đổi kiểu cơ bản
         saved_params = {}
         for param_name, var in self.param_vars.items():
-            param_type = self.param_type_vars[param_name].get()
             value = var.get()
             
-            # Chuyển đổi kiểu dữ liệu nếu cần
-            if param_type == "boolean":
-                saved_params[param_name] = value.lower() == "true"
-            elif param_type == "integer":
-                try:
-                    saved_params[param_name] = int(value)
-                except:
-                    saved_params[param_name] = 0
-            elif param_type == "array":
-                # Xử lý mảng (phân tách bằng dấu phẩy)
-                if value.strip():
-                    saved_params[param_name] = [item.strip() for item in value.split(",") if item.strip()]
-                else:
-                    saved_params[param_name] = []
+            # Chuyển đổi kiểu dữ liệu đơn giản dựa trên giá trị
+            if value.lower() == "true":
+                saved_params[param_name] = True
+            elif value.lower() == "false":
+                saved_params[param_name] = False
+            elif value.isdigit():
+                saved_params[param_name] = int(value)
+            elif "," in value and param_name.endswith("_dns"):
+                # Xử lý đặc biệt cho các trường DNS - chuyển thành mảng
+                saved_params[param_name] = [item.strip() for item in value.split(",") if item.strip()]
             else:
-                # String hoặc enum
+                # Mặc định xử lý như string
                 saved_params[param_name] = value
         
         # Hiển thị thông báo thành công với chi tiết tham số
@@ -1481,9 +1329,9 @@ class MainWindow(LoggerMixin):
         # Update status
         if self.status_var:
             self.status_var.set(f"Parameters saved for {test_name}")
-        
+                
     def create_placeholder_params(self):
-        """Create placeholder parameters UI"""
+        """Create placeholder parameters UI - Simplified version"""
         # Clear existing widgets
         for widget in self.params_frame.winfo_children():
             widget.destroy()
@@ -1492,43 +1340,33 @@ class MainWindow(LoggerMixin):
         param_table_frame = ttk.Frame(self.params_frame)
         param_table_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # Headers
+        # Headers - Chỉ còn 2 cột: Parameter và Value
         header_frame = ttk.Frame(param_table_frame)
         header_frame.pack(fill=tk.X, pady=5)
         
         ttk.Label(header_frame, text="Parameter", width=15, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=0, padx=5)
-        ttk.Label(header_frame, text="Value", width=20, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
-        ttk.Label(header_frame, text="Type", width=10, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=2, padx=5)
-        ttk.Label(header_frame, text="Required", width=10, anchor=tk.CENTER, font=("Segoe UI", 9, "bold")).grid(row=0, column=3, padx=5)
+        ttk.Label(header_frame, text="Value", width=30, anchor=tk.W, font=("Segoe UI", 9, "bold")).grid(row=0, column=1, padx=5)
         
-        # Sample parameters (in a real app, these would be dynamically loaded)
+        # Sample parameters
         params = [
-            {"name": "name", "value": "wan1", "type": "string", "required": True},
-            {"name": "protocol", "value": "ipv4", "type": "enum", "required": True, "options": ["ipv4", "ipv6", "pppoe"]},
-            {"name": "interface", "value": "eth1", "type": "enum", "required": True, "options": ["eth1", "eth2", "wlan0"]},
-            {"name": "metric", "value": "100", "type": "integer", "required": False},
+            {"name": "name", "value": "wan1"},
+            {"name": "protocol", "value": "ipv4"},
+            {"name": "interface", "value": "eth1"},
+            {"name": "metric", "value": "100"},
         ]
         
-        # Create parameter rows
+        # Create parameter rows - Chỉ hiển thị 2 cột
         param_rows_frame = ttk.Frame(param_table_frame)
         param_rows_frame.pack(fill=tk.BOTH, expand=True, pady=5)
         
         row = 0
         for param in params:
+            # Tên tham số
             ttk.Label(param_rows_frame, text=param["name"], width=15, anchor=tk.W).grid(row=row, column=0, padx=5, pady=3)
             
-            # Different input types based on parameter type
-            if param["type"] == "enum" and "options" in param:
-                var = tk.StringVar(value=param["value"])
-                ttk.Combobox(param_rows_frame, textvariable=var, values=param["options"], width=18).grid(row=row, column=1, padx=5, pady=3)
-            else:
-                var = tk.StringVar(value=param["value"])
-                ttk.Entry(param_rows_frame, textvariable=var, width=20).grid(row=row, column=1, padx=5, pady=3)
-            
-            ttk.Label(param_rows_frame, text=param["type"], width=10).grid(row=row, column=2, padx=5, pady=3)
-            
-            required_text = "✓" if param.get("required", False) else ""
-            ttk.Label(param_rows_frame, text=required_text, width=10, anchor=tk.CENTER).grid(row=row, column=3, padx=5, pady=3)
+            # Giá trị tham số - Chỉ dùng Entry widget
+            var = tk.StringVar(value=param["value"])
+            ttk.Entry(param_rows_frame, textvariable=var, width=30).grid(row=row, column=1, padx=5, pady=3, sticky=tk.W+tk.E)
             
             row += 1
         
@@ -1536,8 +1374,11 @@ class MainWindow(LoggerMixin):
         button_frame = ttk.Frame(self.params_frame)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        ttk.Button(button_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="🔄 Reset", command=lambda: self.create_placeholder_params()).pack(side=tk.LEFT, padx=5)
+        # Loại bỏ dòng hiển thị thời gian
+        # ttk.Label(button_frame, text=f"Current time: {current_time}").pack(side=tk.LEFT, padx=5)
+        
+        ttk.Button(button_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="🔄 Reset", command=lambda: self.create_placeholder_params()).pack(side=tk.RIGHT, padx=5)
 
 
 
@@ -1908,7 +1749,7 @@ class MainWindow(LoggerMixin):
         button_frame = ttk.Frame(frame)
         button_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        ttk.Button(button_frame, text="Test Connection", command=self._test_connection).pack(
+        ttk.Button(button_frame, text="Connect", command=self._test_connection).pack(
             side=tk.LEFT, padx=5
         )
         ttk.Button(button_frame, text="Save Settings", command=self._save_connection_settings).pack(
@@ -2023,25 +1864,40 @@ class MainWindow(LoggerMixin):
         self.log_text.insert(tk.END, "[2025-06-12 02:42:03] INFO - Configuration loaded\n")
         self.log_text.insert(tk.END, "[2025-06-12 02:42:04] INFO - GUI initialized\n")
         self.log_text.config(state=tk.DISABLED)
-    
+        
     def _create_status_bar(self) -> None:
-        """Create the status bar."""
+        """Create the status bar with improved visibility."""
         if not self.root:
             return
             
-        status_frame = ttk.Frame(self.root)
-        status_frame.pack(side=tk.BOTTOM, fill=tk.X)
+        # Tạo một frame riêng cho status bar với border và relief để nổi bật
+        status_frame = ttk.Frame(self.root, relief=tk.SUNKEN, borderwidth=1)
+        # Đặt pack_propagate=False để đảm bảo kích thước cố định
+        status_frame.pack_propagate(False)
+        # Đặt chiều cao cố định cho status bar
+        status_frame.configure(height=28)
+        # Đặt ở cuối cùng với fill=X để mở rộng theo chiều ngang
+        status_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=0, pady=0)
         
-        # Status message
+        # Status message bên trái - sử dụng pack thay vì grid để linh hoạt hơn
         self.status_var = tk.StringVar(value="Ready")
-        ttk.Label(status_frame, textvariable=self.status_var).pack(
-            side=tk.LEFT, padx=10, pady=2
-        )
+        status_label = ttk.Label(status_frame, textvariable=self.status_var)
+        status_label.pack(side=tk.LEFT, padx=10, pady=2)
         
-        # Version info
-        ttk.Label(status_frame, text=f"v{APP_VERSION}").pack(
-            side=tk.RIGHT, padx=10, pady=2
-        )
+        # Thời gian hiện tại - ở giữa
+        self.time_var = tk.StringVar(value=self._get_current_time())
+        time_label = ttk.Label(status_frame, textvariable=self.time_var)
+        time_label.pack(side=tk.LEFT, padx=10, pady=2, expand=True)
+        
+        # Cập nhật thời gian mỗi giây
+        def update_time():
+            # Sử dụng _safe_set để cập nhật thời gian
+            self._safe_set(self.time_var, self._get_current_time())
+            # Sử dụng _safe_after thay vì trực tiếp gọi self.root.after
+            self._safe_after(1000, update_time)
+        
+        # Bắt đầu cập nhật thời gian
+        update_time()
 
     def _test_connection(self) -> None:
         """Test connection using selected method (HTTP or SSH)."""
@@ -2055,52 +1911,56 @@ class MainWindow(LoggerMixin):
         import threading
         thread = threading.Thread(target=self._run_connection_test, daemon=True)
         thread.start()
-            
+                    
     def _run_connection_test(self) -> None:
-        """Run connection test in background thread"""
+        """Run connection test in background thread using direct socket connection"""
         try:
             connection_type = self._safe_get(self.connection_type_var, "http")
             
             if connection_type == "http":
-                # Test HTTP connection
+                # Test HTTP connection using direct socket connection
                 host = self._safe_get(self.http_host_var, "127.0.0.1")
-                port = int(self._safe_get(self.http_port_var, "8080"))
+                port = int(self._safe_get(self.http_port_var, "6262"))  # Cổng 6262
                 
-                # Sử dụng GET request thay vì POST để tránh tạo file rỗng
-                import requests
+                import socket
                 try:
-                    self.logger.info(f"Testing HTTP connection to {host}:{port}")
-                    url = f"http://{host}:{port}"
+                    self.logger.info(f"Testing TCP socket connection to {host}:{port}")
                     
-                    # Sử dụng GET request để test kết nối
-                    response = requests.get(
-                        url, 
-                        timeout=int(self._safe_get(self.http_conn_timeout_var, "5"))
-                    )
+                    # Tạo socket và kết nối
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(int(self._safe_get(self.http_conn_timeout_var, "5")))
+                    sock.connect((host, port))
+                    sock.close()  # Đóng kết nối ngay lập tức, không gửi dữ liệu
                     
-                    # Chấp nhận bất kỳ status code nào là dấu hiệu của server đang chạy
+                    # Kết nối thành công
                     self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
-                                                        f"🟢 Connected (HTTP {response.status_code})"))
-                    self.logger.info(f"HTTP connection successful to {host}:{port}")
+                                                        "🟢 Connected (TCP Socket)"))
+                    self.logger.info(f"Socket connection successful to {host}:{port}")
                     
                     # Đánh dấu là đã kết nối thành công
                     self.http_connected = True
-                except requests.exceptions.ConnectionError:
-                    self.http_connected = False
-                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
-                                                        "🔴 Connection refused"))
-                    self.logger.error(f"HTTP connection refused to {host}:{port}")
-                except requests.exceptions.Timeout:
+                    
+                    # Cập nhật thông tin trong UI
+                    current_time = self._get_current_time()
+                    self._safe_after(0, lambda: self._safe_set(self.status_var, 
+                                                f"Connected to {host}:{port} successfully at {current_time}"))
+                    
+                except socket.timeout:
                     self.http_connected = False
                     self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
                                                         "🔴 Connection timeout"))
-                    self.logger.error(f"HTTP connection timeout to {host}:{port}")
+                    self.logger.error(f"Socket connection timeout to {host}:{port}")
+                except socket.error as e:
+                    self.http_connected = False
+                    self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
+                                                        "🔴 Connection refused"))
+                    self.logger.error(f"Socket connection error to {host}:{port}: {str(e)}")
                 except Exception as e:
                     self.http_connected = False
                     self._safe_after(0, lambda: self._safe_set(self.connection_status_var, 
                                                         f"🔴 Error: {str(e)[:30]}..."))
-                    self.logger.error(f"HTTP connection error: {str(e)}")
-                        
+                    self.logger.error(f"Connection error: {str(e)}")
+                    
             else:
                 # Test SSH connection
                 host = self._safe_get(self.ssh_host_var)
@@ -2125,85 +1985,90 @@ class MainWindow(LoggerMixin):
             self.logger.error(f"Connection test error: {str(e)}")
             self._safe_after(0, lambda: self._safe_set(self.connection_status_var, f"🔴 Error: {str(e)[:30]}..."))
             self._safe_after(0, lambda: self._safe_set(self.status_var, f"Connection test failed: {str(e)[:50]}..."))
-                
+                        
+    def _get_current_time(self):
+        """Get current local time in correct format (YYYY-MM-DD HH:MM:SS)"""
+        import datetime
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     def send_test_case_http(self, test_data, index):
-        """Send test case to HTTP server and process response"""
+        """Send test case to HTTP server and process response with improved logging"""
         try:
+            # Import cần thiết
+            import requests
+            import json
+            import time
+            
             if not self.http_client:
                 self.logger.error("HTTP client not initialized")
                 self._safe_after(0, lambda: self.update_test_status(index, "Error", "HTTP client not initialized"))
                 return
-                
+                    
             host = self._safe_get(self.http_host_var, "127.0.0.1")
-            port = int(self._safe_get(self.http_port_var, "8080"))
+            port = int(self._safe_get(self.http_port_var, "6262"))
             url = f"http://{host}:{port}"
             
             self.logger.info(f"Sending test case to {url}")
-            self._safe_after(0, lambda: self.update_test_status(index, "Sending", ""))
+            transaction_id = test_data.get("metadata", {}).get("transaction_id", "unknown")
+            self._safe_after(0, lambda: self.update_test_status(index, "Sending", f"TX: {transaction_id}"))
             
-            # Đảm bảo định dạng đúng với test_cases array
-            if not isinstance(test_data, dict) or "test_cases" not in test_data:
-                if "service" in test_data:
-                    test_data = {"test_cases": [test_data]}
-                else:
-                    self.logger.error("Invalid test data format")
-                    self._safe_after(0, lambda: self.update_test_status(index, "Error", "Invalid test format"))
-                    return
+            # Lấy thời gian hiện tại để tính thời gian thực thi
+            start_time = time.time()
             
-            # Gửi POST request
-            import json
-            
-            self.logger.debug(f"Test payload: {json.dumps(test_data, indent=2)}")
-            
-            # Sử dụng POST để gửi test case
-            response = requests.post(
-                url,
-                json=test_data,
-                headers={"Content-Type": "application/json"},
-                timeout=(int(self._safe_get(self.http_conn_timeout_var, "5")),
-                        int(self._safe_get(self.http_read_timeout_var, "40")))
-            )
-            
-            # Process response
-            if response.status_code == 200:
-                try:
-                    result = response.json()
-                    self.logger.info(f"Test response received: {json.dumps(result, indent=2)}")
-                    
-                    # Extract test results
-                    success = result.get("summary", {}).get("passed", 0) > 0
-                    status = "Success" if success else "Failed"
-                    message = f"Passed: {result.get('summary', {}).get('passed', 0)}, Failed: {result.get('summary', {}).get('failed', 0)}"
-                    
-                    self._safe_after(0, lambda: self.update_test_status(index, status, message))
-                except Exception as e:
-                    self.logger.error(f"Error processing response: {str(e)}")
-                    self._safe_after(0, lambda: self.update_test_status(index, "Error", f"Response error: {str(e)}"))
-            else:
-                self.logger.error(f"HTTP error: {response.status_code}")
-                self._safe_after(0, lambda: self.update_test_status(index, "Error", f"HTTP {response.status_code}"))
+            try:
+                # Gửi POST request
+                response = requests.post(
+                    url,
+                    json=test_data,
+                    headers={"Content-Type": "application/json"},
+                    timeout=(int(self._safe_get(self.http_conn_timeout_var, "5")),
+                            int(self._safe_get(self.http_read_timeout_var, "40")))
+                )
                 
-        except requests.exceptions.ConnectionError:
-            self.logger.error("Connection refused")
-            self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection refused"))
-        except requests.exceptions.Timeout:
-            self.logger.error("Connection timeout")
-            self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection timeout"))
+                # Tính thời gian phản hồi
+                elapsed_time = time.time() - start_time
+                
+                # Process response
+                if response.status_code == 200:
+                    try:
+                        result = response.json()
+                        self.logger.info(f"Test response received in {elapsed_time:.2f}s: {json.dumps(result, indent=2)}")
+                        
+                        # Extract test results
+                        success = result.get("summary", {}).get("passed", 0) > 0
+                        status = "Success" if success else "Failed"
+                        passed = result.get("summary", {}).get("passed", 0)
+                        failed = result.get("summary", {}).get("failed", 0)
+                        message = f"Passed: {passed}, Failed: {failed}, Time: {elapsed_time:.1f}s, TX: {transaction_id[:8]}"
+                        
+                        self._safe_after(0, lambda: self.update_test_status(index, status, message))
+                    except Exception as e:
+                        self.logger.error(f"Error processing response: {str(e)}")
+                        self._safe_after(0, lambda: self.update_test_status(index, "Error", f"Response error: {str(e)}"))
+                else:
+                    self.logger.error(f"HTTP error: {response.status_code}")
+                    self._safe_after(0, lambda: self.update_test_status(index, "Error", f"HTTP {response.status_code}"))
+                    
+            except requests.exceptions.ConnectionError:
+                self.logger.error("Connection refused")
+                self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection refused"))
+            except requests.exceptions.Timeout:
+                self.logger.error("Connection timeout")
+                self._safe_after(0, lambda: self.update_test_status(index, "Error", "Connection timeout"))
+                
         except Exception as e:
             self.logger.error(f"Error sending test: {str(e)}")
             self._safe_after(0, lambda: self.update_test_status(index, "Error", str(e)[:30]))
-
     def send_all_tests(self):
-        """Send all tests in queue for execution"""
+        """Send all tests in queue for execution with proper delay between tests"""
         try:
             if not hasattr(self, 'queue_manager') or not hasattr(self.queue_manager, 'queue_items'):
                 messagebox.showinfo("Information", "Queue is empty or not initialized")
                 return
-                
+                    
             if len(self.queue_manager.queue_items) == 0:
                 messagebox.showinfo("Information", "Queue is empty")
                 return
-                
+                    
             # Kiểm tra kết nối
             connection_type = self._safe_get(self.connection_type_var, "http")
             if connection_type == "http":
@@ -2213,27 +2078,47 @@ class MainWindow(LoggerMixin):
             elif connection_type == "ssh" and (not self.ssh_connection or not self.ssh_connection.is_connected()):
                 messagebox.showinfo("Error", "Not connected to SSH server. Please test connection first.")
                 return
-                
+                    
             # Hỏi xác nhận
             if len(self.queue_manager.queue_items) > 1:
                 confirm = messagebox.askyesno("Confirm",
                     f"Send all {len(self.queue_manager.queue_items)} tests for execution?")
                 if not confirm:
                     return
-            
-            # Lặp qua từng test
-            for i in range(len(self.queue_manager.queue_items)):
-                # Sử dụng send_selected_test để đảm bảo xử lý đồng nhất
-                idx = i
-                self._safe_after(i * 1500, lambda idx=i: self.send_selected_test(idx))
                 
+            # QUAN TRỌNG: Tính toán delay dựa trên loại test case
+            delays = []
+            for i, test_item in enumerate(self.queue_manager.queue_items):
+                test_id = test_item.get("test_id", "")
+                # Kiểm tra xem test có ảnh hưởng đến mạng không
+                if "wan_" in test_id or "network_" in test_id or "reboot" in test_id:
+                    # Test ảnh hưởng mạng cần delay lâu hơn
+                    delay = 30000  # 30 giây
+                else:
+                    # Test thông thường
+                    delay = 10000  # 10 giây
+                
+                delays.append(delay)
+                
+            # Log lịch gửi test case
+            self.logger.info(f"Scheduling {len(self.queue_manager.queue_items)} tests with delays: {', '.join([f'{d/1000}s' for d in delays])}")
+                
+            # Lặp qua từng test và schedule với delay phù hợp
+            total_delay = 0
+            for i in range(len(self.queue_manager.queue_items)):
+                idx = i
+                if i > 0:
+                    total_delay += delays[i-1]  # Tích lũy delay của các test trước
+                
+                self.logger.info(f"Scheduling test #{i+1} after {total_delay/1000}s delay")
+                self._safe_after(total_delay, lambda idx=i: self.send_selected_test(idx))
+                    
             # Status update
-            self._safe_set(self.status_var, f"Sending {len(self.queue_manager.queue_items)} tests...")
+            self._safe_set(self.status_var, f"Sending {len(self.queue_manager.queue_items)} tests with appropriate delays...")
             
         except Exception as e:
             self.logger.error(f"Error sending tests: {str(e)}")
             messagebox.showerror("Error", f"Failed to send tests: {str(e)}")
-
     def update_test_status(self, index, status, message):
         """Update test status in the queue"""
         if not hasattr(self, 'queue_manager'):
@@ -2272,7 +2157,7 @@ class MainWindow(LoggerMixin):
             self.logger.warning(f"Could not update test status for item {index}. Status={status}, Message={message}")
 
     def send_selected_test(self, index=None):
-        """Send a selected test from the queue (enhanced)"""
+        """Send a selected test from the queue with transaction tracking"""
         try:
             if not hasattr(self, 'queue_manager'):
                 messagebox.showinfo("Error", "Queue manager not initialized")
@@ -2309,6 +2194,12 @@ class MainWindow(LoggerMixin):
             parts = test_id.split("_")
             service = parts[0]  # ping, wan, lan, etc
             action = parts[1] if len(parts) > 1 else ""  # test, create, etc
+            
+            # Tạo transaction ID duy nhất
+            import uuid
+            import datetime
+            transaction_id = f"tx-{str(uuid.uuid4())[:8]}"
+            client_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             # Xử lý đặc biệt cho ping theo đúng định dạng
             if service == "ping" or (service == "ping" and action == "test"):
@@ -2352,21 +2243,39 @@ class MainWindow(LoggerMixin):
                         # Nếu chuỗi rỗng hoặc chỉ có khoảng trắng, đặt là list rỗng
                         params[key] = []
             
-            # Tạo test case đúng định dạng
+            # Tạo test case với các trường bổ sung
             test_case = {
                 "service": service,
-                "params": params
+                "params": params,
+                "client_id": transaction_id,           # Thêm ID giao dịch duy nhất
+                "client_timestamp": client_timestamp   # Thêm timestamp từ client
             }
             
             # Thêm action nếu có và cần thiết
             if action:
                 test_case["action"] = action
                 
-            # Đóng gói trong định dạng API
-            test_data = {"test_cases": [test_case]}
+            # Đóng gói trong định dạng API với metadata
+            test_data = {
+                "test_cases": [test_case],
+                "metadata": {
+                    "transaction_id": transaction_id,
+                    "client_timestamp": client_timestamp,
+                    "created_by": "juno-kyojin",
+                    "created_at": client_timestamp
+                }
+            }
             
-            # Log thông tin test case
-            self.logger.info(f"Sending test case {name} (index {index})")
+            # Lưu transaction ID để theo dõi sau này
+            if not hasattr(self, 'test_transactions'):
+                self.test_transactions = {}
+            self.test_transactions[index] = transaction_id
+            
+            # Cập nhật trạng thái để hiển thị ID giao dịch
+            self.update_test_status(index, "Sending", f"TX: {transaction_id}")
+            
+            # Log thông tin test case với transaction ID
+            self.logger.info(f"Sending test case {name} (index {index}, transaction_id: {transaction_id})")
             self.logger.info(f"Full payload: {json.dumps(test_data, indent=2)}")
             
             # Gửi test case
@@ -2375,7 +2284,6 @@ class MainWindow(LoggerMixin):
         except Exception as e:
             self.logger.error(f"Error sending selected test: {e}")
             messagebox.showerror("Error", f"Failed to send test: {str(e)}")
-
     def _update_connection_status(self, status: str) -> None:
         """Update connection status safely."""
         if self.connection_status_var:
@@ -2460,9 +2368,84 @@ class MainWindow(LoggerMixin):
         messagebox.showinfo("Info", "Preferences will be implemented in Phase 2")
     
     def _validate_templates(self) -> None:
-        """Validate all templates."""
-        # TODO: Implement in Phase 2
-        messagebox.showinfo("Info", "Template validation will be implemented in Phase 2")
+        """Show server status and debug information"""
+        # Tạo dialog để hiển thị thông tin
+        debug_window = tk.Toplevel(self.root)
+        debug_window.title("Server Status")
+        debug_window.geometry("600x400")
+        debug_window.transient(self.root)
+        
+        # Tạo frame chính
+        main_frame = ttk.Frame(debug_window, padding=10)
+        main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Hiển thị thông tin về kết nối
+        host = self._safe_get(self.http_host_var, "Unknown")
+        port = self._safe_get(self.http_port_var, "Unknown")
+        connection_type = self._safe_get(self.connection_type_var, "Unknown")
+        
+        # Tạo bảng hiển thị thông tin
+        info_frame = ttk.LabelFrame(main_frame, text="Server Information")
+        info_frame.pack(fill=tk.X, pady=5)
+        
+        ttk.Label(info_frame, text=f"Server: {host}:{port}").pack(anchor=tk.W, pady=2)
+        ttk.Label(info_frame, text=f"Connection Type: {connection_type.upper()}").pack(anchor=tk.W, pady=2)
+        ttk.Label(info_frame, text=f"Status: {'Connected' if getattr(self, 'http_connected', False) else 'Not Connected'}").pack(anchor=tk.W, pady=2)
+        ttk.Label(info_frame, text=f"Current Client Time: {self._get_current_time()}").pack(anchor=tk.W, pady=2)
+        
+        # Thông tin về queues hiện tại
+        queue_frame = ttk.LabelFrame(main_frame, text="Queue Information")
+        queue_frame.pack(fill=tk.X, pady=5)
+        
+        queue_count = len(self.queue_manager.queue_items) if hasattr(self, 'queue_manager') else 0
+        ttk.Label(queue_frame, text=f"Tests in Queue: {queue_count}").pack(anchor=tk.W, pady=2)
+        
+        # Thông tin chi tiết
+        debug_frame = ttk.LabelFrame(main_frame, text="Server Debug Information")
+        debug_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+        
+        # Tạo text widget với scrollbar
+        text_frame = ttk.Frame(debug_frame)
+        text_frame.pack(fill=tk.BOTH, expand=True)
+        
+        debug_text = tk.Text(text_frame, wrap=tk.WORD, height=10)
+        scrollbar = ttk.Scrollbar(text_frame, orient=tk.VERTICAL, command=debug_text.yview)
+        debug_text.configure(yscrollcommand=scrollbar.set)
+        
+        debug_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Thêm thông tin debug
+        debug_info = f"""Server Configuration:
+    - Using fixed config file: config.json
+    - Each test is sent to the same file location
+    - Server processes may take 10-30 seconds
+    - WAN operations require 20-30 second delays
+    - Network tests will cause temporary disconnections
+
+    Transaction Tracking:
+    - Client adds transaction IDs to each test
+    - Server does not use transaction IDs yet
+    - Multiple quick tests may cause server congestion
+
+    Current UTC Time: {self._get_current_time_utc()}
+    Current Local Time: {self._get_current_time()}
+    """
+        
+        debug_text.insert(tk.END, debug_info)
+        
+        # Nút đóng
+        ttk.Button(main_frame, text="Close", command=debug_window.destroy).pack(side=tk.RIGHT, pady=10)
+        
+        # Nút test server
+        ttk.Button(main_frame, text="Connect", 
+                command=self._test_connection).pack(side=tk.LEFT, pady=10)
+
+
+    def _get_current_time_utc(self):
+        """Get current UTC time in correct format (YYYY-MM-DD HH:MM:SS)"""
+        import datetime
+        return datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
     
     def _show_documentation(self) -> None:
         """Show documentation."""
