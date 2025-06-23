@@ -46,6 +46,11 @@ class MainWindow(LoggerMixin):
         self.root: Optional[tk.Tk] = None
         self.notebook: Optional[ttk.Notebook] = None
         
+        from core.test_case_manager import TestCaseFileManager
+        self.test_case_manager = TestCaseFileManager()
+
+        from core.test_case_loader import TestCaseLoader
+        self.test_loader = TestCaseLoader()
         # Thêm biến theo dõi trạng thái kết nối
         self.http_connected = False
         # Initialize HTTP variables
@@ -458,45 +463,22 @@ class MainWindow(LoggerMixin):
         self._populate_test_tree(filter_category=category)
 
     def _populate_test_tree(self, filter_category=None):
-        """Populate the test case tree with hierarchical data"""
+        """Populate the test case tree with data loaded from test case files"""
         # Clear existing items
         for item in self.test_tree.get_children():
             self.test_tree.delete(item)
         
-        # Define categories and their test cases with standardized naming
-        test_categories = {
-            "WAN": [
-                {"id": "wan_create", "name": "wan_create", "impacts_network": True},
-                {"id": "wan_delete", "name": "wan_delete", "impacts_network": True},
-                {"id": "wan_edit", "name": "wan_edit", "impacts_network": True},
-            ],
-            "LAN": [
-                {"id": "lan_config", "name": "lan_config", "impacts_network": True},
-                {"id": "lan_interfaces", "name": "lan_interfaces", "impacts_network": True},
-                {"id": "lan_dhcp", "name": "lan_dhcp", "impacts_network": True},
-            ],
-            "Network": [
-                {"id": "ping", "name": "ping", "impacts_network": False}, 
-                {"id": "bandwidth_test", "name": "bandwidth_test", "impacts_network": False},
-                {"id": "dns_test", "name": "dns_test", "impacts_network": False},
-            ],
-            "Security": [
-                {"id": "firewall_rule", "name": "firewall_rule", "impacts_network": False},
-                {"id": "port_forward", "name": "port_forward", "impacts_network": False},
-            ],
-            "System": [
-                {"id": "sys_backup", "name": "sys_backup", "impacts_network": False},
-                {"id": "sys_restore", "name": "sys_restore", "impacts_network": True},
-                {"id": "sys_reboot", "name": "sys_reboot", "impacts_network": True},
-            ],
-        }
+        # Load all categories from files
+        all_categories = self.test_loader.get_categories()
         
-        # Add categories and their test cases
-        for category, test_cases in test_categories.items():
-            # Skip if filtering and this category is not the one we want
-            if filter_category and filter_category != "ALL" and category != filter_category:
-                continue
-                
+        # Filter if needed
+        if filter_category and filter_category != "ALL":
+            categories = {k: v for k, v in all_categories.items() if k == filter_category}
+        else:
+            categories = all_categories
+        
+        # Add categories and test cases
+        for category, test_cases in categories.items():
             # Add category as parent
             category_id = self.test_tree.insert("", "end", text=category)
             
@@ -507,12 +489,12 @@ class MainWindow(LoggerMixin):
                 if test_case["impacts_network"]:
                     display_text = f"{display_text} ⚠️"
                     
-                # Store test case ID in the 'values' column for later retrieval
+                # Store test case info in the values
                 self.test_tree.insert(
                     category_id, 
                     "end", 
                     text=display_text,
-                    values=(test_case["id"], category, test_case["impacts_network"])
+                    values=(test_case["id"], category, test_case["impacts_network"], test_case["file_path"])
                 )
 
     def _on_test_case_selected(self, event):
@@ -526,22 +508,29 @@ class MainWindow(LoggerMixin):
         # If parent has no children, it's a leaf node/test case
         if not self.test_tree.get_children(selection[0]):
             # Get test case info
-            test_id = self.test_tree.item(selection[0], "values")[0]
+            values = self.test_tree.item(selection[0], "values")
+            if not values or len(values) < 1:
+                self.logger.error("Selected test case has no values")
+                return
+                
+            test_id = values[0]
             test_name = self.test_tree.item(selection[0], "text").split(" ⚠️")[0]  # Remove warning icon if present
             category = self.test_tree.item(self.test_tree.parent(selection[0]), "text")
             
             # Update parameters frame title
             self.params_frame.configure(text=f"Template Parameters ({test_name})")
             
+            # Quan trọng: Xóa dữ liệu test case cũ trước khi tải test case mới
+            if hasattr(self, '_original_test_data'):
+                self._original_test_data = None
+                
             # Load parameters for the selected test case
             self._load_test_parameters(test_id, category)
             
             # Đặt status message để đảm bảo hiển thị đúng
-            # Sửa: Sử dụng _safe_set thay vì truy cập trực tiếp đến set
             self._safe_set(self.status_var, f"Selected test: {test_name}")
                 
             # Đảm bảo UI được cập nhật
-            # Sửa: Kiểm tra self.root trước khi gọi update_idletasks
             if self.root:
                 self.root.update_idletasks()
         else:
@@ -550,86 +539,51 @@ class MainWindow(LoggerMixin):
             self._clear_parameters()
             
             # Đặt status message
-            # Sửa: Sử dụng _safe_set thay vì truy cập trực tiếp đến set
             self._safe_set(self.status_var, f"Selected category: {self.test_tree.item(selection[0], 'text')}")
     def _load_test_parameters(self, test_id, category):
-        """Load parameters for selected test case"""
+        """Load parameters from test files - always load fresh data for new selection"""
         # Clear existing parameters
         self._clear_parameters()
         
-        # Define sample parameters based on test type
+        # Initialize empty params list
         params = []
         
-        if test_id == "wan_create":
-            params = [
-                {"name": "name", "value": "wan1", "type": "string", "required": True},
-                {"name": "protocol", "value": "ipv4", "type": "enum", "required": True, 
-                "options": ["ipv4", "ipv6"]},
-                {"name": "gateway_type", "value": "route", "type": "enum", "required": True,
-                "options": ["route", "bridge"]},
-                {"name": "mtu", "value": "1492", "type": "integer", "required": True},
-                {"name": "nat", "value": "true", "type": "boolean", "required": True, 
-                "options": ["true", "false"]},
-                {"name": "link_mode", "value": "ipoe", "type": "enum", "required": True,
-                "options": ["ipoe", "pppoe"]},
-                {"name": "ipv4_alloc", "value": "dhcp", "type": "enum", "required": True,
-                "options": ["dhcp", "static"]},
-                {"name": "ipv4_ip", "value": "192.168.1.100", "type": "string", "required": False},
-                {"name": "ipv4_mask", "value": "255.255.255.0", "type": "string", "required": False},
-                {"name": "ipv4_gw", "value": "192.168.1.1", "type": "string", "required": False},
-                {"name": "ipv4_dns", "value": "8.8.8.8,8.8.4.4", "type": "string", "required": False},
-            ]
-        elif test_id == "wan_delete":
-            params = [
-                {"name": "name", "value": "wan1", "type": "string", "required": True},
-            ]
-        elif test_id == "wan_edit":
-            params = [
-                {"name": "name", "value": "wan1", "type": "string", "required": True},
-                {"name": "protocol", "value": "ipv4", "type": "enum", "required": True, 
-                "options": ["ipv4", "ipv6"]},
-                {"name": "gateway_type", "value": "route", "type": "enum", "required": False,
-                "options": ["route", "bridge"]},
-                {"name": "mtu", "value": "1492", "type": "integer", "required": False},
-                {"name": "nat", "value": "true", "type": "boolean", "required": False, 
-                "options": ["true", "false"]},
-            ]
-        elif test_id == "ping_test" or test_id == "ping":
-            # Sửa: Dùng đúng định dạng tham số cho ping
-            params = [
-                {"name": "host1", "value": "youtube.com", "type": "string", "required": True},
-                {"name": "host2", "value": "google.com", "type": "string", "required": False}
-            ]
-        elif test_id == "lan_config":
-            params = [
-                {"name": "interface", "value": "eth0", "type": "string", "required": True},
-                {"name": "ip", "value": "192.168.1.1", "type": "string", "required": True},
-                {"name": "netmask", "value": "255.255.255.0", "type": "string", "required": True},
-                {"name": "enable_dhcp", "value": "true", "type": "boolean", "required": False},
-            ]
-        elif test_id == "firewall_rule":
-            params = [
-                {"name": "name", "value": "allow-ssh", "type": "string", "required": True},
-                {"name": "src", "value": "wan", "type": "string", "required": True},
-                {"name": "dest", "value": "lan", "type": "string", "required": True},
-                {"name": "proto", "value": "tcp", "type": "string", "required": True},
-                {"name": "dest_port", "value": "22", "type": "string", "required": True},
-                {"name": "target", "value": "ACCEPT", "type": "string", "required": True},
-            ]
-        elif test_id == "sys_reboot":
-            params = [
-                {"name": "delay", "value": "5", "type": "integer", "required": False},
-                {"name": "force", "value": "false", "type": "boolean", "required": False},
-            ]
-        else:
-            # Default parameters
-            params = [
-                {"name": "param1", "value": "value1", "type": "string", "required": True},
-                {"name": "param2", "value": "value2", "type": "string", "required": False},
-            ]
+        # Luôn tải mới dữ liệu khi chọn test case
+        test_data = self.test_loader.load_test_case(test_id, category)
+        self.logger.debug(f"Loaded fresh test data from file for {test_id}")
+        
+        # Lưu lại để sử dụng cho các lần gọi tiếp theo
+        self._original_test_data = test_data
+        
+        if test_data and "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+            # Get params from the first test case
+            raw_params = test_data["test_cases"][0].get("params", {})
+            
+            # Convert from dict to list format
+            for key, value in raw_params.items():
+                # Handle special data types
+                if isinstance(value, list):
+                    # For lists like ipv4_dns, convert to comma-separated string
+                    str_value = ",".join(str(item) for item in value)
+                elif isinstance(value, bool):
+                    # For booleans, convert to "true"/"false"
+                    str_value = str(value).lower()
+                else:
+                    # For other types, convert to string
+                    str_value = str(value) if value is not None else ""
                 
-        # Create UI for parameters
+                param = {
+                    "name": key,
+                    "value": str_value
+                }
+                params.append(param)
+        
+        # Create UI controls
         self._create_parameter_controls(params)
+
+        # Log để debug
+        self.logger.info(f"Loaded parameters for {test_id} in {category}: {len(params)} parameters")
+
     def _create_saved_tests_tab(self) -> None:
         """Create a tab to browse saved test cases"""
         if not self.notebook:
@@ -938,13 +892,11 @@ class MainWindow(LoggerMixin):
 
     def _refresh_test_cases(self):
         """Refresh test case tree"""
-        # In Phase 1, just repopulate
-        # In Phase 2, this would reload from the filesystem
+        # Tải lại test case từ file
         self._populate_test_tree()
         
         # Show status message
-        if self.status_var:
-            self.status_var.set("Test cases refreshed")
+        self._safe_set(self.status_var, "Test cases refreshed from file")
         
     def _clear_parameters(self):
         """Clear all parameters from the parameters frame"""
@@ -963,7 +915,8 @@ class MainWindow(LoggerMixin):
         # Đưa các nút điều khiển vào frame này
         ttk.Button(control_frame, text="➕ Add Param", command=self._add_parameter).pack(side=tk.LEFT, padx=5)
         ttk.Button(control_frame, text="💾 Save Parameters", command=self._save_parameters).pack(side=tk.RIGHT, padx=5)
-        ttk.Button(control_frame, text="🔄 Reset", command=lambda: self._on_test_case_selected(None)).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(control_frame, text="🔄 Reset", command=self._reset_parameters).pack(side=tk.RIGHT, padx=5)
+
     
         
         # ===== PHẦN 2: FRAME CỐ ĐỊNH CHO TIÊU ĐỀ CỘT =====
@@ -1285,10 +1238,10 @@ class MainWindow(LoggerMixin):
         }
         
         return param_data
-        
+                
 
     def _save_parameters(self) -> None:
-        """Save current template parameters."""
+        """Save parameters back to file."""
         # Get selected item
         selected = self.test_tree.selection()
         if not selected or self.test_tree.get_children(selected[0]):
@@ -1296,40 +1249,152 @@ class MainWindow(LoggerMixin):
             return
                 
         # Get test case info
-        test_id = self.test_tree.item(selected[0], "values")[0]
-        test_name = self.test_tree.item(selected[0], "text").split(" ⚠️")[0]
-        
-        # Lấy tất cả giá trị tham số và thực hiện chuyển đổi kiểu cơ bản
-        saved_params = {}
-        for param_name, var in self.param_vars.items():
-            value = var.get()
+        values = self.test_tree.item(selected[0], "values")
+        if not values or len(values) < 2:
+            messagebox.showinfo("Error", "Invalid selection")
+            return
             
-            # Chuyển đổi kiểu dữ liệu đơn giản dựa trên giá trị
-            if value.lower() == "true":
-                saved_params[param_name] = True
-            elif value.lower() == "false":
-                saved_params[param_name] = False
-            elif value.isdigit():
-                saved_params[param_name] = int(value)
-            elif "," in value and param_name.endswith("_dns"):
-                # Xử lý đặc biệt cho các trường DNS - chuyển thành mảng
-                saved_params[param_name] = [item.strip() for item in value.split(",") if item.strip()]
+        test_id = values[0]
+        category = values[1]
+        file_path = values[3] if len(values) > 3 else None
+        
+        try:
+            # Load original test data to preserve structure
+            test_data = None
+            if hasattr(self, '_original_test_data') and self._original_test_data:
+                test_data = self._original_test_data.copy()  # Tạo bản sao để tránh sửa đổi gốc
             else:
-                # Mặc định xử lý như string
-                saved_params[param_name] = value
-        
-        # Hiển thị thông báo thành công với chi tiết tham số
-        detail_message = f"Parameters for '{test_name}' saved successfully:\n\n"
-        for name, value in saved_params.items():
-            detail_message += f"• {name}: {value}\n"
-        
-        messagebox.showinfo("Success", detail_message)
-        self.logger.info(f"Template parameters saved for {test_name} with {len(saved_params)} parameters")
-        
-        # Update status
-        if self.status_var:
-            self.status_var.set(f"Parameters saved for {test_name}")
+                # Load from file if we don't have original data
+                test_data = self.test_loader.load_test_case(test_id, category)
+            
+            # If still no data, create a new test structure
+            if not test_data:
+                parts = test_id.split('_')
+                service = parts[0]
+                action = parts[1] if len(parts) > 1 else ""
                 
+                test_data = {
+                    "test_cases": [
+                        {
+                            "service": service,
+                            "action": action,
+                            "params": {}
+                        }
+                    ],
+                    "metadata": {}  # Đảm bảo metadata là một dict
+                }
+            
+            # Collect all parameter values
+            params_dict = {}
+            for param_name, var in self.param_vars.items():
+                value = var.get()
+                
+                # Convert to appropriate types
+                if value.lower() == "true":
+                    params_dict[param_name] = True
+                elif value.lower() == "false":
+                    params_dict[param_name] = False
+                elif value.isdigit():
+                    params_dict[param_name] = int(value)
+                elif "," in value and any(name in param_name.lower() for name in ["dns", "servers", "hosts"]):
+                    # Handle comma-separated lists for DNS and similar fields
+                    params_dict[param_name] = [item.strip() for item in value.split(",") if item.strip()]
+                else:
+                    params_dict[param_name] = value
+            
+            # Update the params in test_data
+            if "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+                test_data["test_cases"][0]["params"] = params_dict
+            
+            # Add/update metadata - Sửa cấu trúc đúng
+            if "metadata" not in test_data:
+                test_data["metadata"] = {}  # Tạo dict mới nếu chưa tồn tại
+                
+            # Đảm bảo metadata là một dict (phòng trường hợp nó là kiểu dữ liệu khác)
+            if not isinstance(test_data["metadata"], dict):
+                test_data["metadata"] = {}  # Tạo lại nếu không phải dict
+                
+            # Bây giờ cập nhật các thuộc tính metadata an toàn
+            # Sử dụng thời gian và người dùng được cung cấp
+            test_data["metadata"]["last_modified"] = "2025-06-23 08:41:06"  # Thời gian từ input
+            test_data["metadata"]["modified_by"] = "juno-kyojin"  # Người dùng từ input
+            
+            # Save the test case
+            success, message = self.test_loader.save_test_case(test_id, category, test_data)
+            
+            # Quan trọng: Lưu lại bản sao mới nhất để so sánh khi reset
+            if success:
+                # Lưu bản mới nhất sau khi lưu thành công
+                self._original_test_data = test_data.copy()
+                
+                messagebox.showinfo("Success", f"Parameters saved for {test_id}")
+                self._safe_set(self.status_var, f"Saved parameters for {test_id}")
+                self.logger.info(f"Saved parameters for {test_id} in {category}")
+            else:
+                messagebox.showerror("Error", message)
+                self.logger.error(f"Failed to save parameters: {message}")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save: {str(e)}")
+            self.logger.error(f"Error saving parameters: {str(e)}")
+    def _reset_parameters(self):
+        """Reset parameters from file"""
+        # Get selected item
+        selected = self.test_tree.selection()
+        if not selected:
+            return
+            
+        try:
+            # Check if it's a test case (leaf) or category (parent)
+            if not self.test_tree.get_children(selected[0]):
+                # Get test case info safely
+                values = self.test_tree.item(selected[0], "values")
+                if not values or len(values) < 2:
+                    self.logger.error("Selected item has no values")
+                    return
+                    
+                test_id = values[0] 
+                category = values[1]
+                
+                # Xác nhận reset nếu có các tham số mới được thêm vào
+                current_param_count = len(self.param_vars) if hasattr(self, 'param_vars') else 0
+                confirm_reset = True
+                
+                # Nếu có nhiều hơn 2 tham số, hiển thị thông báo xác nhận
+                if current_param_count > 2:  # Đặt ngưỡng phù hợp cho ứng dụng của bạn
+                    confirm_reset = messagebox.askyesno(
+                        "Confirm Reset", 
+                        f"Reset will discard any new parameters added. Continue?",
+                        icon='warning'
+                    )
+                
+                if not confirm_reset:
+                    return
+                    
+                # Force reload from file - always reload fresh from disk
+                # Buộc LUÔN đọc lại từ đĩa, không sử dụng bộ nhớ cache
+                self._original_test_data = None  # Xóa dữ liệu cũ
+                
+                # Tải lại trực tiếp từ file
+                file_path = values[3] if len(values) > 3 else None
+                
+                # Nếu có file_path, dùng nó để tải trực tiếp
+                if file_path and os.path.exists(file_path):
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        self._original_test_data = json.load(f)
+                        self.logger.info(f"Reset: Loaded test data directly from {file_path}")
+                else:
+                    # Ngược lại, sử dụng test_loader để tìm và tải
+                    self.logger.info(f"Reset: Loading test data for {test_id} from category {category}")
+                    
+                # Tải tham số bằng cách sử dụng dữ liệu đã tải hoặc yêu cầu tải mới
+                self._load_test_parameters(test_id, category)
+                
+                # Update status
+                self._safe_set(self.status_var, f"Parameters reset for {test_id}")
+                
+        except Exception as e:
+            self.logger.error(f"Error resetting parameters: {e}")
     def create_placeholder_params(self):
         """Create placeholder parameters UI - Simplified version"""
         # Clear existing widgets
