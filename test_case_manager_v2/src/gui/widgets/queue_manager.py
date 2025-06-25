@@ -162,53 +162,178 @@ class TestQueueManager(ttk.Frame):
         ttk.Button(self.item_control_frame, text="Remove", command=self.remove_selected_item).pack(side=tk.LEFT, padx=5)
         ttk.Button(self.item_control_frame, text="Edit Parameters", command=self.edit_parameters).pack(side=tk.RIGHT, padx=5)
     
-    def add_item(self, test_id: str, name: str, category: str, parameters: Dict) -> bool:
+        # Cấu hình màu sắc cho các trạng thái
+        self._configure_status_tags()  
+        # Bind double click để xem chi tiết
+        self.queue_tree.bind("<Double-1>", self._view_test_details)
+    def _view_test_details(self, event):
+        """Hiển thị cửa sổ chi tiết khi double-click vào test"""
+        item = self.queue_tree.identify('item', event.x, event.y)
+        if not item:
+            return
+            
+        # Lấy index và dữ liệu item
+        index = self.queue_tree.index(item)
+        if index < len(self.queue_items):
+            test_item = self.queue_items[index]
+            
+            # Tạo cửa sổ popup
+            detail_window = tk.Toplevel(self)
+            detail_window.title(f"Test Details: {test_item.get('name', 'Unknown')}")
+            detail_window.geometry("500x400")
+            detail_window.grab_set()  # Make it modal
+            
+            # Tạo frame cho nội dung
+            content_frame = ttk.Frame(detail_window, padding=10)
+            content_frame.pack(fill=tk.BOTH, expand=True)
+            
+            # Thông tin cơ bản
+            ttk.Label(content_frame, text=f"Test ID: {test_item.get('test_id')}", 
+                    font=("TkDefaultFont", 10, "bold")).pack(anchor=tk.W, pady=3)
+            ttk.Label(content_frame, text=f"Name: {test_item.get('name')}").pack(anchor=tk.W, pady=2)
+            ttk.Label(content_frame, text=f"Category: {test_item.get('category')}").pack(anchor=tk.W, pady=2)
+            
+            # Hiển thị status với màu phù hợp
+            status_frame = ttk.Frame(content_frame)
+            status_frame.pack(fill=tk.X, pady=5)
+            
+            status = test_item.get('status', 'Unknown')
+            status_label = ttk.Label(status_frame, text=f"Status: {status}", width=20)
+            status_label.pack(side=tk.LEFT)
+            
+            # Màu nền cho status dựa trên giá trị
+            if status.lower() == "success":
+                status_color = "#4CAF50"  # Green
+            elif status.lower() == "failed":
+                status_color = "#F44336"  # Red
+            elif status.lower() == "error":
+                status_color = "#FF9800"  # Orange
+            elif status.lower() in ["sending", "running"]:
+                status_color = "#2196F3"  # Blue
+            else:
+                status_color = "#9E9E9E"  # Grey
+                
+            status_indicator = tk.Canvas(status_frame, width=15, height=15, bg=status_color)
+            status_indicator.pack(side=tk.LEFT, padx=5)
+            
+            # Chi tiết message
+            if "details" in test_item and "message" in test_item["details"]:
+                message_frame = ttk.LabelFrame(content_frame, text="Status Message")
+                message_frame.pack(fill=tk.X, pady=5, padx=5)
+                
+                message = test_item["details"]["message"]
+                message_text = tk.Text(message_frame, wrap=tk.WORD, height=3)
+                message_text.insert("1.0", message)
+                message_text.config(state="disabled")
+                message_text.pack(fill=tk.X, padx=5, pady=5)
+            
+            # Parameters
+            param_frame = ttk.LabelFrame(content_frame, text="Parameters")
+            param_frame.pack(fill=tk.BOTH, expand=True, pady=5, padx=5)
+            
+            # Tạo scrollable frame cho parameters
+            canvas = tk.Canvas(param_frame)
+            scrollbar = ttk.Scrollbar(param_frame, orient="vertical", command=canvas.yview)
+            scrollable_frame = ttk.Frame(canvas)
+            
+            scrollable_frame.bind(
+                "<Configure>",
+                lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+            )
+            
+            canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+            canvas.configure(yscrollcommand=scrollbar.set)
+            
+            # Thêm các tham số
+            params = test_item.get("parameters", {})
+            for i, (key, value) in enumerate(params.items()):
+                param_row = ttk.Frame(scrollable_frame)
+                param_row.pack(fill=tk.X, pady=2)
+                
+                ttk.Label(param_row, text=key, width=15, anchor=tk.W).pack(side=tk.LEFT)
+                ttk.Label(param_row, text="=").pack(side=tk.LEFT, padx=5)
+                
+                # Format value dựa vào kiểu dữ liệu
+                if isinstance(value, list):
+                    value_text = json.dumps(value)
+                elif isinstance(value, bool):
+                    value_text = str(value).lower()
+                else:
+                    value_text = str(value)
+                    
+                value_label = ttk.Label(param_row, text=value_text, anchor=tk.W)
+                value_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            
+            # Đặt canvas và scrollbar vào param_frame
+            canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+            
+            # Timing info
+            if "details" in test_item and "last_updated" in test_item["details"]:
+                ttk.Label(content_frame, text=f"Last updated: {test_item['details']['last_updated']}",
+                        font=("TkDefaultFont", 8)).pack(anchor=tk.E, pady=5)
+            
+            # Nút đóng
+            ttk.Button(content_frame, text="Close", command=detail_window.destroy).pack(pady=10)
+    def _configure_status_tags(self):
+        """Cấu hình màu sắc cho các trạng thái khác nhau"""
+        self.queue_tree.tag_configure("sending", background="#FFFDE7")  # Màu vàng nhạt
+        self.queue_tree.tag_configure("running", background="#E1F5FE")  # Màu xanh dương nhạt
+        self.queue_tree.tag_configure("success", background="#E8F5E9")  # Màu xanh lá nhạt
+        self.queue_tree.tag_configure("failed", background="#FFEBEE")   # Màu đỏ nhạt
+        self.queue_tree.tag_configure("error", background="#FCE4EC")    # Màu hồng nhạt
+        self.queue_tree.tag_configure("queued", background="#F5F5F5")   # Màu xám nhạt  
+    def add_item(self, test_id, name, category, parameters, service="", action=""):
         """
-        Add item to the queue
+        Add item to queue với thông tin service và action đầy đủ
         
         Args:
-            test_id: Test case ID
+            test_id: Test identifier string
             name: Display name
-            category: Test category
-            parameters: Test parameters
-            
+            category: Category name
+            parameters: Dictionary of parameters
+            service: Service name từ file JSON gốc
+            action: Action name từ file JSON gốc
+        
         Returns:
-            True if added successfully, False otherwise
+            bool: True if added successfully
         """
-        try:
-            # Create item data
-            order = len(self.queue_items) + 1
-            item_data = {
-                "order": order,
-                "test_id": test_id,
-                "name": name, 
-                "category": category,
-                "parameters": parameters,
-                "status": "Queued"
-            }
-            
-            # Add to internal list
-            self.queue_items.append(item_data)
-            
-            # Format parameters for display
-            params_str = ", ".join([f"{k}={v}" for k, v in parameters.items()])
-            if len(params_str) > 40:
-                params_str = params_str[:37] + "..."
-            
-            # Add to TreeView
-            self.queue_tree.insert("", "end", values=(
-                order,
-                name,
-                category,
-                params_str,
-                "Queued"
-            ))
-            
-            return True
-        except Exception as e:
-            print(f"Error adding item to queue: {e}")
-            return False
-    
+        # Create item data object
+        item_data = {
+            "test_id": test_id,
+            "name": name,
+            "category": category,
+            "parameters": parameters.copy() if parameters else {},
+            "status": "Queued",
+            "service": service,  # Lưu trữ service từ file JSON
+            "action": action     # Lưu trữ action từ file JSON
+        }
+        
+        # Add to internal list
+        self.queue_items.append(item_data)
+        
+        # Add to treeview
+        order = len(self.queue_items)
+        param_text = ", ".join([f"{k}:{v}" for k,v in parameters.items()])[:50] if parameters else ""
+        
+        # Update parameter text for display
+        if len(param_text) >= 50:
+            param_text += "..."
+        
+        # Insert into treeview
+        self.queue_tree.insert("", "end", values=(
+            order,
+            name,
+            category,
+            param_text,
+            "Queued"
+        ))
+        
+        # Không sử dụng logger vì không tồn tại trong class
+        # Thay thế bằng print debug nếu cần
+        # print(f"Added to queue: {test_id}, service={service}, action={action}")
+        
+        return True
     def move_item_up(self):
         """Move the selected item up in the queue"""
         selected = self.queue_tree.selection()
@@ -291,25 +416,24 @@ class TestQueueManager(ttk.Frame):
             self._refresh_queue_view()
     
     def _refresh_queue_view(self):
-        """Refresh the TreeView to match the internal queue items"""
-        # Clear existing items
+        """Refresh the queue view with current items"""
+        # Clear current view
         for item in self.queue_tree.get_children():
             self.queue_tree.delete(item)
         
-        # Add updated items
-        for item in self.queue_items:
-            # Format parameters for display
-            params = item.get("parameters", {})
-            params_str = ", ".join([f"{k}={v}" for k, v in params.items()])
-            if len(params_str) > 40:
-                params_str = params_str[:37] + "..."
-            
+        # Add items from queue
+        for i, item in enumerate(self.queue_items):
+            # Đảm bảo order tồn tại
+            if "order" not in item:
+                item["order"] = i + 1  # Tạo order dựa trên vị trí hiện tại
+                
             self.queue_tree.insert("", "end", values=(
                 item["order"],
-                item["name"],
-                item["category"],
-                params_str,
-                item["status"]
+                item.get("test_id", ""),
+                item.get("name", ""),
+                item.get("service", ""),
+                item.get("action", ""),
+                item.get("status", "Queued")
             ))
     
     def _on_queue_item_selected(self, event):
@@ -483,28 +607,71 @@ class TestQueueManager(ttk.Frame):
             messagebox.showerror("Error", f"Error advancing to next test: {str(e)}")
             self.running = False            
     def update_status(self, index, status, message=None):
-        """Update status of a test in the queue"""
-        items = self.queue_tree.get_children()  # Sử dụng queue_tree thay vì test_queue
+        """
+        Cập nhật trạng thái test với hiển thị cải tiến
+        
+        Args:
+            index: Chỉ số của test trong queue
+            status: Trạng thái mới (Sending, Running, Success, Failed, Error)
+            message: Thông điệp bổ sung (nếu có)
+        """
+        items = self.queue_tree.get_children()
         if 0 <= index < len(items):
             item_id = items[index]
-            values = list(self.queue_tree.item(item_id, "values"))  # Sử dụng queue_tree
+            values = list(self.queue_tree.item(item_id, "values"))
             
-            # Cột "status" thực ra ở index 4 dựa vào định nghĩa columns
-            # columns = ("order", "name", "category", "parameters", "status")
-            status_col = 4  # Cột thứ 5 (index 4)
+            # Cột "status" ở index 4
+            status_col = 4
             if len(values) > status_col:
-                values[status_col] = status
+                # Thêm icon cho trạng thái
+                if status.lower() == "sending":
+                    status_display = "🔄 " + status
+                    self.queue_tree.item(item_id, tags=("sending",))
+                elif status.lower() == "running":
+                    status_display = "⏳ " + status
+                    self.queue_tree.item(item_id, tags=("running",))
+                elif status.lower() == "success":
+                    status_display = "✅ " + status
+                    self.queue_tree.item(item_id, tags=("success",))
+                elif status.lower() == "failed":
+                    status_display = "❌ " + status
+                    self.queue_tree.item(item_id, tags=("failed",))
+                elif status.lower() == "error":
+                    status_display = "⚠️ " + status
+                    self.queue_tree.item(item_id, tags=("error",))
+                elif status.lower() == "queued":
+                    status_display = "📋 " + status
+                    self.queue_tree.item(item_id, tags=("queued",))
+                else:
+                    status_display = status
                 
-            # Không có cột message riêng trong implementation hiện tại
-            # Có thể cập nhật vào cột parameters nếu cần hiển thị message
-            
-            # Cập nhật UI
-            self.queue_tree.item(item_id, values=tuple(values))  # Sử dụng queue_tree
-            
-            # Cập nhật dữ liệu nội bộ
-            if index < len(self.queue_items):
-                self.queue_items[index]["status"] = status
+                # Thêm message nếu có
                 if message:
-                    self.queue_items[index]["message"] = message
+                    status_display += f": {message}"
+                    
+                    # Giới hạn độ dài hiển thị
+                    if len(status_display) > 40:
+                        status_display = status_display[:37] + "..."
+                
+                values[status_col] = status_display
+                
+                # Cập nhật UI
+                self.queue_tree.item(item_id, values=tuple(values))
+                
+                # Đảm bảo item nhìn thấy được trong view
+                self.queue_tree.see(item_id)
+                
+                # Cập nhật dữ liệu nội bộ
+                if index < len(self.queue_items):
+                    # Cập nhật trạng thái
+                    self.queue_items[index]["status"] = status
+                    
+                    # Lưu message vào thuộc tính tạm thời
+                    if message:
+                        if "details" not in self.queue_items[index]:
+                            self.queue_items[index]["details"] = {}
+                        
+                        self.queue_items[index]["details"]["message"] = message
+                        self.queue_items[index]["details"]["last_updated"] = "2025-06-24 01:25:56"  # Thời gian hiện tại
 
         

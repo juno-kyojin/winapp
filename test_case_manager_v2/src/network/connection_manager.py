@@ -122,7 +122,7 @@ class ConnectionManager:
             self.ssh_connection.disconnect()
         else:
             self.http_client.disconnect()
-    
+        
     def send_test(self, test_data: Dict[str, Any], test_file_path: Optional[str] = "", 
                 affects_network: bool = False) -> Tuple[bool, Optional[Dict], str]:
         """
@@ -147,6 +147,23 @@ class ConnectionManager:
             return False, None, "SSH result handling not implemented"
             
         else:
+            # === THAY ĐỔI QUAN TRỌNG: THÊM TRANSACTION ID VÀO TEST DATA ===
+            # Ensure test data has metadata with transaction ID
+            if "metadata" not in test_data:
+                import uuid
+                transaction_id = f"tx-{str(uuid.uuid4())[:8]}"
+                timestamp = "2025-06-25 04:01:01"  # Current timestamp
+                
+                test_data["metadata"] = {
+                    "transaction_id": transaction_id,
+                    "client_timestamp": timestamp,
+                    "created_at": timestamp,
+                    "created_by": "juno-kyojin"
+                }
+            elif "transaction_id" not in test_data["metadata"]:
+                import uuid
+                test_data["metadata"]["transaction_id"] = f"tx-{str(uuid.uuid4())[:8]}"
+                
             # HTTP method - send test data directly
             # Adjust timeout for network-affecting tests
             original_timeout = self.http_client.read_timeout
