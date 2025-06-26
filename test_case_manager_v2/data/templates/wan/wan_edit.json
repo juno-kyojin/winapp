@@ -2,7 +2,7 @@
   "test_cases": [
     {
       "service": "wan",
-      "action": "create",
+      "action": "edit",
       "params": {
         "name": "wan1",
         "protocol": "ipv4",
