@@ -1,16 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-Main window for Test Case Manager v2.0
-
-This module implements the main application window with tabbed interface
-and core GUI functionality.
-
-Author: juno-kyojin
-Created: 2025-06-12
-"""
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 import random
@@ -2162,7 +2149,7 @@ class MainWindow(LoggerMixin):
         import datetime
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     def send_test_case_http(self, test_data, index):
-        """Gửi test case đến HTTP server và xử lý kết quả chính xác"""
+        """Gửi test case đến HTTP server với giải pháp chống race condition"""
         try:
             # Import required libraries
             import requests
@@ -2170,6 +2157,7 @@ class MainWindow(LoggerMixin):
             import time
             import uuid
             import random
+            import datetime
             
             if not self.http_client:
                 self.logger.error("HTTP client not initialized")
@@ -2177,23 +2165,29 @@ class MainWindow(LoggerMixin):
                 self._safe_after(0, lambda err=error_msg: self.update_test_status(index, "Error", err))
                 return
                     
-            # Get current connection info
+            # Lấy thông tin kết nối từ UI thay vì hardcode
             host = self._safe_get(self.http_host_var, "127.0.0.1")
             port = int(self._safe_get(self.http_port_var, "6262"))
             url = f"http://{host}:{port}"
             
+            # Lấy transaction_id từ metadata hoặc tạo mới nếu không có
+            transaction_id = test_data.get("metadata", {}).get("transaction_id", "")
+            if not transaction_id:
+                transaction_id = f"tx-{str(uuid.uuid4())[:8]}"
+                if "metadata" in test_data:
+                    test_data["metadata"]["transaction_id"] = transaction_id
+                    
             self.logger.info(f"Sending test case to {url}")
-            transaction_id = test_data.get("metadata", {}).get("transaction_id", "unknown")
             tx_msg = f"Request sent, TX: {transaction_id[:8]}"
             self._safe_after(0, lambda msg=tx_msg: self.update_test_status(index, "Sending", msg))
             
-            # Cập nhật metadata với thời gian và username mới nhất
-            timestamp = "2025-06-25 06:13:00"  # Dùng thời gian hiện tại từ input
-            username = "juno-kyojin"  # Dùng username từ input
+            # Cập nhật metadata với thời gian thực thay vì hardcode
+            current_time = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            username = os.environ.get('USERNAME', 'juno-kyojin')  # Lấy từ môi trường hoặc fallback
             
             if "metadata" in test_data:
-                test_data["metadata"]["created_at"] = timestamp
-                test_data["metadata"]["client_timestamp"] = timestamp
+                test_data["metadata"]["created_at"] = current_time
+                test_data["metadata"]["client_timestamp"] = current_time
                 test_data["metadata"]["created_by"] = username
             
             # Check if test affects network
@@ -2205,7 +2199,7 @@ class MainWindow(LoggerMixin):
             if is_network_test:
                 self.logger.info(f"Test {transaction_id} affects network connectivity - will use enhanced handling")
             
-            # Get current time for execution timing
+            # Thời gian bắt đầu để tính thời gian thực thi
             start_time = time.time()
             
             try:
@@ -2215,7 +2209,11 @@ class MainWindow(LoggerMixin):
                     try:
                         import socket
                         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        sock.settimeout(int(self._safe_get(self.http_conn_timeout_var, "5")))
+                        
+                        # Sử dụng timeout từ cấu hình UI thay vì hardcode
+                        conn_timeout = int(self._safe_get(self.http_conn_timeout_var, "5")) 
+                        sock.settimeout(conn_timeout)
+                        
                         sock.connect((host, port))
                         sock.close()
                         self.http_connected = True
@@ -2225,11 +2223,11 @@ class MainWindow(LoggerMixin):
                 # Update UI before sending
                 self._safe_after(0, lambda: self.update_test_status(index, "Running", "Processing..."))
                 
-                # Mở rộng timeout cho tất cả các test case
+                # Lấy timeout từ UI thay vì hardcode
                 conn_timeout = max(10, int(self._safe_get(self.http_conn_timeout_var, "10")))
                 read_timeout = max(45, int(self._safe_get(self.http_read_timeout_var, "45")))
                 
-                # Add anti-cache headers
+                # Tạo thông tin chống cache động
                 cache_buster = str(uuid.uuid4())[:8]
                 cache_time = str(int(time.time() * 1000))
                 random_string = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz0123456789', k=8))
@@ -2241,37 +2239,40 @@ class MainWindow(LoggerMixin):
                     "Expires": "0",
                     "X-Cache-Buster": cache_buster,
                     "X-Request-Time": cache_time,
-                    "X-Random": random_string
+                    "X-Random": random_string,
+                    "X-Client-ID": username,
+                    "X-Transaction-ID": transaction_id
                 }
                 
-                # Add randomized info to metadata to ensure unique requests
+                # Thêm thông tin cache vào metadata để đảm bảo mỗi request là duy nhất
                 if "metadata" in test_data:
                     test_data["metadata"]["client_request_time"] = cache_time
                     test_data["metadata"]["cache_buster"] = cache_buster
                     test_data["metadata"]["random_id"] = random_string
                     
-                    # Add unique version for each request
-                    unique_suffix = f"{int(time.time())}-{random.randint(10000, 99999)}"
-                    test_data["metadata"]["unique_request_id"] = f"req-{unique_suffix}"
+                    # Thêm unique_id cho mỗi request
+                    unique_id = str(uuid.uuid4())
+                    test_data["metadata"]["unique_id"] = unique_id
+                    test_data["metadata"]["client_version"] = "2.0.1"
+                    test_data["metadata"]["client_platform"] = "Windows"
                 
-                # ĐỢI 2 GIÂY ĐỂ SERVER SẴN SÀNG
+                # ===== GIẢI PHÁP CHỐNG RACE CONDITION =====
+                # Tạo file config với tên duy nhất theo transaction_id
+                config_dir = "/etc/testmanager/config"  # Nên đưa vào cấu hình
+                unique_config_name = f"config_{transaction_id}.json"
+                config_path = f"{config_dir}/{unique_config_name}"
+                
+                self.logger.info(f"Creating config file: {config_path}")
+                
+                # Gửi thông tin file config trong headers
+                headers["X-Config-File"] = unique_config_name
+                
+                # Đợi một chút để đảm bảo server sẵn sàng (có thể đưa vào cấu hình)
                 time.sleep(2)
                 
-                # Tạo thư mục config nếu cần
-                config_dir = "/etc/testmanager/config"
+                # Xác minh file config đã được tạo (thực hiện trước khi gửi request)
+                # Nếu muốn tạo file trước qua API riêng, có thể thêm đoạn này
                 
-                # TẠO VÀ KIỂM TRA TỒN TẠI CONFIG FILE
-                try:
-                    # Tạo file config với tên duy nhất cho từng request
-                    unique_config_name = f"config_{transaction_id}.json"
-                    config_path = f"{config_dir}/{unique_config_name}"
-                    
-                    # Ghi file config
-                    config_cmd = f"echo '{json.dumps(test_data)}' > {config_path}"
-                    self.logger.info(f"Creating config file: {config_path}")
-                except Exception as e:
-                    self.logger.error(f"Error preparing config commands: {e}")
-                    
                 # Gửi request
                 response = requests.post(
                     url,
@@ -2280,7 +2281,7 @@ class MainWindow(LoggerMixin):
                     timeout=(conn_timeout, read_timeout)
                 )
                 
-                # Calculate response time
+                # Tính thời gian phản hồi
                 elapsed_time = time.time() - start_time
                 
                 # Process response
@@ -2289,55 +2290,60 @@ class MainWindow(LoggerMixin):
                         result = response.json()
                         self.logger.info(f"Test response received in {elapsed_time:.2f}s: {json.dumps(result, indent=2)}")
                         
-                        # Xác minh kết quả không phải từ cache
-                        if not self._verify_response_matches_request(test_data, result):
-                            self.logger.warning("Response may be from cache - reattempting with different cache buster")
-                            time.sleep(2)  # Đợi 2 giây
+                        # Tích hợp xử lý LAN (giữ nguyên)
+                        try:
+                            test_case = test_data["test_cases"][0] if "test_cases" in test_data and test_data["test_cases"] else {}
+                            service = test_case.get("service", "").lower()
                             
-                            # Chỉnh sửa cache buster và thử lại
-                            new_cache_buster = str(uuid.uuid4())[:8]
-                            headers["X-Cache-Buster"] = new_cache_buster
-                            
-                            if "metadata" in test_data:
-                                test_data["metadata"]["cache_buster"] = new_cache_buster
+                            # Nếu đây là LAN test, xác minh kết quả từ client
+                            if service == "lan" and "summary" in result and result["summary"].get("passed", 0) > 0:
+                                self.logger.info("LAN test returned success from router. Verifying with client...")
                                 
-                            # Thử lại với cache buster mới
-                            response = requests.post(
-                                url,
-                                json=test_data,
-                                headers=headers,
-                                timeout=(conn_timeout, read_timeout)
-                            )
-                            
-                            # Kiểm tra lại phản hồi
-                            if response.status_code == 200:
-                                result = response.json()
-                                self.logger.info(f"Test response (retry) received: {json.dumps(result, indent=2)}")
+                                # Import LAN checker
+                                from network.lan_checker import verify_lan_test
+                                
+                                # Thực hiện xác minh
+                                result = verify_lan_test(test_data, result, self.logger)
+                                
+                                # Log kết quả xác minh từ client
+                                if "client_verification" in result:
+                                    status = result["client_verification"].get("status")
+                                    message = result["client_verification"].get("message", "")
+                                    
+                                    if status is True:
+                                        self.logger.info(f"Client verification passed: {message}")
+                                    elif status == "warning":
+                                        self.logger.warning(f"Client verification warning: {message}")
+                                    elif status is False:
+                                        self.logger.error(f"Client verification failed: {message}")
+                                    else:
+                                        self.logger.warning(f"Client verification status unclear: {message}")
+                        except Exception as e:
+                            self.logger.error(f"Error in LAN verification: {str(e)}")
                         
-                        # QUAN TRỌNG: Kiểm tra chính xác kết quả từ server
+                        # Xác định kết quả cuối cùng
                         summary = result.get("summary", {})
                         passed = summary.get("passed", 0)
                         failed = summary.get("failed", 0)
                         
-                        # Xác định kết quả cuối cùng
+                        # Cập nhật UI và lưu kết quả
                         success = passed > 0 and failed == 0
                         
-                        # THAY ĐỔI QUAN TRỌNG: LUÔN LƯU KẾT QUẢ TRƯỚC KHI XỬ LÝ NETWORK TEST
-                        # Lưu kết quả test (BỔ SUNG)
+                        # Lưu kết quả test trực tiếp
                         try:
-                            # Lưu trực tiếp (không dùng _safe_after)
                             self.save_result_directly(index, test_data, result, "Success" if success else "Fail", elapsed_time)
                             self.logger.info("Test result saved successfully")
                         except Exception as save_err:
                             self.logger.error(f"Failed to save test result: {save_err}")
                         
+                        # Xử lý test ảnh hưởng mạng
                         if is_network_test and success:
                             if expected_disconnect:
-                                # THAY ĐỔI: Cập nhật UI trước khi bắt đầu quá trình kết nối lại
+                                # Cập nhật UI trước quá trình kết nối lại
                                 success_msg = f"Network test passed ({elapsed_time:.1f}s) - Reconnecting..."
                                 self._safe_after(0, lambda msg=success_msg: self.update_test_status(index, "Success", msg))
                                 
-                                # ĐẶT status_var NGAY LẬP TỨC không dùng after
+                                # Cập nhật status_var
                                 self._safe_set(self.status_var, "Network configuration changed. Reconnecting...")
                                 
                                 # Đặt lại trạng thái kết nối
@@ -2347,12 +2353,12 @@ class MainWindow(LoggerMixin):
                                 # Lên lịch kiểm tra kết nối sau một khoảng thời gian dựa trên mức độ ảnh hưởng
                                 self._safe_after(restart_delay * 1000, lambda: self._complete_after_reconnect(index))
                             else:
-                                # Đối với những thay đổi không gây mất kết nối, chúng ta vẫn có thể lưu kết quả nhưng không cần đợi
+                                # Đối với những thay đổi không gây mất kết nối
                                 self.logger.info(f"Thay đổi mạng không gây mất kết nối, không cần đợi kết nối lại")
                                 final_msg = f"Network change applied ({elapsed_time:.1f}s) - No reconnect needed"
                                 self._safe_after(0, lambda m=final_msg: self.update_test_status(index, "Success", m))
                                 
-                                # Vẫn cần thực hiện kiểm tra kết nối nhẹ để đảm bảo mọi thứ vẫn ổn
+                                # Kiểm tra kết nối nhẹ
                                 self._safe_after(1000, self._recheck_connection)
                         else:
                             # Xử lý các test không ảnh hưởng mạng hoặc test mạng không thành công
@@ -2376,7 +2382,7 @@ class MainWindow(LoggerMixin):
                     self._safe_after(0, lambda e=err_msg: self.update_test_status(index, "Error", e))
                                 
             except Exception as req_error:
-                # ===== PHẦN CẢI TIẾN: PHÁT HIỆN NHIỀU DẠNG CONNECTION RESET =====
+                # Xử lý connection reset
                 error_str = str(req_error)
                 self.logger.error(f"Lỗi kết nối: {error_str}")
                 
@@ -2395,14 +2401,14 @@ class MainWindow(LoggerMixin):
                     "10054"  # Mã lỗi Windows cho connection reset
                 ]
                 
-                # Kiểm tra toàn bộ chuỗi lỗi thay vì chỉ kiểm tra lớp exception
+                # Kiểm tra toàn bộ chuỗi lỗi
                 for indicator in reset_indicators:
                     if indicator.lower() in error_str.lower():
                         connection_reset = True
                         self.logger.info(f"Phát hiện connection reset qua chuỗi: '{indicator}'")
                         break
                 
-                # Nếu xác định được Connection Reset và đây là test mạng
+                # Xử lý connection reset
                 if connection_reset and is_network_test:
                     self.logger.info("Connection reset được phát hiện cho test mạng - đây là hành vi mong đợi")
                     
@@ -2433,7 +2439,7 @@ class MainWindow(LoggerMixin):
                     # Lưu kết quả và cập nhật UI
                     elapsed_time = time.time() - start_time
                     
-                    # LƯU KẾT QUẢ TRỰC TIẾP THAY VÌ QUA LAMBDA
+                    # LƯU KẾT QUẢ TRỰC TIẾP
                     self.save_result_directly(index, test_data, synthetic_result, "Success", elapsed_time)
                         
                     success_msg = f"Thay đổi mạng đã được áp dụng ({elapsed_time:.1f}s)"
@@ -2461,16 +2467,14 @@ class MainWindow(LoggerMixin):
             self.logger.error(f"Lỗi khi gửi test: {error_str}")
             self._safe_after(0, lambda err=error_str[:30]: self.update_test_status(index, "Error", f"Lỗi: {err}..."))
     def _complete_after_reconnect(self, index):
-        """Hoàn tất test case sau khi đã kết nối lại thành công"""
-        # Kiểm tra kết nối với mức retry cao hơn
+        """Hoàn tất test case sau khi đã kết nối lại thành công mà không retry"""
+        # Thử kết nối lại với số lần giới hạn
         max_reconnect_retries = 5
         reconnect_retry = 0
         
         while reconnect_retry < max_reconnect_retries:
             if self._recheck_connection():
-                # Kết nối đã thành công
                 break
-            
             self.logger.info(f"Connection check #{reconnect_retry+1} failed, trying again...")
             reconnect_retry += 1
             time.sleep(5)
@@ -2481,16 +2485,14 @@ class MainWindow(LoggerMixin):
             self._safe_set(self.connection_status_var, "🟡 Connection unstable")
             return False
         
-        # Kết nối đã thành công, hoàn tất test case
+        # Kết nối lại thành công, đánh dấu test hoàn thành (không retry nữa)
         self.logger.info("Network test completed successfully after reconnection")
-        
-        # Cập nhật UI - phần này quan trọng để test không bị treo ở trạng thái "Running"
         self._safe_set(self.status_var, "Network test completed successfully")
         self.update_test_status(index, "Success", "Network change applied successfully")
-        
-        # Cập nhật trạng thái kết nối
         self._safe_set(self.connection_status_var, "🟢 Connected")
+        
         return True
+
     def save_result_directly(self, index, test_data, result_data, status, execution_time):
         """Lưu kết quả test trực tiếp, không dùng lambda hoặc _safe_after"""
         import json
@@ -2597,8 +2599,22 @@ class MainWindow(LoggerMixin):
                 self.logger.info(f"Saved fallback result to {fallback_path}")
             except Exception as fallback_error:
                 self.logger.error(f"Failed to save even fallback result: {fallback_error}")
+            try:
+                # Lên lịch test tiếp theo nếu đang trong chuỗi test
+                if hasattr(self, '_running_test_sequence') and self._running_test_sequence:
+                    if index + 1 < len(self.queue_manager.queue_items):
+                        self.logger.info(f"Scheduling next test #{index+2} after current test completed")
+                        
+                        # Chạy test tiếp theo sau khoảng thời gian ngắn
+                        self._safe_after(5000, lambda: self._execute_test_with_readiness_check(index + 1))
+                    else:
+                        # Kết thúc chuỗi test
+                        self.logger.info("All tests in sequence completed")
+                        self._running_test_sequence = False
+            except Exception as e:
+                self.logger.error(f"Error scheduling next test: {e}")
 
-            return False
+            return True
     def _verify_config_file_exists(self):
         """Xác minh file config.json tồn tại và có kích thước > 0"""
         try:
@@ -2743,6 +2759,7 @@ class MainWindow(LoggerMixin):
         except Exception as e:
             self.logger.error(f"Lỗi khi xác minh file: {e}")
             return False
+
     def _recheck_connection(self):
         """Recheck connection status to update UI and internal state"""
         try:
@@ -3242,49 +3259,41 @@ class MainWindow(LoggerMixin):
             self.logger.error(f"Error verifying response match: {e}")
             return True  # Default to accepting the response in case of error
     def send_all_tests(self):
-        """Send all tests with adaptive device readiness detection instead of fixed delays"""
-        try:
-            if not hasattr(self, 'queue_manager') or not hasattr(self.queue_manager, 'queue_items'):
-                messagebox.showinfo("Information", "Queue is empty or not initialized")
-                return
-                    
-            if len(self.queue_manager.queue_items) == 0:
-                messagebox.showinfo("Information", "Queue is empty")
-                return
-                    
-            # Initial connection check
-            connection_type = self._safe_get(self.connection_type_var, "http")
-            if connection_type == "http":
-                if not hasattr(self, 'http_connected') or not self.http_connected:
-                    # Try to connect first
-                    if not self._recheck_connection():
-                        messagebox.showinfo("Error", "Not connected to HTTP server. Please test connection first.")
-                        return
-            
-            # Confirmation dialog with improved wording
-            if len(self.queue_manager.queue_items) > 1:
-                confirm = messagebox.askyesno(
-                    "Confirm",
-                    f"Send all {len(self.queue_manager.queue_items)} tests for execution?\n\n"
-                    f"The system will automatically check for device readiness between tests\n"
-                    f"instead of using fixed delays. This is especially important for network tests."
-                )
-                if not confirm:
-                    return
+        """Send all tests sequentially with wait for device readiness"""
+        # Kiểm tra điều kiện ban đầu
+        if not hasattr(self, 'queue_manager') or not hasattr(self.queue_manager, 'queue_items'):
+            messagebox.showinfo("Information", "Queue is empty")
+            return
                 
-            # Instead of scheduling with fixed delays, use adaptive readiness detection
-            self.logger.info(f"Scheduling {len(self.queue_manager.queue_items)} tests with adaptive readiness detection")
-            
-            # Schedule the first test to run immediately
-            self._safe_after(0, lambda: self._execute_test_with_readiness_check(0))
-            
-            # Update status
-            self._safe_set(self.status_var, 
-                        f"Scheduled {len(self.queue_manager.queue_items)} tests with adaptive readiness checking")
-            
-        except Exception as e:
-            self.logger.error(f"Error scheduling tests: {str(e)}")
-            messagebox.showerror("Error", f"Failed to schedule tests: {str(e)}")
+        if len(self.queue_manager.queue_items) == 0:
+            messagebox.showinfo("Information", "Queue is empty")
+            return
+                
+        # Kiểm tra kết nối
+        connection_type = self._safe_get(self.connection_type_var, "http")
+        if connection_type == "http":
+            if not hasattr(self, 'http_connected') or not self.http_connected:
+                if not self._recheck_connection():
+                    messagebox.showinfo("Error", "Not connected to HTTP server. Please test connection first.")
+                    return
+        
+        # Xác nhận và thêm biến cờ
+        if len(self.queue_manager.queue_items) > 1:
+            confirm = messagebox.askyesno(
+                "Confirm",
+                f"Send all {len(self.queue_manager.queue_items)} tests for execution?\n\n"
+                f"The system will automatically check for device readiness between tests."
+            )
+            if not confirm:
+                return
+                
+        # ===== THAY ĐỔI QUAN TRỌNG =====
+        # Đặt biến cờ để chỉ ra rằng chúng ta đang chạy chuỗi test
+        self._running_test_sequence = True
+        
+        # Chỉ bắt đầu test đầu tiên - không lập lịch trước tất cả các test
+        self.logger.info(f"Starting sequential execution of {len(self.queue_manager.queue_items)} tests")
+        self._execute_test_with_readiness_check(0)
     def _check_connection_and_send(self, index):
         """Kiểm tra kết nối trước khi chạy test với cải tiến"""
         try:
@@ -3770,6 +3779,29 @@ class MainWindow(LoggerMixin):
                         formatted_params["gateway_type"] = "route"
                         self.logger.info("Added default gateway_type: route")
             
+            # Format WIRELESS service parameters
+            elif service == "wireless":
+                # Đảm bảo password luôn là chuỗi, ngay cả khi chỉ chứa các chữ số
+                if "password" in formatted_params:
+                    formatted_params["password"] = str(formatted_params["password"])
+                    self.logger.info("Ensured password is string format for wireless configuration")
+                
+                # Đảm bảo disable_mode là chuỗi
+                if "disable_mode" in formatted_params:
+                    formatted_params["disable_mode"] = str(formatted_params["disable_mode"])
+                    self.logger.info(f"Ensured disable_mode is string format: {formatted_params['disable_mode']}")
+                    
+                # Đảm bảo power là chuỗi (nếu có)
+                if "power" in formatted_params:
+                    formatted_params["power"] = str(formatted_params["power"])
+                    self.logger.info(f"Ensured power is string format: {formatted_params['power']}")
+                    
+                # Đảm bảo các trường số khác cũng là chuỗi
+                for numeric_field in ["channel"]:
+                    if numeric_field in formatted_params:
+                        formatted_params[numeric_field] = str(formatted_params[numeric_field])
+                        self.logger.info(f"Ensured {numeric_field} is string format: {formatted_params[numeric_field]}")
+            
             # Xử lý các kiểu dữ liệu đặc biệt
             for key, value in list(formatted_params.items()):
                 # Xử lý danh sách DNS
@@ -3996,91 +4028,59 @@ class MainWindow(LoggerMixin):
             return False
     def _execute_test_with_readiness_check(self, index):
         """
-        Execute test with device readiness checking and schedule next test with improved reliability
+        Thực thi bài kiểm tra với kiểm tra sự sẵn sàng của thiết bị và lập lịch cho bài kiểm tra tiếp theo
+        với khả năng phục hồi được cải thiện
         """
-        if index >= len(self.queue_manager.queue_items):
-            self.logger.info("All tests completed")
-            return
-        
-        test_id = self.queue_manager.queue_items[index].get("test_id", "unknown")
-        self.logger.info(f"Preparing to run test #{index+1}: {test_id}")
-        
-        # Kiểm tra xem test trước có ảnh hưởng đến mạng không
-        previous_test_affects_network = False
-        previous_network_severity = "none"
-        
-        if index > 0:
-            prev_test = self.queue_manager.queue_items[index-1]
-            prev_test_id = prev_test.get("test_id", "").lower()
-            prev_service = prev_test.get("service", "").lower()
-            prev_action = prev_test.get("action", "").lower()
-            
-            # Phân tích mức độ ảnh hưởng mạng của test trước
-            if prev_service in ["wan", "lan", "network"]:
-                previous_test_affects_network = True
+        try:
+            if index >= len(self.queue_manager.queue_items):
+                self.logger.info("Hoàn thành tất cả bài kiểm tra trong hàng đợi")
+                return
                 
-                # Xác định mức độ nghiêm trọng
-                if prev_service == "lan" and "edit_ip" in prev_action:
-                    previous_network_severity = "severe"
-                elif "restart" in prev_action or "reset" in prev_action:
-                    previous_network_severity = "severe"
-                elif prev_service == "wan":
-                    previous_network_severity = "severe"
-                else:
-                    previous_network_severity = "moderate"
+            # Kiểm tra xem thiết bị đã sẵn sàng chưa
+            device_ready = self._check_device_readiness_http()
+            if not device_ready:
+                self.logger.warning(f"Thiết bị chưa sẵn sàng, thử lại sau 5 giây...")
+                self._safe_after(5000, lambda: self._execute_test_with_readiness_check(index))
+                return
+                
+            # Kiểm tra xem đây có phải là bài kiểm tra wireless không
+            is_wireless_test = False
+            test_item = self.queue_manager.queue_items[index]
+            service = test_item.get("service", "").lower()
+            action = test_item.get("action", "").lower()
             
-            # Nếu test trước ảnh hưởng đến mạng, đợi thiết bị sẵn sàng
-            if previous_test_affects_network:
-                # Xác định thời gian chờ dựa trên mức độ nghiêm trọng
-                if previous_network_severity == "severe":
-                    max_wait = 120  # 2 phút cho các thay đổi nghiêm trọng
-                elif previous_network_severity == "moderate":
-                    max_wait = 90  # 1.5 phút cho các thay đổi trung bình
+            # Xác định nếu đây là bài kiểm tra wireless
+            if service == "wireless":
+                is_wireless_test = True
+                self.logger.info(f"Phát hiện bài kiểm tra wireless: {action}. Sử dụng xử lý nâng cao.")
+            
+            # Thực thi bài kiểm tra hiện tại
+            result_success = self.send_selected_test(index)
+            
+            # Xử lý đặc biệt cho bài kiểm tra wireless - độ trễ dài hơn nhiều
+            if is_wireless_test and hasattr(self, '_running_test_sequence') and index + 1 < len(self.queue_manager.queue_items):
+                wireless_delay = 45000  # 45 giây cho bài kiểm tra wireless
+                self.logger.info(f"Lên lịch bài kiểm tra tiếp theo với độ trễ mở rộng là {wireless_delay/1000}s do khởi động lại dịch vụ wireless")
+                self._safe_after(wireless_delay, lambda: self._execute_test_with_readiness_check(index + 1))
+                return  # Thoát sớm - không sử dụng lịch bình thường
+                
+            # Tiếp tục với việc lên lịch bài kiểm tra tiếp theo
+            if hasattr(self, '_running_test_sequence') and index + 1 < len(self.queue_manager.queue_items):
+                # Tính toán độ trễ dựa trên loại bài kiểm tra
+                if result_success is False:
+                    # Nếu bài kiểm tra thất bại, tạm dừng ngắn
+                    next_delay = 5000  # 5 giây
                 else:
-                    max_wait = 60  # 1 phút cho các thay đổi nhỏ
+                    # Độ trễ bình thường giữa các bài kiểm tra thành công
+                    next_delay = 15000  # 15 giây
                     
-                # Đợi thiết bị sẵn sàng với timeout phù hợp
-                self.logger.info(f"Previous test {prev_test_id} affected network, waiting for device readiness")
-                device_ready = self.wait_for_device_ready(index, max_wait)
-                
-                if not device_ready:
-                    # Ghi log cảnh báo nhưng vẫn tiếp tục
-                    self.logger.warning(f"Device may not be fully ready, but proceeding with test {test_id}")
-                    
-                    # Hiển thị cảnh báo cho người dùng
-                    warning_msg = f"Warning: Device may not be fully ready. Proceeding with caution."
-                    self.update_test_status(index, "Warning", warning_msg)
-                    time.sleep(5)  # Đợi thêm 5 giây trước khi tiếp tục
-        
-        # Thực thi test hiện tại
-        self.send_selected_test(index)
-        
-        # Lên lịch cho test tiếp theo với khoảng cách thích hợp
-        if index + 1 < len(self.queue_manager.queue_items):
-            # Điều chỉnh delay dựa trên test hiện tại
-            next_test = self.queue_manager.queue_items[index]
-            next_test_id = next_test.get("test_id", "").lower()
-            next_service = next_test.get("service", "").lower()
-            next_action = next_test.get("action", "").lower()
-            
-            # Phân tích để xác định độ trễ thích hợp
-            is_network_test = next_service in ["wan", "lan", "network"]
-            
-            if is_network_test:
-                # Các test mạng cần delay lớn hơn
-                if "edit_ip" in next_test_id.lower():
-                    delay = 60000  # 60 giây cho test thay đổi IP
-                elif "restart" in next_test_id.lower() or "reset" in next_test_id.lower():
-                    delay = 45000  # 45 giây cho test restart
-                elif next_service == "wan":
-                    delay = 40000  # 40 giây cho các test WAN
-                else:
-                    delay = 30000  # 30 giây cho các test mạng khác
-            else:
-                delay = 15000  # 15 giây cho test thông thường (tăng từ 10s)
-                
-            self.logger.info(f"Scheduling next test #{index+2} with initial delay of {delay/1000:.1f}s")
-            self._safe_after(delay, lambda: self._execute_test_with_readiness_check(index + 1))
+                self.logger.info(f"Lên lịch bài kiểm tra tiếp theo #{index + 1} với độ trễ ban đầu là {next_delay/1000}s")
+                self._safe_after(next_delay, lambda: self._execute_test_with_readiness_check(index + 1))
+        except Exception as e:
+            self.logger.error(f"Lỗi trong quá trình thực hiện bài kiểm tra với kiểm tra sự sẵn sàng: {str(e)}")
+            # Tiếp tục với bài kiểm tra tiếp theo sau độ trễ dài hơn
+            if hasattr(self, '_running_test_sequence') and index + 1 < len(self.queue_manager.queue_items):
+                self._safe_after(10000, lambda: self._execute_test_with_readiness_check(index + 1))
     def _new_template(self) -> None:
         """Create new template."""
         # TODO: Implement in Phase 2

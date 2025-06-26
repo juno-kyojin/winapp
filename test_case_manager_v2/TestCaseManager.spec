@@ -1,58 +1,44 @@
-block_cipher = None
+# -*- mode: python ; coding: utf-8 -*-
+
 
 a = Analysis(
     ['src\\main.py'],
-    pathex=['C:\\Users\\tobie\\Desktop\\winapp\\test_case_manager_v2'],
+    pathex=['src'],
     binaries=[],
-    datas=[
-        ('assets', 'assets'),
-        ('data\\templates', 'data\\templates'),
-        ('data\\config', 'data\\config'),
-        ('data\\database', 'data\\database'),
-    ],
-    hiddenimports=[
-        'tkinter',
-        'paramiko',
-        'requests',
-        'core',
-        'core.config',
-        'core.constants',
-        'core.exceptions',
-        'gui',
-        'gui.main_window',
-        'gui.widgets',
-        'gui.widgets.queue_manager',
-        'utils',
-        'utils.file_utils',
-        'utils.formatters',
-        'utils.logger',
-        'utils.validators',
-    ],
+    datas=[('data', 'data')],
+    hiddenimports=['tkinter', 'tkinter.ttk'],
     hookspath=[],
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=block_cipher,
     noarchive=False,
+    optimize=0,
 )
-
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
     [],
+    exclude_binaries=True,
     name='TestCaseManager',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
-    upx_exclude=[],
-    runtime_tmpdir=None,
+    upx=False,
     console=True,
-    onefile=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
+)
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name='TestCaseManager',
 )
