@@ -1,0 +1,92 @@
+[2025-06-26 10:05:00] INFO - root: Logging initialized - Level: INFO
+[2025-06-26 10:05:00] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-26 10:05:00] INFO - __main__: Configuration loaded successfully
+[2025-06-26 10:05:00] INFO - __main__: Starting GUI...
+[2025-06-26 10:05:00] INFO - core.test_case_loader: Discovered categories: 
+[2025-06-26 10:05:00] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-26 10:05:00] INFO - core.test_case_loader: Found 0 categories
+[2025-06-26 10:05:00] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-26 10:05:01] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-26 10:05:01] INFO - __main__: Application ready
+[2025-06-26 10:05:01] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-26 10:05:08] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.99.1:8080
+[2025-06-26 10:05:10] ERROR - gui.main_window.MainWindow: Socket connection error to 192.168.99.1:8080: [WinError 10061] No connection could be made because the target machine actively refused it
+[2025-06-26 10:05:13] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.99.1:6262
+[2025-06-26 10:05:13] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.99.1:6262
+[2025-06-26 10:06:30] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-26 10:06:30] INFO - __main__: Application shutdown complete
+[2025-06-26 10:06:34] INFO - root: Logging initialized - Level: INFO
+[2025-06-26 10:06:34] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-26 10:06:34] INFO - __main__: Configuration loaded successfully
+[2025-06-26 10:06:34] INFO - __main__: Starting GUI...
+[2025-06-26 10:06:34] INFO - core.test_case_loader: Discovered categories: 
+[2025-06-26 10:06:34] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-26 10:06:34] INFO - core.test_case_loader: Found 0 categories
+[2025-06-26 10:06:34] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-26 10:06:34] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-26 10:06:34] INFO - __main__: Application ready
+[2025-06-26 10:06:34] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-26 10:06:38] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-26 10:06:38] INFO - __main__: Application shutdown complete
+[2025-06-26 10:07:27] INFO - root: Logging initialized - Level: INFO
+[2025-06-26 10:07:27] INFO - __main__: Test Case Manager v2.0 starting up...
+[2025-06-26 10:07:27] INFO - __main__: Configuration loaded successfully
+[2025-06-26 10:07:27] INFO - __main__: Starting GUI...
+[2025-06-26 10:07:27] INFO - core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-06-26 10:07:27] INFO - core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v2\data\templates
+[2025-06-26 10:07:27] INFO - core.test_case_loader: Found 4 categories
+[2025-06-26 10:07:27] INFO - gui.main_window.MainWindow: HTTP client module loaded
+[2025-06-26 10:07:28] INFO - gui.main_window.MainWindow: Main window initialized
+[2025-06-26 10:07:28] INFO - __main__: Application ready
+[2025-06-26 10:07:28] INFO - gui.main_window.MainWindow: Starting GUI main loop
+[2025-06-26 10:07:35] INFO - gui.main_window.MainWindow: Testing TCP socket connection to 192.168.99.1:6262
+[2025-06-26 10:07:35] INFO - gui.main_window.MainWindow: Socket connection successful to 192.168.99.1:6262
+[2025-06-26 10:07:37] INFO - gui.main_window.MainWindow: Loaded parameters for wan_create in WAN: 13 parameters
+[2025-06-26 10:07:37] INFO - gui.main_window.MainWindow: Loaded parameters for wan_delete in WAN: 1 parameters
+[2025-06-26 10:07:38] INFO - gui.main_window.MainWindow: Loading test case 'wan_delete' from category 'WAN'
+[2025-06-26 10:07:38] INFO - gui.main_window.MainWindow: Found in JSON file: service='wan', action='delete'
+[2025-06-26 10:07:38] INFO - gui.main_window.MainWindow: Added test case to queue: wan_delete (wan_delete), service=wan, action=delete
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Sending test wan_delete (index 0)
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Service: wan, Action: delete
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Formatting parameters for wan.delete
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Sending test wan_delete (index 0, TX: tx-71adc05a)
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Request data: {
+  "test_cases": [
+    {
+      "service": "wan",
+      "params": {
+        "name": "wan1"
+      },
+      "client_id": "tx-71adc05a",
+      "client_timestamp": "2025-06-24 12:50:12",
+      "action": "delete"
+    }
+  ],
+  "metadata": {
+    "transaction_id": "tx-71adc05a",
+    "client_timestamp": "2025-06-24 12:50:12",
+    "created_by": "juno-kyojin",
+    "created_at": "2025-06-24 12:50:12",
+    "unique_id": "08d3ff1d-1097-4b53-8274-86763ba86109",
+    "client_version": "2.0.1",
+    "client_platform": "Windows"
+  }
+}
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Sending test case to http://192.168.99.1:6262
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Test với service=wan, action=delete ảnh hưởng đến kết nối mạng: severity=severe, expected_disconnect=True
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Test tx-71adc05a affects network connectivity - will use enhanced handling
+[2025-06-26 10:07:39] INFO - gui.main_window.MainWindow: Creating config file: /etc/testmanager/config/config_tx-71adc05a.json
+[2025-06-26 10:07:57] INFO - gui.main_window.MainWindow: Test response received in 18.20s: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+[2025-06-26 10:07:57] INFO - gui.main_window.MainWindow: Saving test result to: data\temp\results\wan_delete_71adc05a_success.json
+[2025-06-26 10:07:57] INFO - gui.main_window.MainWindow: ✅ Test result successfully saved to data\temp\results\wan_delete_71adc05a_success.json
+[2025-06-26 10:07:57] INFO - gui.main_window.MainWindow: Test result saved successfully
+[2025-06-26 10:08:02] INFO - gui.main_window.MainWindow: Application closing...
+[2025-06-26 10:08:02] INFO - __main__: Application shutdown complete

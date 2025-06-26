@@ -1,0 +1,16 @@
+{
+  "test_cases": [
+    {
+      "service": "wireless",
+      "action": "wireless_edit_sta",
+      "params": {
+        "frequency": "5G",
+        "wifi_mode": "sta",
+        "encryption": "psk2+ccmp",
+        "ssid": "han_lap_5G",
+        "password": "12345678",
+        "disable_mode": "0"
+      }
+    }
+  ]
+}

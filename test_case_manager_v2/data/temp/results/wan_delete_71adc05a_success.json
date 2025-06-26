@@ -1,0 +1,45 @@
+{
+  "test_id": "wan_delete",
+  "name": "wan_delete",
+  "service": "wan",
+  "action": "delete",
+  "status": "Success",
+  "execution_time": 18.196226596832275,
+  "timestamp": "2025-06-25 06:13:00",
+  "transaction_id": "tx-71adc05a",
+  "request": {
+    "test_cases": [
+      {
+        "service": "wan",
+        "params": {
+          "name": "wan1"
+        },
+        "client_id": "tx-71adc05a",
+        "client_timestamp": "2025-06-24 12:50:12",
+        "action": "delete"
+      }
+    ],
+    "metadata": {
+      "transaction_id": "tx-71adc05a",
+      "client_timestamp": "2025-06-26 03:07:39",
+      "created_by": "tobie",
+      "created_at": "2025-06-26 03:07:39",
+      "unique_id": "099ba118-c96e-4f60-96a5-760cda07ab18",
+      "client_version": "2.0.1",
+      "client_platform": "Windows",
+      "client_request_time": "1750907259731",
+      "cache_buster": "c52de41a",
+      "random_id": "2ktwugx8"
+    }
+  },
+  "response": {
+    "summary": {
+      "total_test_cases": 1,
+      "passed": 1,
+      "failed": 0,
+      "failed_services": []
+    },
+    "failed_by_service": {}
+  },
+  "user": "juno-kyojin"
+}
