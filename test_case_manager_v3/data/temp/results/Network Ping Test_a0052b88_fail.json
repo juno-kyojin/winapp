@@ -1,0 +1,36 @@
+{
+  "test_data": {
+    "test_cases": [
+      {
+        "service": "ping",
+        "client_validation": true,
+        "params": {
+          "host1": "google.com",
+          "host2": "youtube.com"
+        }
+      }
+    ],
+    "metadata": {
+      "name": "Network Ping Test",
+      "description": "Tests network connectivity by pinging a target",
+      "version": "1.0.0",
+      "tags": [
+        "network",
+        "connectivity",
+        "ping"
+      ],
+      "category": "network",
+      "transaction_id": "20250701105541_3cea153d"
+    }
+  },
+  "result_data": null,
+  "message": "Error sending test case: (\"Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)\", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
+  "metadata": {
+    "test_id": "Network Ping Test",
+    "status": "fail",
+    "timestamp": "2025-07-01 03:55:42",
+    "affects_network": false,
+    "execution_time": 1.0359807014465332,
+    "filename": "Network Ping Test_a0052b88_fail.json"
+  }
+}

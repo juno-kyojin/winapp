@@ -1,0 +1,12 @@
+{
+    "test_cases": [
+        {
+            "service": "lan",
+            "action": "edit_leasetime",
+            "params": {
+                "name": "lan",
+                "dhcp_leasetime": 43200
+            }
+        }
+    ]
+}

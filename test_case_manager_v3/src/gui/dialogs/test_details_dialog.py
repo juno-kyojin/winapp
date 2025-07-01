@@ -1,0 +1,1 @@
+# Test details view 

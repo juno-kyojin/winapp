@@ -1,0 +1,1 @@
+# Logs display panel 

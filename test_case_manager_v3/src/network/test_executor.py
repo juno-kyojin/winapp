@@ -1,0 +1,442 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Test Executor for Test Case Manager v3.0
+
+This module provides specialized test execution functionality with
+enhanced error handling and retry mechanisms, particularly for dealing
+with the "empty file" issue on the server.
+
+Author: juno-kyojin
+Created: 2025-07-01
+"""
+
+import json
+import logging
+import time
+import uuid
+import socket
+import os
+import requests
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Any, Optional, Tuple, List, Union, cast
+
+from .connection_manager import ConnectionManager
+from ..utils.logger import get_logger
+from ..utils.file_lock_utils import read_file_with_lock, write_file_with_lock
+
+class TestExecutor:
+    """
+    Test executor with enhanced error handling.
+    
+    This class provides specialized test execution functionality with
+    improved error handling and retry mechanisms for common server issues.
+    """
+    
+    def __init__(self, connection_manager: Optional[ConnectionManager] = None) -> None:
+        """
+        Initialize the test executor.
+        
+        Args:
+            connection_manager: Connection manager to use for test execution.
+                              If None, a new ConnectionManager will be created.
+        """
+        self.logger = get_logger(__name__)
+        
+        # Create connection manager if not provided
+        if connection_manager is None:
+            self.connection_manager = ConnectionManager()
+        else:
+            self.connection_manager = connection_manager
+        
+        # Default retry parameters
+        self.max_retries = 5
+        self.base_retry_delay = 3
+        self.empty_file_max_retries = 8
+        
+        # Track last execution stats
+        self.last_test_time: Optional[float] = None
+        self.last_test_duration: Optional[float] = None
+        self.last_transaction_id: Optional[str] = None
+        self.last_test_type: Optional[str] = None
+        self.last_test_affected_network: bool = False
+        self.error_history: List[str] = []
+        self.consecutive_errors = 0
+        self.execution_count = 0
+        self.successful_count = 0
+        
+    def connect(self, host: str, **kwargs) -> bool:
+        """
+        Connect to a device.
+        
+        Args:
+            host: Host to connect to
+            **kwargs: Additional connection parameters
+            
+        Returns:
+            True if connection successful, False otherwise
+        """
+        try:
+            return self.connection_manager.connect(host, **kwargs)
+        except Exception as e:
+            self.logger.error(f"Error connecting to device: {e}")
+            return False
+    
+    def disconnect(self) -> None:
+        """Disconnect from the current device."""
+        try:
+            self.connection_manager.disconnect()
+        except Exception as e:
+            self.logger.error(f"Error disconnecting from device: {e}")
+            
+    def is_connected(self) -> bool:
+        """
+        Check if connected to a device.
+        
+        Returns:
+            True if connected, False otherwise
+        """
+        return self.connection_manager.is_connected()
+        
+    def execute_test(self, test_data: Dict[str, Any], 
+                   affects_network: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+        """
+        Execute a test case on the connected device.
+        
+        Args:
+            test_data: Test data to send
+            affects_network: Whether the test affects network connectivity
+            
+        Returns:
+            Tuple containing (success flag, response data, error message)
+        """
+        if not self.is_connected():
+            self.logger.error("Not connected to device")
+            return False, None, "Not connected to device"
+            
+        # Validate test data
+        if not test_data:
+            self.logger.error("Test data is empty")
+            return False, None, "Test data is empty"
+            
+        try:
+            self.logger.info("Executing test case")
+            self.logger.debug(f"Test data: {json.dumps(test_data, indent=2)}")
+            
+            # Prepare server based on test importance
+            if affects_network or self._is_important_test(test_data):
+                self._prepare_server_for_important_test()
+            else:
+                self._prepare_server_for_regular_test()
+                
+            # Add transaction ID if not present
+            if "metadata" not in test_data:
+                test_data["metadata"] = {}
+                
+            if "transaction_id" not in test_data["metadata"]:
+                # Generate unique transaction ID
+                transaction_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{str(uuid.uuid4())[:8]}"
+                test_data["metadata"]["transaction_id"] = transaction_id
+                
+            # Store transaction ID for checking result later
+            transaction_id = test_data["metadata"]["transaction_id"]
+            
+            # Thêm retry và exponential backoff khi gặp lỗi file trống
+            max_retries = 5
+            initial_backoff = 0.1
+            retry_count = 0
+            backoff = initial_backoff
+            
+            while retry_count < max_retries:
+                # Send test case to device
+                success, response, error = self.connection_manager.send_test(
+                    test_data, 
+                    affects_network=affects_network
+                )
+                
+                # Kiểm tra xem có lỗi liên quan đến file không
+                if not success and self._is_file_related_error(error):
+                    self.logger.warning(f"Detected file-related error: {error}")
+                    self.logger.info(f"Retrying in {backoff}s (attempt {retry_count+1}/{max_retries})...")
+                    time.sleep(backoff)
+                    backoff *= 2  # Exponential backoff
+                    retry_count += 1
+                    
+                    # Prepare server for retry
+                    self._prepare_server_for_retry()
+                    continue
+                
+                # Verify result was written if successful
+                if success and transaction_id:
+                    is_important = affects_network or self._is_important_test(test_data)
+                    result_written = self._verify_result_written(transaction_id, is_important)
+                    
+                    if not result_written:
+                        self.logger.warning(f"Could not confirm result for transaction {transaction_id} was written")
+                        # Continue anyway as this is just a verification step
+                
+                # Nếu không phải lỗi file hoặc đã thành công, trả về kết quả
+                return success, response, error
+            
+            # Nếu đã hết số lần thử, trả về kết quả cuối cùng
+            return False, None, f"Failed after {max_retries} attempts: {error}"
+            
+        except Exception as e:
+            error_msg = f"Error executing test: {str(e)}"
+            self.logger.error(error_msg)
+            return False, None, error_msg
+    
+    def _is_file_related_error(self, error_message: str) -> bool:
+        """
+        Check if error message indicates a file-related issue.
+        
+        Args:
+            error_message: Error message to check
+            
+        Returns:
+            True if error is file-related, False otherwise
+        """
+        error_message = error_message.lower()
+        file_related_terms = ["empty", "file", "parse", "json", "invalid", "config"]
+        
+        for term in file_related_terms:
+            if term in error_message:
+                return True
+                
+        return False
+    
+    def _is_important_test(self, test_data: Dict[str, Any]) -> bool:
+        """
+        Check if test is important (affects network or system configuration).
+        
+        Args:
+            test_data: Test data to check
+            
+        Returns:
+            True if test is important, False otherwise
+        """
+        if "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+            for test_case in test_data["test_cases"]:
+                service = test_case.get("service", "").lower()
+                action = test_case.get("action", "").lower()
+                
+                # Network-affecting services
+                if service in ["wan", "lan", "wireless", "firewall", "network"]:
+                    return True
+                    
+                # System-affecting actions
+                if action in ["create", "delete", "edit", "update", "restart", "reboot"]:
+                    return True
+        
+        return False
+    
+    def _prepare_server_for_important_test(self) -> None:
+        """
+        Prepare server for an important test with multiple ping checks
+        and longer delays to ensure server stability.
+        """
+        self.logger.info("Preparing server for important test...")
+        
+        # Multiple ping verification
+        self._verify_server_with_multiple_pings()
+        
+        # Longer delay for important tests
+        time.sleep(5)
+        
+        # Send dummy request to clear any pending operations
+        self._send_dummy_request()
+        
+        # Final delay before test
+        time.sleep(3)
+    
+    def _prepare_server_for_regular_test(self) -> None:
+        """
+        Prepare server for a regular test with basic checks.
+        """
+        self.logger.info("Preparing server for test...")
+        
+        # Simple ping verification
+        self._ping_server()
+        
+        # Short delay
+        time.sleep(2)
+    
+    def _prepare_server_for_retry(self) -> None:
+        """
+        More aggressive server preparation for retry attempts.
+        """
+        self.logger.info("Preparing server for retry attempt...")
+        
+        # Multiple ping verification with longer delays
+        self._verify_server_with_multiple_pings(extra_delay=True)
+        
+        # Send multiple dummy requests to ensure server is clear
+        self._send_dummy_request()
+        time.sleep(2)
+        self._send_dummy_request()
+        
+        # Longer delay before retry
+        time.sleep(5)
+    
+    def _verify_server_with_multiple_pings(self, extra_delay: bool = False) -> bool:
+        """
+        Verify server is ready by sending multiple ping requests with increasing delays.
+        
+        Args:
+            extra_delay: Whether to add extra delay between pings
+            
+        Returns:
+            True if server is responsive, False otherwise
+        """
+        self.logger.info("Performing multiple ping verification...")
+        success_count = 0
+        
+        # Try multiple pings with increasing delays
+        for i in range(4):
+            try:
+                # Check if the HTTP client is initialized
+                if not hasattr(self.connection_manager, 'http_client') or not self.connection_manager.http_client:
+                    self.logger.warning("HTTP client not initialized, skipping ping verification")
+                    return False
+                    
+                if not hasattr(self.connection_manager.http_client, 'url'):
+                    self.logger.warning("HTTP client URL not set, skipping ping verification")
+                    return False
+                    
+                response = requests.get(
+                    f"{self.connection_manager.http_client.url}/ping",
+                    timeout=5  # Use default timeout if http_client doesn't have connect_timeout
+                )
+                
+                if response.status_code == 200:
+                    success_count += 1
+                    self.logger.debug(f"Ping {i+1} successful")
+                else:
+                    self.logger.debug(f"Ping {i+1} returned status {response.status_code}")
+                
+                # Increasing delay between pings
+                delay = (i + 1) * 2 if extra_delay else (i + 1)
+                time.sleep(delay)
+            except Exception as e:
+                self.logger.debug(f"Ping {i+1} failed: {e}")
+                delay = (i + 2) * 2 if extra_delay else (i + 2)
+                time.sleep(delay)
+        
+        if success_count >= 3:
+            self.logger.info("Server verified responsive")
+            return True
+        else:
+            self.logger.warning(f"Server responsiveness check: {success_count}/4 successful")
+            # Wait longer if server doesn't seem fully responsive
+            time.sleep(5)
+            return False
+    
+    def _ping_server(self) -> bool:
+        """
+        Send a simple ping request to the server.
+        
+        Returns:
+            True if ping successful, False otherwise
+        """
+        try:
+            # Check if the HTTP client is initialized
+            if not hasattr(self.connection_manager, 'http_client') or not self.connection_manager.http_client:
+                self.logger.warning("HTTP client not initialized, skipping ping")
+                return False
+                
+            if not hasattr(self.connection_manager.http_client, 'url'):
+                self.logger.warning("HTTP client URL not set, skipping ping")
+                return False
+                
+            response = requests.get(
+                f"{self.connection_manager.http_client.url}/ping",
+                timeout=5  # Use default timeout if http_client doesn't have connect_timeout
+            )
+            
+            return response.status_code == 200
+        except Exception as e:
+            self.logger.debug(f"Ping failed: {e}")
+            return False
+    
+    def _send_dummy_request(self) -> None:
+        """
+        Send a dummy request to clear any pending operations on the server.
+        """
+        try:
+            # Check if the HTTP client is initialized
+            if not hasattr(self.connection_manager, 'http_client') or not self.connection_manager.http_client:
+                self.logger.warning("HTTP client not initialized, skipping dummy request")
+                return
+                
+            if not hasattr(self.connection_manager.http_client, 'url'):
+                self.logger.warning("HTTP client URL not set, skipping dummy request")
+                return
+                
+            # Check if URL is None before using it
+            if self.connection_manager.http_client.url is None:
+                self.logger.warning("HTTP client URL is None, skipping dummy request")
+                return
+                
+            dummy_data = {
+                "test_cases": [
+                    {
+                        "service": "dummy",
+                        "action": "prepare",
+                        "params": {}
+                    }
+                ],
+                "metadata": {
+                    "transaction_id": f"dummy-{str(uuid.uuid4())[:8]}",
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "purpose": "prepare_server"
+                }
+            }
+            
+            self.logger.info("Sending dummy request to prepare server...")
+            
+            try:
+                requests.post(
+                    url=self.connection_manager.http_client.url,
+                    json=dummy_data,
+                    headers={"Content-Type": "application/json"},
+                    timeout=2
+                )
+            except requests.exceptions.Timeout:
+                # Timeout is expected and not a problem
+                self.logger.debug("Dummy request timed out as expected")
+            except Exception as e:
+                self.logger.debug(f"Dummy request exception (can be ignored): {e}")
+            
+            # Wait to ensure server has processed the dummy request
+            time.sleep(2)
+        except Exception as e:
+            self.logger.debug(f"Error sending dummy request: {e}")
+    
+    def _verify_result_written(self, transaction_id: str, is_important: bool = False) -> bool:
+        """
+        Verify that the result for a transaction was properly written.
+        
+        Args:
+            transaction_id: Transaction ID to check
+            is_important: Whether this is an important test
+            
+        Returns:
+            True if result was written, False otherwise
+        """
+        # Check if the HTTP client is initialized and has the check_result_written method
+        if (not hasattr(self.connection_manager, 'http_client') or
+            not self.connection_manager.http_client or
+            not hasattr(self.connection_manager.http_client, 'check_result_written')):
+            self.logger.warning("HTTP client not initialized or missing check_result_written method")
+            return False
+            
+        max_retries = 12 if is_important else 8
+        retry_delay = 2
+        
+        return self.connection_manager.http_client.check_result_written(
+            transaction_id, 
+            max_retries=max_retries,
+            retry_delay=retry_delay
+        ) 

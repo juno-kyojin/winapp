@@ -1,0 +1,26 @@
+{
+  "test_data": {
+    "test_cases": [
+      {
+        "service": "ping",
+        "params": {
+          "host1": "google.com",
+          "host2": "youtube.com"
+        }
+      }
+    ],
+    "metadata": {
+      "transaction_id": "20250701110230_132f4024"
+    }
+  },
+  "result_data": null,
+  "message": "Error sending test case: (\"Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)\", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))",
+  "metadata": {
+    "test_id": "ping",
+    "status": "fail",
+    "timestamp": "2025-07-01 04:02:31",
+    "affects_network": false,
+    "execution_time": 1.036886215209961,
+    "filename": "ping_a89b97b9_fail.json"
+  }
+}
