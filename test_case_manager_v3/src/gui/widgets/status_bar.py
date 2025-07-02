@@ -63,16 +63,7 @@ class StatusBar(ttk.Frame):
             length=100
         )
         
-        # Connection indicator
-        self.connection_var = tk.StringVar(value="Not Connected")
-        self.connection_label = ttk.Label(
-            self,
-            textvariable=self.connection_var,
-            width=15,
-            anchor=tk.E,
-            padding=(5, 2)
-        )
-        self.connection_label.pack(side=tk.RIGHT)
+
         
         # Time display
         self.time_var = tk.StringVar()
@@ -98,20 +89,7 @@ class StatusBar(ttk.Frame):
         self.status_var.set(message)
         self.logger.info(f"Status: {message}")
     
-    def set_connection_status(self, connected: bool, host: Optional[str] = None) -> None:
-        """
-        Set the connection status.
-        
-        Args:
-            connected: Whether connection is active
-            host: Connected host (if connected)
-        """
-        if connected and host:
-            self.connection_var.set(f"Connected: {host}")
-        elif connected:
-            self.connection_var.set("Connected")
-        else:
-            self.connection_var.set("Not Connected")
+
     
     def show_progress(self, show: bool = True) -> None:
         """

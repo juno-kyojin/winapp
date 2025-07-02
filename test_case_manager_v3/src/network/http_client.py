@@ -55,13 +55,66 @@ class HTTPTestClient:
         # Đơn giản hóa cơ chế retry để tránh lỗi import
         self.session = requests.Session()
         # Các cài đặt retry sẽ được xử lý thủ công trong các phương thức gửi request
+
+    def _health_check(self) -> bool:
+        """
+        Perform a quick health check on the server.
+
+        Returns:
+            True if server is healthy, False otherwise
+        """
+        if not self.url:
+            return False
+
+        try:
+            response = self.session.get(
+                f"{self.url}/ping",
+                timeout=3  # Quick timeout for health check
+            )
+            return response.status_code == 200
+        except Exception as e:
+            self.logger.debug(f"Health check failed: {e}")
+            return False
+
+    def _reconnect(self) -> bool:
+        """
+        Attempt to reconnect to the server.
+
+        Returns:
+            True if reconnection successful, False otherwise
+        """
+        if not self.host or not self.port:
+            return False
+
+        try:
+            return self.connect(
+                host=self.host,
+                port=self.port,
+                connect_timeout=self.connect_timeout,
+                read_timeout=self.read_timeout
+            )
+        except Exception as e:
+            self.logger.error(f"Reconnection failed: {e}")
+            return False
     
     def _generate_transaction_id(self) -> str:
         """Generate a unique transaction ID."""
         from datetime import datetime
+        import time
+
+        # Use microseconds for better uniqueness
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        microseconds = str(int(time.time() * 1000000) % 1000000)  # Last 6 digits of microseconds
         unique_id = str(uuid.uuid4())[:8]
-        return f"{timestamp}_{unique_id}"
+
+        transaction_id = f"{timestamp}_{microseconds}_{unique_id}"
+
+        # Ensure we don't reuse the same transaction ID
+        if transaction_id == self.last_transaction_id:
+            time.sleep(0.001)  # Wait 1ms and regenerate
+            return self._generate_transaction_id()
+
+        return transaction_id
     
     def _sanitize_transaction_id(self, transaction_id: str) -> str:
         """Sanitize transaction ID to be safe for file operations."""
@@ -305,8 +358,14 @@ class HTTPTestClient:
             return False, None, "Test data is empty"
             
         try:
+            # Health check before sending test
+            if not self._health_check():
+                self.logger.warning("Server health check failed, attempting to reconnect...")
+                if not self._reconnect():
+                    return False, None, "Server is not responding and reconnection failed"
+
             self.logger.info(f"Preparing to send test case to {self.url}")
-            
+
             # Validate test structure
             if "test_cases" not in test_data:
                 # Wrap single test case in proper structure if needed
@@ -377,6 +436,30 @@ class HTTPTestClient:
                     
                     return False, response_data, error_msg
                 
+                # Check for successful response by examining the content
+                # Check if response indicates test failure
+                if "summary" in response_data:
+                    summary = response_data["summary"]
+                    if "failed" in summary and summary["failed"] > 0:
+                        # Test failed - extract failure message
+                        failed_count = summary["failed"]
+                        total_count = summary.get("total_test_cases", 0)
+                        error_msg = f"Test execution failed: {failed_count}/{total_count} test cases failed"
+
+                        # Try to get more specific error message
+                        if "failed_by_service" in response_data:
+                            failed_services = list(response_data["failed_by_service"].keys())
+                            if failed_services:
+                                first_service = failed_services[0]
+                                failed_tests = response_data["failed_by_service"][first_service]
+                                if failed_tests and len(failed_tests) > 0:
+                                    first_failure = failed_tests[0]
+                                    if "message" in first_failure:
+                                        error_msg = f"Test failed: {first_failure['message']}"
+
+                        self.logger.warning(f"Device reported test failure: {error_msg}")
+                        return False, response_data, error_msg
+
                 # Check for successful response
                 return True, response_data, ""
                 
@@ -408,8 +491,31 @@ class HTTPTestClient:
             return False, None, error_msg
             
         except Exception as e:
-            error_msg = f"Error sending test case: {str(e)}"
-            self.logger.error(error_msg)
+            error_str = str(e)
+            self.logger.error(f"Exception during test send: {error_str}")
+
+            # Check for connection reset errors
+            connection_reset_indicators = [
+                "connection was forcibly closed",
+                "forcibly closed",
+                "connection reset by peer",
+                "connection reset",
+                "broken pipe",
+                "ConnectionResetError",
+                "Connection broken",
+                "10054"  # Windows error code for connection reset
+            ]
+
+            is_connection_reset = any(indicator.lower() in error_str.lower()
+                                    for indicator in connection_reset_indicators)
+
+            if is_connection_reset:
+                self.logger.warning("Detected connection reset error, marking as disconnected")
+                self.connected = False
+                error_msg = f"Connection reset by server: {error_str}"
+            else:
+                error_msg = f"Error sending test case: {error_str}"
+
             return False, None, error_msg
 
 

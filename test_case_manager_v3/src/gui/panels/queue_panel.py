@@ -15,6 +15,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import uuid
 import time
+import threading
 from typing import Dict, Any, Optional, List, Callable, cast
 from datetime import datetime
 
@@ -48,6 +49,16 @@ class QueuePanel(ttk.Frame):
         # Queue data
         self.queue_items: List[Dict[str, Any]] = []
         self.selected_item: Optional[int] = None
+
+        # Stream panel reference for real-time execution monitoring
+        self.stream_panel: Optional[Any] = None
+
+        # Test result tracking for queue execution
+        self.current_test_results: Dict[int, bool] = {}  # test_index -> success
+        self.test_completion_events: Dict[int, threading.Event] = {}  # test_index -> completion event
+
+        # Main window reference for execution time tracking
+        self.main_window: Optional[Any] = None
         
         # Execution control
         self.is_executing: bool = False
@@ -342,7 +353,7 @@ class QueuePanel(ttk.Frame):
                 "Queue is empty"
             )
             return
-        
+
         if not self.execute_callback:
             self._update_status("Test execution not implemented")
             messagebox.showinfo(
@@ -350,7 +361,7 @@ class QueuePanel(ttk.Frame):
                 "Test execution will be implemented in a future version"
             )
             return
-        
+
         # Check if already executing
         if self.is_executing:
             messagebox.showwarning(
@@ -358,100 +369,188 @@ class QueuePanel(ttk.Frame):
                 "Test execution is already in progress. Please wait for it to complete."
             )
             return
-        
+
         # Confirm execution
         confirm = messagebox.askyesno(
             "Execute All",
             f"Execute all {len(self.queue_items)} tests in the queue?"
         )
-        
+
         if not confirm:
             return
-        
-        # Set executing flag
-        self.is_executing = True
-        
-        # Execute tests sequentially
+
+        # Start queue execution in background thread to prevent UI blocking
+        execution_thread = threading.Thread(target=self._execute_all_background)
+        execution_thread.daemon = True
+        execution_thread.start()
+
+    def _execute_all_background(self) -> None:
+        """Execute all tests in the queue sequentially in background thread."""
         try:
+            # Set executing flag
+            self.is_executing = True
+
+            # Clear previous test results and completion events
+            self.current_test_results.clear()
+            self.test_completion_events.clear()
+
+            # Start queue execution tracking in stream panel (thread-safe)
+            if self.stream_panel is not None:
+                test_names = [item["name"] for item in self.queue_items]
+                stream_panel = self.stream_panel  # Capture reference for type safety
+                self.after(0, lambda: stream_panel.start_queue_execution(len(self.queue_items), test_names))
+
+            # Execute tests sequentially
             for i, item in enumerate(self.queue_items):
-                # Update status
+                # Update status (thread-safe)
                 item["status"] = "Running"
-                self._update_item_in_tree(item)
-                
-                # Update status message with progress information
-                self._update_status(f"Executing test {i+1} of {len(self.queue_items)}: {item['name']}")
-                
-                # Call execute callback and wait for completion
-                self.update()  # Update UI before execution
-                
+                self.after(0, lambda item=item: self._update_item_in_tree(item))
+
+                # Update status message with progress information (thread-safe)
+                self.after(0, lambda i=i, item=item: self._update_status(f"Executing test {i+1} of {len(self.queue_items)}: {item['name']}"))
+
+                # Update queue progress in stream panel (thread-safe)
+                if self.stream_panel is not None:
+                    stream_panel = self.stream_panel  # Capture reference for type safety
+                    self.after(0, lambda i=i, item=item: stream_panel.update_queue_progress(i, item['name']))
+                    # Start queue test stream (thread-safe)
+                    self.after(0, lambda i=i, item=item: stream_panel.start_queue_test_stream(i, item['name'], item['test_data']))
+
+                    # Set current test index in main window for execution time tracking (thread-safe)
+                    if self.main_window and hasattr(self.main_window, '_current_queue_test_index'):
+                        self.after(0, lambda i=i: setattr(self.main_window, '_current_queue_test_index', i))
+
                 # Determine if test affects network
                 affects_network = self._check_if_affects_network(item["test_data"])
-                
+
                 # Add pre-execution delay for stability
                 if i > 0:  # Don't delay before first test
-                    delay_seconds = 8 if affects_network else 5  # Tăng thời gian chờ giữa các test
-                    self._update_status(f"Waiting {delay_seconds}s before executing next test...")
-                    self._wait_with_ui_updates(delay_seconds)
-                
+                    delay_seconds = 30 if affects_network else 20  # Tăng delay để server có thời gian recover
+                    self.after(0, lambda delay=delay_seconds: self._update_status(f"Waiting {delay}s before executing next test..."))
+                    self._wait_with_ui_updates_background(delay_seconds)
+
                 # Execute test with network flag
                 try:
                     max_retries = 2  # Số lần thử lại tối đa cho mỗi test
                     retry_count = 0
                     success = False
-                    
+
                     while retry_count <= max_retries and not success:
                         if retry_count > 0:
                             self._update_status(f"Retry attempt {retry_count} for test: {item['name']}")
                             # Thêm thời gian chờ giữa các lần thử lại
-                            self._wait_with_ui_updates(10)
-                        
-                        # Thực thi test
-                        self.execute_callback(item["test_data"], affects_network)
-                        
-                        # Giả định test thành công (vì execute_callback không trả về kết quả)
-                        success = True
+                            self._wait_with_ui_updates(20)
+
+                        # Create completion event for this test
+                        completion_event = threading.Event()
+                        self.test_completion_events[i] = completion_event
+
+                        # Thực thi test (thread-safe)
+                        if self.execute_callback is not None:
+                            execute_callback = self.execute_callback  # Capture reference for type safety
+                            self.after(0, lambda item=item, affects=affects_network: execute_callback(item["test_data"], affects))
+
+                        # Wait for test completion (with timeout)
+                        if completion_event.wait(timeout=300):  # 5 minute timeout
+                            # Test completed, get the result
+                            test_success = self.current_test_results.get(i, False)
+                            success = test_success
+                        else:
+                            # Timeout occurred
+                            self.logger.error(f"Test {item['name']} timed out after 5 minutes")
+                            success = False
+
                         retry_count += 1
-                    
-                    # Update status
-                    item["status"] = "Completed"
-                    self._update_item_in_tree(item)
-                    
+
+                    # Update status based on actual test result (thread-safe)
+                    if success:
+                        item["status"] = "Completed"
+                    else:
+                        item["status"] = "Failed"
+                    self.after(0, lambda item=item: self._update_item_in_tree(item))
+
+                    # Mark test as completed in stream panel (thread-safe)
+                    if self.stream_panel is not None:
+                        stream_panel = self.stream_panel  # Capture reference for type safety
+                        self.after(0, lambda i=i, item=item, success=success: stream_panel.complete_queue_test(i, item['name'], success))
+                        # Note: end_queue_test_stream will be called from main_window after execution completes
+
                     # Add post-execution delay to ensure device is ready for next test
                     if i < len(self.queue_items) - 1:  # Don't delay after last test
-                        post_delay = 15 if affects_network else 8  # Tăng thời gian chờ sau khi test hoàn thành
-                        self._update_status(f"Test completed. Waiting {post_delay}s for device to stabilize...")
-                        self._wait_with_ui_updates(post_delay)
+                        post_delay = 40 if affects_network else 25  # Tăng delay để server có thời gian recover
+                        self.after(0, lambda delay=post_delay: self._update_status(f"Test completed. Waiting {delay}s for device to stabilize..."))
+                        self._wait_with_ui_updates_background(post_delay)
                         
                 except Exception as e:
                     self.logger.error(f"Error executing test {item['name']}: {e}")
                     item["status"] = "Failed"
-                    self._update_item_in_tree(item)
-                    
-                    # Show error but continue with next test
-                    messagebox.showwarning(
+                    self.after(0, lambda item=item: self._update_item_in_tree(item))
+
+                    # Mark test as failed in stream panel (thread-safe)
+                    if self.stream_panel is not None:
+                        stream_panel = self.stream_panel  # Capture reference for type safety
+                        self.after(0, lambda i=i, item=item: stream_panel.complete_queue_test(i, item['name'], False))
+                        # Note: end_queue_test_stream will be called from main_window after execution completes
+
+                    # Show error but continue with next test (thread-safe)
+                    self.after(0, lambda item=item, e=e: messagebox.showwarning(
                         "Test Execution Warning",
                         f"Test '{item['name']}' failed: {str(e)}\n\nContinuing with next test..."
-                    )
-                    
-                    # Add longer recovery delay after failure
-                    self._update_status("Waiting 20s for device to recover after test failure...")  # Tăng thời gian phục hồi
-                    self._wait_with_ui_updates(20)
+                    ))
+
+                    # Add longer recovery delay after failure (thread-safe)
+                    self.after(0, lambda: self._update_status("Waiting 60s for device to recover after test failure..."))
+                    self._wait_with_ui_updates_background(60)
             
-            self._update_status(f"Executed {len(self.queue_items)} tests")
+            # Update status (thread-safe)
+            self.after(0, lambda: self._update_status(f"Executed {len(self.queue_items)} tests"))
+
+            # Add small delay to ensure last test's end_queue_test_stream completes before ending queue
+            self._wait_with_ui_updates_background(1)
+
+            # End queue execution tracking in stream panel (thread-safe)
+            if self.stream_panel is not None:
+                # Count actual successes and failures based on test results
+                successful_count = sum(1 for success in self.current_test_results.values() if success)
+                failed_count = len(self.current_test_results) - successful_count
+                total_count = len(self.queue_items)
+
+                # Overall success only if all tests passed
+                overall_success = successful_count == total_count and failed_count == 0
+
+                if failed_count > 0:
+                    final_message = f"Queue execution completed: {successful_count}/{total_count} tests successful, {failed_count}/{total_count} tests failed"
+                else:
+                    final_message = f"Queue execution completed: {successful_count}/{total_count} tests successful"
+
+                stream_panel = self.stream_panel  # Capture reference for type safety
+                self.after(0, lambda success=overall_success, msg=final_message: stream_panel.end_queue_execution(success, msg))
+
         except Exception as e:
             self.logger.error(f"Error during test execution: {e}")
-            messagebox.showerror(
+
+            # End queue execution with error in stream panel (thread-safe)
+            if self.stream_panel is not None:
+                stream_panel = self.stream_panel  # Capture reference for type safety
+                self.after(0, lambda e=e: stream_panel.end_queue_execution(False, f"Queue execution failed: {str(e)}"))
+
+            # Show error message (thread-safe)
+            self.after(0, lambda e=e: messagebox.showerror(
                 "Execution Error",
                 f"An error occurred during test execution: {str(e)}"
-            )
+            ))
         finally:
             # Reset executing flag
             self.is_executing = False
+
+            # Reset current queue test index in main window (thread-safe)
+            if self.main_window and hasattr(self.main_window, '_current_queue_test_index'):
+                self.after(0, lambda: setattr(self.main_window, '_current_queue_test_index', -1))
     
     def _wait_with_ui_updates(self, seconds: int) -> None:
         """
         Wait while keeping UI responsive.
-        
+
         Args:
             seconds: Number of seconds to wait
         """
@@ -459,6 +558,15 @@ class QueuePanel(ttk.Frame):
         while time.time() - start_time < seconds:
             self.update()
             time.sleep(0.1)  # Short sleep to prevent CPU hogging
+
+    def _wait_with_ui_updates_background(self, seconds: int) -> None:
+        """
+        Wait in background thread without blocking UI.
+
+        Args:
+            seconds: Number of seconds to wait
+        """
+        time.sleep(seconds)
     
     def _remove_selected(self) -> None:
         """Remove the selected test from the queue."""
@@ -549,10 +657,26 @@ class QueuePanel(ttk.Frame):
                 )
                 break
     
+    def set_test_result(self, test_index: int, success: bool) -> None:
+        """
+        Set the result of a test execution for queue tracking.
+        This is called from main_window after test completion.
+
+        Args:
+            test_index: Index of the test in queue (0-based)
+            success: Whether the test completed successfully
+        """
+        self.current_test_results[test_index] = success
+        self.logger.debug(f"Queue test {test_index} result set to: {'SUCCESS' if success else 'FAILED'}")
+
+        # Signal test completion
+        if test_index in self.test_completion_events:
+            self.test_completion_events[test_index].set()
+
     def _update_status(self, message: str) -> None:
         """
         Update status message.
-        
+
         Args:
             message: Status message
         """

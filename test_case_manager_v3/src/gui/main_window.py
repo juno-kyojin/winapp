@@ -38,7 +38,7 @@ from src.network.test_executor import TestExecutor
 from src.gui.panels.connection_panel import ConnectionPanel
 from src.gui.panels.templates_panel import TemplatesPanel
 from src.gui.panels.queue_panel import QueuePanel
-from src.gui.panels.test_results_panel import TestResultsPanel
+
 # from gui.panels.history_panel import HistoryPanel
 # from gui.panels.logs_panel import LogsPanel
 
@@ -84,8 +84,6 @@ class MainWindow:
         # Panels
         self.connection_panel: Optional[ConnectionPanel] = None
         self.templates_panel: Optional[TemplatesPanel] = None
-        self.results_panel: Optional[TestResultsPanel] = None
-        self.history_panel = None
         # self.logs_panel: Optional[LogsPanel] = None
         
         # Setup UI
@@ -180,16 +178,14 @@ class MainWindow:
         self.connection_tab = ttk.Frame(self.notebook)
         self.templates_tab = ttk.Frame(self.notebook)
         self.queue_tab = ttk.Frame(self.notebook)
-        self.results_tab = ttk.Frame(self.notebook)  # New tab for real-time results
-        self.history_tab = ttk.Frame(self.notebook)
+        self.stream_tab = ttk.Frame(self.notebook)
         self.logs_tab = ttk.Frame(self.notebook)
-        
+
         # Add tabs to notebook
         self.notebook.add(self.connection_tab, text="Connection")
         self.notebook.add(self.templates_tab, text="Templates")
         self.notebook.add(self.queue_tab, text="Queue")
-        self.notebook.add(self.results_tab, text="Results")  # Add Results tab
-        self.notebook.add(self.history_tab, text="History")
+        self.notebook.add(self.stream_tab, text="Stream")
         self.notebook.add(self.logs_tab, text="Logs")
     
     def _create_status_bar(self) -> None:
@@ -219,8 +215,7 @@ class MainWindow:
             self.logger.error(f"Failed to initialize Connection Panel: {e}")
             self._show_placeholder(self.connection_tab, "Connection Panel")
         
-        # Initialize Templates Panel with placeholder for now
-        self._show_placeholder(self.templates_tab, "Templates Panel")
+
         
         # Initialize Queue Panel
         try:
@@ -231,6 +226,12 @@ class MainWindow:
                 self._execute_test
             )
             self.queue_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+            # Set main window reference for execution time tracking
+            self.queue_panel.main_window = self
+
+            # Initialize current queue test index for execution time tracking
+            self._current_queue_test_index: int = -1
         except Exception as e:
             self.logger.error(f"Failed to initialize Queue Panel: {e}")
             self._show_placeholder(self.queue_tab, "Queue Panel")
@@ -260,32 +261,23 @@ class MainWindow:
         except Exception as e:
             self.logger.error(f"Failed to initialize Templates Panel: {e}")
             self._show_placeholder(self.templates_tab, "Templates Panel")
-            
-        # Initialize History Panel
+
+        # Initialize Stream Panel
         try:
-            from src.gui.panels.history_panel import HistoryPanel
-            self.history_panel = HistoryPanel(
-                self.history_tab,
-                self.result_manager,
+            from src.gui.panels.stream_panel import StreamPanel
+            self.stream_panel: StreamPanel = StreamPanel(
+                self.stream_tab,
                 self._update_status
             )
-            self.history_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            self.stream_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         except Exception as e:
-            self.logger.error(f"Failed to initialize History Panel: {e}")
-            self._show_placeholder(self.history_tab, "History Panel")
-            
-        # Initialize Results Panel for real-time test results
-        try:
-            from src.gui.panels.test_results_panel import TestResultsPanel
-            self.results_panel = TestResultsPanel(
-                self.results_tab,
-                self._update_status
-            )
-            self.results_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        except Exception as e:
-            self.logger.error(f"Failed to initialize Results Panel: {e}")
-            self._show_placeholder(self.results_tab, "Results Panel")
-        
+            self.logger.error(f"Failed to initialize Stream Panel: {e}")
+            self._show_placeholder(self.stream_tab, "Stream Panel")
+
+        # Connect Queue Panel to Stream Panel for queue execution streaming
+        if hasattr(self, 'queue_panel') and hasattr(self, 'stream_panel') and self.queue_panel and self.stream_panel:
+            self.queue_panel.stream_panel = self.stream_panel
+
         # Initialize other panels with placeholders for now
         self._show_placeholder(self.logs_tab, "Logs Panel")
     
@@ -415,58 +407,81 @@ class MainWindow:
             self._update_status(f"Executing network-affecting test: {test_name}...")
         else:
             self._update_status(f"Executing test: {test_name}...")
-            
-        # Switch to Results tab
-        if self.notebook and hasattr(self, 'results_panel'):
-            self.notebook.select(self.results_tab)
-            
+
+        # Start stream for this test
+        if hasattr(self, 'stream_panel') and self.stream_panel:
+            self.stream_panel.start_test_stream(test_name, test_data)
+
         # Start measuring execution time
         start_time = time.time()
             
         # Function to execute in a separate thread
         def execute_test_thread():
             try:
+                # Get test name for thread context
+                thread_test_name = "Unknown"
+                if "metadata" in test_data and "name" in test_data["metadata"]:
+                    thread_test_name = test_data["metadata"]["name"]
+                elif "metadata" in test_data and "test_id" in test_data["metadata"]:
+                    thread_test_name = test_data["metadata"]["test_id"]
+                elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+                    service = test_data["test_cases"][0].get("service", "")
+                    action = test_data["test_cases"][0].get("action", "")
+                    if service and action:
+                        thread_test_name = f"{service}_{action}"
+                    elif service:
+                        thread_test_name = service
+
+                # Update stream: preparing to send
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    self.stream_panel.update_stream_status("preparing", "Validating test data and connection", 10)
+
                 # Execute the test
                 self.logger.info("Sending test to device...")
-                
+
+                # Update stream: sending test
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    self.stream_panel.update_stream_status("sending", "Sending test data to device", 30)
+
                 # Send test to device
                 success, result_data, message = self.connection_manager.send_test(
-                    test_data, 
+                    test_data,
                     affects_network=affects_network
                 )
-                
+
+                # Update stream: processing
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    self.stream_panel.update_stream_status("processing", "Device is processing test case", 60)
+
                 # Calculate execution time
                 execution_time = time.time() - start_time
-                
+
+                # Update stream: receiving results
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    self.stream_panel.update_stream_status("receiving", "Receiving test results from device", 90)
+
                 # Update status
                 if success:
                     status = "success"
-                    self._update_status(f"Test executed successfully: {test_name}")
+                    self._update_status(f"Test executed successfully: {thread_test_name}")
                 else:
                     status = "fail"
                     self._update_status(f"Test execution failed: {message}")
                 
-                # Add result to Results panel
-                if hasattr(self, 'results_panel') and self.results_panel is not None:
-                    # Sử dụng cast để báo cho type checker biết rằng results_panel là TestResultsPanel
-                    results_panel = cast(TestResultsPanel, self.results_panel)
-                    if self.root is not None:
-                        self.root.after(0, lambda: results_panel.add_test_result(
-                            test_data, result_data, status, message, execution_time
-                        ))
+
                 
                 # Save result to history
                 try:
                     # Save to file
                     self.result_manager.save_result(
-                        test_name,
+                        thread_test_name,
                         status,
                         {
                             "test_data": test_data,
                             "result_data": result_data,
                             "message": message,
                             "metadata": {
-                                "test_id": test_name,
+                                "test_id": thread_test_name,
                                 "status": status,
                                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                 "affects_network": affects_network,
@@ -475,28 +490,70 @@ class MainWindow:
                         }
                     )
                     
-                    # Refresh history panel
-                    if hasattr(self, 'history_panel') and self.history_panel and self.root:
-                        self.root.after(0, self.history_panel._load_results)
-                        
+
+
                 except Exception as e:
                     self.logger.error(f"Error saving result to history: {e}")
-                
+
+                # End stream with success
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    final_message = f"Test completed successfully in {execution_time:.1f}s" if success else f"Test failed: {message}"
+                    self.stream_panel.end_test_stream(success, final_message)
+
+                    # If we're in queue execution mode, also store the execution time and end queue test stream
+                    if self.stream_panel.is_queue_executing and hasattr(self, '_current_queue_test_index'):
+                        self.stream_panel.set_queue_test_execution_time(self._current_queue_test_index, execution_time)
+
+                        # Report test result to queue panel for accurate tracking
+                        if hasattr(self, 'queue_panel') and self.queue_panel:
+                            self.queue_panel.set_test_result(self._current_queue_test_index, success)
+
+                        # End queue test stream with appropriate message based on success
+                        if success:
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success,
+                                                                   f"Test completed successfully")
+                        else:
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success,
+                                                                   f"Test failed: {message}")
+
             except Exception as e:
+                # Calculate execution time even for failed tests
+                execution_time = time.time() - start_time
+
+                # Get test name for error context
+                thread_test_name = "Unknown"
+                if "metadata" in test_data and "name" in test_data["metadata"]:
+                    thread_test_name = test_data["metadata"]["name"]
+                elif "metadata" in test_data and "test_id" in test_data["metadata"]:
+                    thread_test_name = test_data["metadata"]["test_id"]
+                elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+                    service = test_data["test_cases"][0].get("service", "")
+                    action = test_data["test_cases"][0].get("action", "")
+                    if service and action:
+                        thread_test_name = f"{service}_{action}"
+                    elif service:
+                        thread_test_name = service
+
                 # Handle any exceptions
                 error_msg = f"Error executing test: {str(e)}"
                 self.logger.error(error_msg)
-                
-                # Update Results panel with error
-                if hasattr(self, 'results_panel') and self.results_panel is not None:
-                    # Sử dụng cast để báo cho type checker biết rằng results_panel là TestResultsPanel
-                    results_panel = cast(TestResultsPanel, self.results_panel)
-                    execution_time = time.time() - start_time
-                    if self.root is not None:
-                        self.root.after(0, lambda: results_panel.add_test_result(
-                            test_data, None, "error", str(e), execution_time
-                        ))
-                
+
+                # End stream with error
+                if hasattr(self, 'stream_panel') and self.stream_panel:
+                    self.stream_panel.end_test_stream(False, f"Test execution error: {str(e)}")
+
+                    # If we're in queue execution mode, also store the execution time and end queue test stream
+                    if self.stream_panel.is_queue_executing and hasattr(self, '_current_queue_test_index'):
+                        self.stream_panel.set_queue_test_execution_time(self._current_queue_test_index, execution_time)
+
+                        # Report test failure to queue panel for accurate tracking
+                        if hasattr(self, 'queue_panel') and self.queue_panel:
+                            self.queue_panel.set_test_result(self._current_queue_test_index, False)
+
+                        # End queue test stream with error
+                        self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, False,
+                                                               f"Test execution error: {str(e)}")
+
                 # Show error message
                 if self.root:
                     self.root.after(0, lambda: messagebox.showerror(
@@ -621,12 +678,7 @@ class MainWindow:
             )
             return
             
-        # Switch to Results tab and initialize test execution
-        if self.notebook and hasattr(self, 'results_panel') and self.results_panel is not None:
-            # Sử dụng cast để báo cho type checker biết rằng results_panel là TestResultsPanel
-            results_panel = cast(TestResultsPanel, self.results_panel)
-            self.notebook.select(self.results_tab)
-            results_panel.start_test_execution(test_queue)
+
             
         # Execute tests one by one
         for test_data in test_queue:
