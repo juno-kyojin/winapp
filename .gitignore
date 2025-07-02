@@ -1,0 +1,195 @@
+# Test Case Manager v3.0 - Git Ignore File
+# ==========================================
+
+# Python
+# -------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+# -------------------
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# IDE and Editor Files
+# --------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Augment Code AI Assistant
+# --------------------------
+.augment/
+.augment_cache/
+augment.log
+.augment.log
+
+# Cursor AI Editor
+# ----------------
+.cursor/
+.cursor-tutor/
+cursor.log
+.cursor.log
+
+# Test Case Manager v3.0 Specific
+# --------------------------------
+# Temporary test results
+test_case_manager_v3/data/temp/results/*.json
+test_case_manager_v3/data/temp/results/*.txt
+test_case_manager_v3/data/temp/results/*.log
+
+# Log files
+test_case_manager_v3/logs/
+*.log
+*.log.*
+
+# Configuration files with sensitive data
+test_case_manager_v3/config/local_config.json
+test_case_manager_v3/config/device_credentials.json
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test data and temporary files
+test_case_manager_v3/data/temp/
+!test_case_manager_v3/data/temp/.gitkeep
+
+# Generated documentation
+docs/_build/
+docs/build/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# RND AutoTest (OpenWrt component)
+# --------------------------------
+# Exclude entire rnd_autotest directory - not needed in git
+rnd_autotest/
+
+# Windows specific
+# ----------------
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.obj
+
+# Archive files
+# --------------
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# Temporary files
+# ---------------
+*.tmp
+*.temp
+~*
+
+# Project specific excludes
+# -------------------------
+# Exclude any personal notes or documentation
+NOTES.md
+TODO.md
+personal_*
+
+# Exclude any test device specific configurations
+device_*.json
+router_*.json
+
+# AI Assistant specific files
+# ----------------------------
+.ai_context/
+.ai_memory/
+ai_session_*
+conversation_*
