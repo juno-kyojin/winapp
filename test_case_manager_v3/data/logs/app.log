@@ -6681,3 +6681,234 @@
 2025-07-01 18:18:18,585 - src.network.http_client - WARNING - Unknown status for transaction 20250701181739_f0b38079: unknown
 2025-07-01 18:18:23,113 - src.network.http_client - WARNING - Unknown status for transaction 20250701181739_f0b38079: unknown
 2025-07-01 18:18:29,868 - src.network.http_client - WARNING - Unknown status for transaction 20250701181739_f0b38079: unknown
+2025-07-02 09:56:39,085 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 09:56:40,023 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 09:56:40,023 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 09:56:40,024 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 09:56:40,024 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 09:56:40,665 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 09:56:40,699 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 09:56:40,699 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 09:56:40,792 - src.gui.widgets.status_bar - INFO - Status: Loaded 8 test results
+2025-07-02 09:56:40,805 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 09:56:47,698 - src.main - INFO - Exiting Test Case Manager v3.0.0
+2025-07-02 09:57:56,327 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 09:57:56,665 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 09:57:56,665 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 09:57:56,665 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 09:57:56,666 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 09:57:56,718 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 09:57:56,739 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 09:57:56,739 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 09:57:56,756 - src.gui.widgets.status_bar - INFO - Status: Loaded 8 test results
+2025-07-02 09:57:56,771 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 09:58:25,329 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 09:58:25,659 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 09:58:25,659 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 09:58:25,659 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 09:58:25,660 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 09:58:25,711 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 09:58:25,732 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 09:58:25,732 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 09:58:25,749 - src.gui.widgets.status_bar - INFO - Status: Loaded 8 test results
+2025-07-02 09:58:25,762 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 09:58:36,157 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-02 09:58:38,237 - src.network.http_client - ERROR - Failed to ping server: HTTPConnectionPool(host='192.168.99.1', port=6262): Max retries exceeded with url: /ping (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001D9E1FF8830>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-02 09:58:38,238 - src.gui.widgets.status_bar - INFO - Status: Connection failed
+2025-07-02 09:58:54,400 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-02 09:58:54,404 - src.network.http_client - INFO - Successfully pinged server at http://192.168.99.1:6262/ping
+2025-07-02 09:58:54,405 - src.gui.widgets.status_bar - INFO - Status: Connected to 192.168.99.1
+2025-07-02 09:58:58,449 - src.gui.widgets.status_bar - INFO - Status: Loaded template: ping.json
+2025-07-02 09:58:59,878 - src.gui.widgets.status_bar - INFO - Status: Added test ping.json to queue
+2025-07-02 09:58:59,880 - src.gui.widgets.status_bar - INFO - Status: Added template ping.json to queue
+2025-07-02 09:58:59,880 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 09:59:01,590 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping.json
+2025-07-02 09:59:01,594 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 09:59:01,594 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 09:59:01,596 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 09:59:01,597 - src.gui.widgets.status_bar - INFO - Status: Executed test ping.json
+2025-07-02 09:59:01,615 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 09:59:01,615 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 09:59:01,615 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 09:59:01,616 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702095901_9b2c630c
+2025-07-02 09:59:31,711 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping.json
+2025-07-02 09:59:31,715 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 09:59:31,715 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 09:59:31,717 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 09:59:31,717 - src.gui.widgets.status_bar - INFO - Status: Executed test ping.json
+2025-07-02 09:59:32,944 - src.network.http_client - INFO - Received response from server
+2025-07-02 09:59:32,944 - src.network.http_client - WARNING - Server reported error: Timeout waiting for result
+2025-07-02 09:59:32,944 - src.network.http_client - INFO - Server reported timeout, checking transaction status for 20250702095901_9b2c630c
+2025-07-02 09:59:32,944 - src.network.http_client - INFO - Waiting for transaction 20250702095901_9b2c630c to complete
+2025-07-02 09:59:32,946 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 09:59:32,946 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 09:59:32,947 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 09:59:32,947 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702095901_9b2c630c
+2025-07-02 09:59:39,969 - src.network.http_client - ERROR - Transaction 20250702095901_9b2c630c failed: Error checking transaction status: HTTPConnectionPool(host='192.168.99.1', port=6262): Read timed out. (read timeout=5)
+2025-07-02 09:59:39,970 - src.gui.widgets.status_bar - INFO - Status: Test execution failed: Transaction failed: Error checking transaction status: HTTPConnectionPool(host='192.168.99.1', port=6262): Read timed out. (read timeout=5)
+2025-07-02 09:59:39,973 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\ping_dba134fa_fail.json
+2025-07-02 09:59:39,992 - src.gui.widgets.status_bar - INFO - Status: Loaded 9 test results
+2025-07-02 10:00:04,294 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:00:04,295 - src.network.http_client - WARNING - Server reported error: Timeout waiting for result
+2025-07-02 10:00:04,295 - src.network.http_client - INFO - Server reported timeout, checking transaction status for 20250702095901_9b2c630c
+2025-07-02 10:00:04,295 - src.network.http_client - INFO - Waiting for transaction 20250702095901_9b2c630c to complete
+2025-07-02 10:00:06,311 - src.network.http_client - WARNING - Unknown status for transaction 20250702095901_9b2c630c: unknown
+2025-07-02 10:00:08,339 - src.network.http_client - WARNING - Unknown status for transaction 20250702095901_9b2c630c: unknown
+2025-07-02 10:00:11,357 - src.network.http_client - WARNING - Unknown status for transaction 20250702095901_9b2c630c: unknown
+2025-07-02 10:00:15,879 - src.network.http_client - WARNING - Unknown status for transaction 20250702095901_9b2c630c: unknown
+2025-07-02 10:00:22,654 - src.network.http_client - WARNING - Unknown status for transaction 20250702095901_9b2c630c: unknown
+2025-07-02 10:17:06,232 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 10:17:06,676 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 10:17:06,677 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 10:17:06,677 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 10:17:06,677 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 10:17:06,778 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 10:17:06,833 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 10:17:06,833 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 10:17:06,862 - src.gui.widgets.status_bar - INFO - Status: Loaded 9 test results
+2025-07-02 10:17:06,889 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 10:17:12,390 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-02 10:17:12,396 - src.network.http_client - INFO - Successfully pinged server at http://192.168.99.1:6262/ping
+2025-07-02 10:17:12,397 - src.gui.widgets.status_bar - INFO - Status: Connected to 192.168.99.1
+2025-07-02 10:17:16,535 - src.gui.widgets.status_bar - INFO - Status: Loaded template: ping.json
+2025-07-02 10:17:16,870 - src.gui.widgets.status_bar - INFO - Status: Loaded template: ping.json
+2025-07-02 10:17:17,573 - src.gui.widgets.status_bar - INFO - Status: Added test ping.json to queue
+2025-07-02 10:17:17,575 - src.gui.widgets.status_bar - INFO - Status: Added template ping.json to queue
+2025-07-02 10:17:17,575 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 10:17:18,997 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping.json
+2025-07-02 10:17:19,000 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 10:17:19,000 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 10:17:19,002 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:17:19,002 - src.gui.widgets.status_bar - INFO - Status: Executed test ping.json
+2025-07-02 10:17:19,017 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:17:19,017 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:17:19,017 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:17:19,018 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101719_73302a54
+2025-07-02 10:17:28,632 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:17:28,632 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: ping
+2025-07-02 10:17:28,634 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\ping_26d625d3_success.json
+2025-07-02 10:17:28,647 - src.gui.widgets.status_bar - INFO - Status: Loaded 10 test results
+2025-07-02 10:17:39,674 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_create.json
+2025-07-02 10:17:39,675 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_create.json
+2025-07-02 10:17:40,216 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_edit.json
+2025-07-02 10:17:40,632 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_create.json
+2025-07-02 10:17:40,870 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_delete.json
+2025-07-02 10:17:41,752 - src.gui.widgets.status_bar - INFO - Status: Added test wan_delete.json to queue
+2025-07-02 10:17:41,753 - src.gui.widgets.status_bar - INFO - Status: Added template wan_delete.json to queue
+2025-07-02 10:17:41,753 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 10:17:43,368 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_create.json
+2025-07-02 10:17:44,255 - src.gui.widgets.status_bar - INFO - Status: Added test wan_create.json to queue
+2025-07-02 10:17:44,257 - src.gui.widgets.status_bar - INFO - Status: Added template wan_create.json to queue
+2025-07-02 10:17:44,258 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 10:17:45,543 - src.gui.widgets.status_bar - INFO - Status: Loaded template: wan_edit.json
+2025-07-02 10:17:46,399 - src.gui.widgets.status_bar - INFO - Status: Added test wan_edit.json to queue
+2025-07-02 10:17:46,400 - src.gui.widgets.status_bar - INFO - Status: Added template wan_edit.json to queue
+2025-07-02 10:17:46,400 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 10:17:47,239 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping.json
+2025-07-02 10:17:47,243 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 10:17:47,243 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 10:17:47,245 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:17:47,246 - src.gui.widgets.status_bar - INFO - Status: Executed test ping.json
+2025-07-02 10:17:47,262 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:17:47,262 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:17:47,262 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:17:47,263 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101719_73302a54
+2025-07-02 10:17:56,883 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:17:56,884 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: ping
+2025-07-02 10:17:56,885 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\ping_ef73e347_success.json
+2025-07-02 10:17:56,895 - src.gui.widgets.status_bar - INFO - Status: Loaded 11 test results
+2025-07-02 10:18:02,683 - src.gui.widgets.status_bar - INFO - Status: Executing test 1 of 4: ping.json
+2025-07-02 10:18:02,695 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 10:18:02,695 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 10:18:02,699 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:18:02,699 - src.gui.widgets.status_bar - INFO - Status: Test completed. Waiting 8s for device to stabilize...
+2025-07-02 10:18:02,721 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:18:02,721 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:18:02,721 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:18:02,722 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101719_73302a54
+2025-07-02 10:18:10,728 - src.gui.widgets.status_bar - INFO - Status: Executing test 2 of 4: wan_delete.json
+2025-07-02 10:18:10,729 - src.gui.widgets.status_bar - INFO - Status: Waiting 8s before executing next test...
+2025-07-02 10:18:12,334 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:18:12,336 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: ping
+2025-07-02 10:18:12,338 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\ping_22912ad7_success.json
+2025-07-02 10:18:12,350 - src.gui.widgets.status_bar - INFO - Status: Loaded 12 test results
+2025-07-02 10:18:18,735 - src.gui.main_window - INFO - Executing test: wan_delete
+2025-07-02 10:18:18,740 - src.gui.main_window - INFO - Test affects network connectivity
+2025-07-02 10:18:18,741 - src.gui.widgets.status_bar - INFO - Status: Executing network-affecting test: wan_delete...
+2025-07-02 10:18:18,742 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:18:18,742 - src.gui.widgets.status_bar - INFO - Status: Test completed. Waiting 15s for device to stabilize...
+2025-07-02 10:18:18,760 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:18:18,767 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:18:18,775 - src.network.connection_manager - INFO - Extended timeout for network-affecting test: 80s
+2025-07-02 10:18:18,785 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:18:18,785 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101818_926ed0b5
+2025-07-02 10:18:33,831 - src.gui.widgets.status_bar - INFO - Status: Executing test 3 of 4: wan_create.json
+2025-07-02 10:18:33,832 - src.gui.widgets.status_bar - INFO - Status: Waiting 8s before executing next test...
+2025-07-02 10:18:35,642 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:18:35,740 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: wan_delete
+2025-07-02 10:18:35,742 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_delete_d17b9618_success.json
+2025-07-02 10:18:35,760 - src.gui.widgets.status_bar - INFO - Status: Loaded 13 test results
+2025-07-02 10:18:41,915 - src.gui.main_window - INFO - Executing test: wan_create
+2025-07-02 10:18:41,915 - src.gui.main_window - INFO - Test affects network connectivity
+2025-07-02 10:18:41,915 - src.gui.widgets.status_bar - INFO - Status: Executing network-affecting test: wan_create...
+2025-07-02 10:18:41,916 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:18:41,916 - src.gui.widgets.status_bar - INFO - Status: Test completed. Waiting 15s for device to stabilize...
+2025-07-02 10:18:41,948 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:18:41,948 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:18:41,948 - src.network.connection_manager - INFO - Extended timeout for network-affecting test: 80s
+2025-07-02 10:18:41,948 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:18:41,948 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101841_a1cce567
+2025-07-02 10:18:56,931 - src.gui.widgets.status_bar - INFO - Status: Executing test 4 of 4: wan_edit.json
+2025-07-02 10:18:56,932 - src.gui.widgets.status_bar - INFO - Status: Waiting 8s before executing next test...
+2025-07-02 10:19:03,695 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:19:03,761 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: wan_create
+2025-07-02 10:19:03,763 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_create_adc25ded_success.json
+2025-07-02 10:19:03,777 - src.gui.widgets.status_bar - INFO - Status: Loaded 14 test results
+2025-07-02 10:19:04,988 - src.gui.main_window - INFO - Executing test: wan_edit
+2025-07-02 10:19:04,988 - src.gui.main_window - INFO - Test affects network connectivity
+2025-07-02 10:19:04,988 - src.gui.widgets.status_bar - INFO - Status: Executing network-affecting test: wan_edit...
+2025-07-02 10:19:04,989 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:19:04,989 - src.gui.widgets.status_bar - INFO - Status: Executed 4 tests
+2025-07-02 10:19:05,009 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:19:05,009 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:19:05,009 - src.network.connection_manager - INFO - Extended timeout for network-affecting test: 80s
+2025-07-02 10:19:05,009 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:19:05,009 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702101905_4a4f1b7f
+2025-07-02 10:19:06,576 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:19:06,577 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: wan_edit
+2025-07-02 10:19:06,578 - src.core.result_manager - WARNING - Test wan_edit has failed tests in summary: 1
+2025-07-02 10:19:06,578 - src.core.result_manager - WARNING - Correcting status from success to fail for test wan_edit
+2025-07-02 10:19:06,579 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_c2475c93_fail.json
+2025-07-02 10:19:06,591 - src.gui.widgets.status_bar - INFO - Status: Loaded 15 test results
+2025-07-02 10:19:22,711 - src.main - INFO - Exiting Test Case Manager v3.0.0
+2025-07-02 10:21:52,798 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 10:21:53,136 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 10:21:53,137 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 10:21:53,137 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 10:21:53,137 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 10:21:53,192 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 10:21:53,217 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 10:21:53,217 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 10:21:53,237 - src.gui.widgets.status_bar - INFO - Status: Loaded 15 test results
+2025-07-02 10:21:53,254 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 10:22:00,468 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-02 10:22:00,478 - src.network.http_client - INFO - Successfully pinged server at http://192.168.99.1:6262/ping
+2025-07-02 10:22:00,478 - src.gui.widgets.status_bar - INFO - Status: Connected to 192.168.99.1
+2025-07-02 10:22:06,486 - src.gui.widgets.status_bar - INFO - Status: Loaded template: ping.json
+2025-07-02 10:22:06,860 - src.gui.widgets.status_bar - INFO - Status: Loaded template: ping.json
+2025-07-02 10:22:07,787 - src.gui.widgets.status_bar - INFO - Status: Added test ping.json to queue
+2025-07-02 10:22:07,789 - src.gui.widgets.status_bar - INFO - Status: Added template ping.json to queue
+2025-07-02 10:22:07,789 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-02 10:22:09,347 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping.json
+2025-07-02 10:22:09,350 - src.gui.main_window - INFO - Executing test: ping
+2025-07-02 10:22:09,350 - src.gui.widgets.status_bar - INFO - Status: Executing test: ping...
+2025-07-02 10:22:09,352 - src.gui.main_window - INFO - Sending test to device...
+2025-07-02 10:22:09,352 - src.gui.widgets.status_bar - INFO - Status: Executed test ping.json
+2025-07-02 10:22:09,380 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-02 10:22:09,381 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-02 10:22:09,381 - src.network.http_client - INFO - Preparing to send test case to http://192.168.99.1:6262
+2025-07-02 10:22:09,381 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250702102209_8c14c24a
+2025-07-02 10:22:19,062 - src.network.http_client - INFO - Received response from server
+2025-07-02 10:22:19,063 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: ping
+2025-07-02 10:22:19,064 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\ping_60faff73_success.json
+2025-07-02 10:22:19,079 - src.gui.widgets.status_bar - INFO - Status: Loaded 16 test results

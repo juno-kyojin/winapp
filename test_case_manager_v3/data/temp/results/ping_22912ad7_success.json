@@ -1,0 +1,34 @@
+{
+  "test_data": {
+    "test_cases": [
+      {
+        "service": "ping",
+        "params": {
+          "host1": "google.com",
+          "host2": "youtube.com"
+        }
+      }
+    ],
+    "metadata": {
+      "transaction_id": "20250702101719_73302a54"
+    }
+  },
+  "result_data": {
+    "summary": {
+      "total_test_cases": 1,
+      "passed": 1,
+      "failed": 0,
+      "failed_services": []
+    },
+    "failed_by_service": {}
+  },
+  "message": "",
+  "metadata": {
+    "test_id": "ping",
+    "status": "success",
+    "timestamp": "2025-07-02 03:18:12",
+    "affects_network": false,
+    "execution_time": 9.635431289672852,
+    "filename": "ping_22912ad7_success.json"
+  }
+}

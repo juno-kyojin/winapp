@@ -1,0 +1,26 @@
+{
+  "test_data": {
+    "test_cases": [
+      {
+        "service": "ping",
+        "params": {
+          "host1": "google.com",
+          "host2": "youtube.com"
+        }
+      }
+    ],
+    "metadata": {
+      "transaction_id": "20250702095901_9b2c630c"
+    }
+  },
+  "result_data": null,
+  "message": "Transaction failed: Error checking transaction status: HTTPConnectionPool(host='192.168.99.1', port=6262): Read timed out. (read timeout=5)",
+  "metadata": {
+    "test_id": "ping",
+    "status": "fail",
+    "timestamp": "2025-07-02 02:59:39",
+    "affects_network": false,
+    "execution_time": 38.37372136116028,
+    "filename": "ping_dba134fa_fail.json"
+  }
+}

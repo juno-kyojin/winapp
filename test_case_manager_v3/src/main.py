@@ -25,15 +25,20 @@ def setup_logger(level: int = logging.INFO, log_file: Optional[str] = None, max_
     """
     # Configure root logger
     root_logger = logging.getLogger()
+
+    # Clear existing handlers to prevent duplicates
+    if root_logger.handlers:
+        root_logger.handlers.clear()
+
     root_logger.setLevel(level)
-    
+
     # Console handler
     console_handler = logging.StreamHandler()
     console_handler.setLevel(level)
     console_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     console_handler.setFormatter(console_format)
     root_logger.addHandler(console_handler)
-    
+
     # File handler (if log_file is provided)
     if log_file:
         try:
@@ -41,7 +46,7 @@ def setup_logger(level: int = logging.INFO, log_file: Optional[str] = None, max_
             log_dir = os.path.dirname(log_file)
             if log_dir and not os.path.exists(log_dir):
                 os.makedirs(log_dir)
-                
+
             file_handler = logging.FileHandler(log_file)
             file_handler.setLevel(level)
             file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

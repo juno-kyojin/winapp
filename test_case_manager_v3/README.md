@@ -5,108 +5,50 @@ A robust application for managing and executing test cases against network devic
 ## Features
 
 ### Core Features
-- Execute test cases against network devices via HTTP or SSH
+- Execute test cases against network devices via HTTP
 - Support for multiple test case formats (JSON templates)
 - Batch execution of test cases
 - Result management and reporting
-- Configurable retry mechanisms and timeouts
+- Basic HTTP-level retry mechanisms
 
 ### New in v3.0
-- **Client-side Validation System**: Verify test results on both server and client sides
-- **Dynamic Validator Loading**: Add new validators without modifying core code
-- **Enhanced Result Verification**: Ensure test results are properly written before proceeding
+- **Simplified Architecture**: Streamlined system with reduced complexity
 - **Network Test Handling**: Special handling for tests that affect network connectivity
-- **Improved Error Handling**: Better retry mechanisms and error reporting
-- **Empty File Prevention**: Added mechanisms to prevent the "empty file" issue on the server
+- **Transaction ID Tracking**: Unique identification for concurrent test execution
+- **Basic Error Handling**: Simple and reliable error reporting
 
-## Client-side Validation System
+## System Architecture
 
-The client-side validation system allows for verifying test results beyond what the server reports. This is useful for:
+The Test Case Manager v3.0 follows a simplified client-server architecture:
 
-1. Verifying network connectivity after configuration changes
-2. Testing actual functionality from the client perspective
-3. Providing more detailed error information
+### Components
 
-### How It Works
+1. **Test Case Manager (Client)**: Windows GUI application for test management
+2. **RnD AutoTest (Server)**: OpenWrt-based test execution system
+3. **HTTP Communication**: Simple request-response protocol on port 6262
 
-1. Add `"client_validation": true` to any test case that requires client-side validation
-2. Create a validator function in the `validators` directory
-3. The system automatically loads and registers validators
-4. After server execution, the client-side validator is called to verify results
+### Key Features
 
-### Validator Structure
+- **Transaction ID Tracking**: Each test gets a unique identifier for result matching
+- **File-based Processing**: Server processes tests via JSON files
+- **Concurrent Support**: Multiple tests can be handled simultaneously
+## Test Execution Flow
 
-Validators are organized by service type:
-- `validators/lan.py` - LAN-related validators
-- `validators/wan.py` - WAN-related validators
-- `validators/network.py` - Network test validators (ping, etc.)
-- `validators/common.py` - Common validation functions
+1. **Test Preparation**: Basic server connectivity check
+2. **Transaction ID Assignment**: Unique identifier for each test
+3. **HTTP Request**: Send test data to OpenWrt device
+4. **Result Processing**: Receive and parse response
+5. **Next Test**: Continue to next test case
 
-### Creating Custom Validators
+## Error Handling
 
-To create a new validator:
+The system includes basic error handling mechanisms:
 
-1. Add a function to the appropriate validator file (or create a new one)
-2. Name your function `validate_<service>_<action>` or `validate_<service>`
-3. The function should take `test_data` and `result_data` parameters
-4. Return a tuple of `(success: bool, message: str)`
+1. **HTTP-level Retries**: Built into the requests library for network issues
+2. **Connection Verification**: Basic ping check before sending tests
+3. **Transaction Tracking**: Unique IDs help match requests with responses
 
-Example:
-```python
-def validate_ping(test_data: Dict[str, Any], result_data: Dict[str, Any]) -> Tuple[bool, str]:
-    """Validate ping test results by actually pinging the targets."""
-    hosts = []
-    if "params" in test_data:
-        for key, value in test_data["params"].items():
-            if key.startswith("host"):
-                hosts.append(value)
-    
-    # Ping each host
-    for host in hosts:
-        if not ping_host(host):
-            return False, f"Client-side validation failed: Cannot ping {host}"
-    
-    return True, "All hosts are reachable"
-```
 
-## Result Verification Mechanism
-
-To ensure test cases are properly processed before moving to the next test:
-
-1. Each test is assigned a unique transaction ID
-2. After receiving a response, the system checks if the result has been written
-3. For network-affecting tests, additional wait time is added
-
-This prevents race conditions and ensures stable test execution.
-
-## Empty File Issue Prevention
-
-The system includes several mechanisms to prevent the "empty file" issue on the server:
-
-1. **Pre-send Delay**: A delay is added before sending each test to ensure the server has cleared the previous file
-2. **Server Readiness Check**: The system pings the server before sending a test to ensure it's responsive
-3. **Automatic Retries**: If an empty file error is detected, the system automatically retries with increased delays
-4. **Extended Timeouts**: Longer timeouts are used for network-affecting tests
-5. **Result Verification**: The system checks that results are properly written before proceeding to the next test
-6. **Double Ping Check**: Before sending important tests, the system performs a double ping check to ensure the server is ready
-7. **Adaptive Wait Times**: Wait times between tests are increased for network-affecting operations
-
-These mechanisms work together to ensure reliable test execution even when the server is under load or processing multiple requests.
-
-### Understanding the Empty File Issue
-
-The empty file issue occurs when the server receives a test request before it has finished processing the previous request. This can happen because:
-
-1. The server's file handling is not atomic
-2. The client sends requests too quickly
-3. Network conditions cause delays in file processing
-
-When this happens, the server may read an empty file and return an error. Our system addresses this by:
-
-1. Adding appropriate delays between requests
-2. Checking server responsiveness before sending tests
-3. Automatically retrying with longer delays if an empty file error is detected
-4. Using transaction IDs to track and verify test completion
 
 ## Usage
 
@@ -117,7 +59,7 @@ from network.test_executor import TestExecutor
 executor = TestExecutor()
 
 # Connect to device
-executor.connect("192.168.1.1", port=8080)
+executor.connect("192.168.1.1", port=6262)
 
 # Load and execute test
 with open("test_case.json", "r") as f:
@@ -134,7 +76,6 @@ print(f"Test {'succeeded' if success else 'failed'}: {message}")
   "test_cases": [
     {
       "service": "ping",
-      "client_validation": true,
       "params": {
         "host1": "google.com",
         "host2": "youtube.com"

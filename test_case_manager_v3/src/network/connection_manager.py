@@ -24,8 +24,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List, Union, cast
 
 from src.network.http_client import HTTPTestClient
-# from src.network.ssh_connection import SSHConnection  
-from src.core.test_case_validator import TestCaseValidator
+# from src.network.ssh_connection import SSHConnection
 from src.utils.file_utils import ensure_directory
 from src.utils.file_lock_utils import read_file_with_lock, write_file_with_lock
 from src.utils.logger import get_logger
@@ -71,14 +70,7 @@ class ConnectionManager:
         self.between_tests_delay = 2  # Seconds to wait between tests
         self.network_test_delay = 5  # Seconds to wait after network-affecting tests
         
-        # Test validator
-        try:
-            self.validator = TestCaseValidator()
-            self.validation_available = True
-        except Exception as e:
-            self.logger.warning(f"Failed to load validators via spec import: {str(e)}")
-            self.validation_available = False
-            self.validator = None
+
             
         # File lock settings
         self.file_lock_check_retries = 5

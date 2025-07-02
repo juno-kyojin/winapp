@@ -1,0 +1,34 @@
+{
+  "test_data": {
+    "test_cases": [
+      {
+        "service": "wan",
+        "action": "delete",
+        "params": {
+          "name": "wan1"
+        }
+      }
+    ],
+    "metadata": {
+      "transaction_id": "20250702101818_926ed0b5"
+    }
+  },
+  "result_data": {
+    "summary": {
+      "total_test_cases": 1,
+      "passed": 1,
+      "failed": 0,
+      "failed_services": []
+    },
+    "failed_by_service": {}
+  },
+  "message": "",
+  "metadata": {
+    "test_id": "wan_delete",
+    "status": "success",
+    "timestamp": "2025-07-02 03:18:35",
+    "affects_network": true,
+    "execution_time": 16.90083599090576,
+    "filename": "wan_delete_d17b9618_success.json"
+  }
+}

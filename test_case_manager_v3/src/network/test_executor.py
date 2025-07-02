@@ -125,11 +125,8 @@ class TestExecutor:
             self.logger.info("Executing test case")
             self.logger.debug(f"Test data: {json.dumps(test_data, indent=2)}")
             
-            # Prepare server based on test importance
-            if affects_network or self._is_important_test(test_data):
-                self._prepare_server_for_important_test()
-            else:
-                self._prepare_server_for_regular_test()
+            # Simple server preparation
+            self._prepare_server_for_test()
                 
             # Add transaction ID if not present
             if "metadata" not in test_data:
@@ -142,70 +139,21 @@ class TestExecutor:
                 
             # Store transaction ID for checking result later
             transaction_id = test_data["metadata"]["transaction_id"]
-            
-            # Thêm retry và exponential backoff khi gặp lỗi file trống
-            max_retries = 5
-            initial_backoff = 0.1
-            retry_count = 0
-            backoff = initial_backoff
-            
-            while retry_count < max_retries:
-                # Send test case to device
-                success, response, error = self.connection_manager.send_test(
-                    test_data, 
-                    affects_network=affects_network
-                )
-                
-                # Kiểm tra xem có lỗi liên quan đến file không
-                if not success and self._is_file_related_error(error):
-                    self.logger.warning(f"Detected file-related error: {error}")
-                    self.logger.info(f"Retrying in {backoff}s (attempt {retry_count+1}/{max_retries})...")
-                    time.sleep(backoff)
-                    backoff *= 2  # Exponential backoff
-                    retry_count += 1
-                    
-                    # Prepare server for retry
-                    self._prepare_server_for_retry()
-                    continue
-                
-                # Verify result was written if successful
-                if success and transaction_id:
-                    is_important = affects_network or self._is_important_test(test_data)
-                    result_written = self._verify_result_written(transaction_id, is_important)
-                    
-                    if not result_written:
-                        self.logger.warning(f"Could not confirm result for transaction {transaction_id} was written")
-                        # Continue anyway as this is just a verification step
-                
-                # Nếu không phải lỗi file hoặc đã thành công, trả về kết quả
-                return success, response, error
-            
-            # Nếu đã hết số lần thử, trả về kết quả cuối cùng
-            return False, None, f"Failed after {max_retries} attempts: {error}"
+
+            # Send test case to device (simplified - no complex retry logic)
+            success, response, error = self.connection_manager.send_test(
+                test_data,
+                affects_network=affects_network
+            )
+
+            return success, response, error
             
         except Exception as e:
             error_msg = f"Error executing test: {str(e)}"
             self.logger.error(error_msg)
             return False, None, error_msg
     
-    def _is_file_related_error(self, error_message: str) -> bool:
-        """
-        Check if error message indicates a file-related issue.
-        
-        Args:
-            error_message: Error message to check
-            
-        Returns:
-            True if error is file-related, False otherwise
-        """
-        error_message = error_message.lower()
-        file_related_terms = ["empty", "file", "parse", "json", "invalid", "config"]
-        
-        for term in file_related_terms:
-            if term in error_message:
-                return True
-                
-        return False
+
     
     def _is_important_test(self, test_data: Dict[str, Any]) -> bool:
         """
@@ -232,53 +180,19 @@ class TestExecutor:
         
         return False
     
-    def _prepare_server_for_important_test(self) -> None:
+    def _prepare_server_for_test(self) -> None:
         """
-        Prepare server for an important test with multiple ping checks
-        and longer delays to ensure server stability.
-        """
-        self.logger.info("Preparing server for important test...")
-        
-        # Multiple ping verification
-        self._verify_server_with_multiple_pings()
-        
-        # Longer delay for important tests
-        time.sleep(5)
-        
-        # Send dummy request to clear any pending operations
-        self._send_dummy_request()
-        
-        # Final delay before test
-        time.sleep(3)
-    
-    def _prepare_server_for_regular_test(self) -> None:
-        """
-        Prepare server for a regular test with basic checks.
+        Simple server preparation for test execution.
         """
         self.logger.info("Preparing server for test...")
-        
-        # Simple ping verification
+
+        # Basic ping verification
         self._ping_server()
-        
+
         # Short delay
-        time.sleep(2)
+        time.sleep(1)
     
-    def _prepare_server_for_retry(self) -> None:
-        """
-        More aggressive server preparation for retry attempts.
-        """
-        self.logger.info("Preparing server for retry attempt...")
-        
-        # Multiple ping verification with longer delays
-        self._verify_server_with_multiple_pings(extra_delay=True)
-        
-        # Send multiple dummy requests to ensure server is clear
-        self._send_dummy_request()
-        time.sleep(2)
-        self._send_dummy_request()
-        
-        # Longer delay before retry
-        time.sleep(5)
+
     
     def _verify_server_with_multiple_pings(self, extra_delay: bool = False) -> bool:
         """
@@ -414,29 +328,4 @@ class TestExecutor:
         except Exception as e:
             self.logger.debug(f"Error sending dummy request: {e}")
     
-    def _verify_result_written(self, transaction_id: str, is_important: bool = False) -> bool:
-        """
-        Verify that the result for a transaction was properly written.
-        
-        Args:
-            transaction_id: Transaction ID to check
-            is_important: Whether this is an important test
-            
-        Returns:
-            True if result was written, False otherwise
-        """
-        # Check if the HTTP client is initialized and has the check_result_written method
-        if (not hasattr(self.connection_manager, 'http_client') or
-            not self.connection_manager.http_client or
-            not hasattr(self.connection_manager.http_client, 'check_result_written')):
-            self.logger.warning("HTTP client not initialized or missing check_result_written method")
-            return False
-            
-        max_retries = 12 if is_important else 8
-        retry_delay = 2
-        
-        return self.connection_manager.http_client.check_result_written(
-            transaction_id, 
-            max_retries=max_retries,
-            retry_delay=retry_delay
-        ) 
+

@@ -42,8 +42,7 @@ class HTTPTestClient:
         self.port: int = 8080
         self.connect_timeout: int = 5
         self.read_timeout: int = 500
-        self.max_retries = 3
-        self.retry_delay = 2
+
         self.session = requests.Session()
         self.last_transaction_id: Optional[str] = None
         self.last_test_data: Optional[Dict[str, Any]] = None
@@ -163,17 +162,23 @@ class HTTPTestClient:
             
             # Send request to status endpoint
             response = self.session.get(
-                f"{self.url}/status/{safe_transaction_id}",
-                timeout=self.connect_timeout
+                f"{self.url}/check_result/{safe_transaction_id}",
+                timeout=(self.connect_timeout, 15)  # Use longer read timeout for status check
             )
             
             if response.status_code == 200:
                 try:
                     data = response.json()
-                    status = data.get("status", "unknown")
-                    return status, f"Transaction status: {status}"
+                    # If we get valid test result data, transaction is completed
+                    if "test_name" in data or "result" in data or "status" in data:
+                        return "completed", "Transaction completed successfully"
+                    else:
+                        return "unknown", "Response received but no valid result data"
                 except json.JSONDecodeError:
                     return "error", "Invalid JSON response from server"
+            elif response.status_code == 404:
+                # Result file not found yet - transaction still processing
+                return "processing", "Transaction still processing"
             else:
                 return "error", f"Server returned status code {response.status_code}"
                 
@@ -200,7 +205,7 @@ class HTTPTestClient:
             # Send request to check_result endpoint
             response = self.session.get(
                 f"{self.url}/check_result/{safe_transaction_id}",
-                timeout=self.connect_timeout
+                timeout=(self.connect_timeout, 15)  # Use longer read timeout for result check
             )
             
             if response.status_code == 200:
@@ -225,9 +230,9 @@ class HTTPTestClient:
         except Exception as e:
             return False, None, f"Error checking result: {str(e)}"
     
-    def wait_for_transaction_completion(self, transaction_id: str, 
-                                        max_retries: int = 10, 
-                                        retry_delay: int = 2) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+    def wait_for_transaction_completion(self, transaction_id: str,
+                                        max_retries: int = 15,
+                                        retry_delay: int = 1) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
         Wait for a transaction to complete.
         
@@ -406,92 +411,8 @@ class HTTPTestClient:
             error_msg = f"Error sending test case: {str(e)}"
             self.logger.error(error_msg)
             return False, None, error_msg
-    
-    def execute_test_with_retries(self, test_data: Dict[str, Any], 
-                                  max_retries: int = 3,
-                                  is_important: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
-        """
-        Execute a test with automatic retries on failure.
-        
-        Args:
-            test_data: Test data to send
-            max_retries: Maximum number of retry attempts
-            is_important: Whether this is an important test (affects retry behavior)
-            
-        Returns:
-            Tuple containing (success flag, response data, error message)
-        """
-        # Add transaction ID if not present
-        if "metadata" not in test_data:
-            test_data["metadata"] = {}
-            
-        if "transaction_id" not in test_data["metadata"]:
-            transaction_id = self._generate_transaction_id()
-            test_data["metadata"]["transaction_id"] = transaction_id
-        
-        # Store the original transaction ID
-        original_transaction_id = test_data["metadata"]["transaction_id"]
-        
-        # Implement exponential backoff for retries
-        retry_delay = 2 if not is_important else 5
-        
-        for attempt in range(max_retries):
-            if attempt > 0:
-                # For retries, generate a new transaction ID based on the original
-                retry_transaction_id = f"{original_transaction_id}_retry{attempt}"
-                test_data["metadata"]["transaction_id"] = retry_transaction_id
-                test_data["metadata"]["retry_count"] = attempt
-                test_data["metadata"]["original_transaction_id"] = original_transaction_id
-                
-                self.logger.info(f"Retry attempt {attempt}/{max_retries} with transaction ID: {retry_transaction_id}")
-                
-                # Wait before retry with exponential backoff
-                time.sleep(retry_delay)
-                retry_delay = min(retry_delay * 2, 30)  # Cap at 30 seconds
-            
-            # Send the test
-            success, response, error = self.send_test(test_data)
-            
-            if success:
-                return success, response, error
-                
-            # Check if error is retryable
-            if not self._is_retryable_error(error):
-                self.logger.warning(f"Non-retryable error: {error}")
-                return success, response, error
-                
-            self.logger.warning(f"Retryable error: {error}")
-        
-        # If we've exhausted all retries
-        return False, None, f"Failed after {max_retries} attempts"
-    
-    def _is_retryable_error(self, error: str) -> bool:
-        """
-        Determine if an error is retryable.
-        
-        Args:
-            error: Error message to check
-            
-        Returns:
-            True if error is retryable, False otherwise
-        """
-        retryable_patterns = [
-            "timeout", 
-            "empty file", 
-            "file not found",
-            "connection refused",
-            "connection reset",
-            "empty response",
-            "no result",
-            "invalid json"
-        ]
-        
-        error_lower = error.lower()
-        for pattern in retryable_patterns:
-            if pattern in error_lower:
-                return True
-                
-        return False
+
+
     
     def is_connected(self) -> bool:
         """
