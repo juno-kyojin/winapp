@@ -17,7 +17,7 @@ import argparse
 from typing import List, Optional
 
 from src.core.config import AppConfig
-from src.core.constants import APP_NAME, APP_VERSION
+from src.core.constants import APP_NAME, APP_VERSION, LOG_DIR
 
 def setup_logger(level: int = logging.INFO, log_file: Optional[str] = None, max_size_mb: int = 10) -> None:
     """
@@ -89,13 +89,12 @@ def main(args: Optional[List[str]] = None) -> int:
             log_level = getattr(logging, parsed_args.log_level)
         
         # Create logs directory if it doesn't exist
-        logs_dir = os.path.join(os.path.dirname(__file__), "..", "data", "logs")
-        os.makedirs(logs_dir, exist_ok=True)
-        
+        LOG_DIR.mkdir(parents=True, exist_ok=True)
+
         # Setup logging
         setup_logger(
             level=log_level,
-            log_file=os.path.join(logs_dir, "app.log"),
+            log_file=str(LOG_DIR / "app.log"),
             max_size_mb=10
         )
         

@@ -1,0 +1,23 @@
+# Test Case Manager v3.0 Dependencies
+# Core HTTP communication
+requests>=2.28.0
+
+# GUI framework (included with Python but listed for completeness)
+# tkinter - included with Python standard library
+
+# Development and build tools
+pyinstaller>=5.0.0
+
+# Optional: For enhanced logging and file handling
+# pathlib - included with Python 3.4+
+# json - included with Python standard library
+# logging - included with Python standard library
+# threading - included with Python standard library
+# datetime - included with Python standard library
+# uuid - included with Python standard library
+# time - included with Python standard library
+# os - included with Python standard library
+# sys - included with Python standard library
+# re - included with Python standard library
+# argparse - included with Python standard library
+# typing - included with Python 3.5+

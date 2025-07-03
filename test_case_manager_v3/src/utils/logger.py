@@ -19,8 +19,23 @@ import sys
 from pathlib import Path
 from typing import Optional, Union, Dict, Any
 
-# Define constants using uppercase as per PEP 8
-BASE_DIR = Path(__file__).parent.parent.parent
+# Define constants using uppercase as per PEP 8 - Handle both development and executable environments
+def _get_base_dir() -> Path:
+    """
+    Get the base directory for the application.
+
+    When running from source: returns project root directory
+    When running from executable: returns directory containing the .exe file
+    """
+    if getattr(sys, 'frozen', False):
+        # Running from PyInstaller executable
+        # sys.executable points to the .exe file
+        return Path(sys.executable).parent
+    else:
+        # Running from source code
+        return Path(__file__).parent.parent.parent
+
+BASE_DIR = _get_base_dir()
 LOG_DIR = BASE_DIR / "data" / "logs"
 LOG_FORMAT = "[%(asctime)s] %(levelname)s - %(name)s: %(message)s"
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"

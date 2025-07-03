@@ -30,8 +30,25 @@ CONFIG_FILE_EXTENSION: Final[str] = ".json"
 LOG_FILE_EXTENSION: Final[str] = ".log"
 DATABASE_FILE_EXTENSION: Final[str] = ".db"
 
-# Base Directories
-BASE_DIR: Final[Path] = Path(__file__).parent.parent.parent
+# Base Directories - Handle both development and executable environments
+def _get_base_dir() -> Path:
+    """
+    Get the base directory for the application.
+
+    When running from source: returns project root directory
+    When running from executable: returns directory containing the .exe file
+    """
+    import sys
+
+    if getattr(sys, 'frozen', False):
+        # Running from PyInstaller executable
+        # sys.executable points to the .exe file
+        return Path(sys.executable).parent
+    else:
+        # Running from source code
+        return Path(__file__).parent.parent.parent
+
+BASE_DIR: Final[Path] = _get_base_dir()
 DATA_DIR: Final[Path] = BASE_DIR / "data"
 TEMPLATE_DIR: Final[Path] = DATA_DIR / "templates"
 CONFIG_DIR: Final[Path] = DATA_DIR / "config"
