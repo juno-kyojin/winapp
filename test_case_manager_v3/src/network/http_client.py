@@ -15,15 +15,11 @@ import requests
 import json
 import logging
 import time
-import os
-from typing import Dict, Any, Tuple, Optional, Union, List
 import uuid
-from urllib.parse import urljoin
-from pathlib import Path
 import re
+from typing import Dict, Any, Tuple, Optional
 
-import src.utils.logger as logger_module
-from src.utils.file_lock_utils import read_file_with_lock, write_file_with_lock
+
 
 class HTTPTestClient:
     """
@@ -41,7 +37,7 @@ class HTTPTestClient:
         self.host: Optional[str] = None
         self.port: Optional[int] = None
         self.connect_timeout: int = 5
-        self.read_timeout: int = 30  # Reduced from 500s to 30s for faster failure detection
+        self.read_timeout: int = 60  # Increased to 60s to better handle wireless tests
 
         self.session = requests.Session()
         self.last_transaction_id: Optional[str] = None
@@ -55,6 +51,27 @@ class HTTPTestClient:
         # Đơn giản hóa cơ chế retry để tránh lỗi import
         self.session = requests.Session()
         # Các cài đặt retry sẽ được xử lý thủ công trong các phương thức gửi request
+
+    def _is_wireless_test(self, test_data: Dict[str, Any]) -> bool:
+        """
+        Check if test data contains wireless-related operations.
+
+        Args:
+            test_data: Test data to check
+
+        Returns:
+            True if this is a wireless test, False otherwise
+        """
+        if "test_cases" in test_data:
+            for test_case in test_data["test_cases"]:
+                service = test_case.get("service", "").lower()
+                if service == "wireless":
+                    return True
+        elif "service" in test_data:
+            service = test_data.get("service", "").lower()
+            if service == "wireless":
+                return True
+        return False
 
     def _health_check(self) -> bool:
         """
@@ -196,37 +213,55 @@ class HTTPTestClient:
             self.connected = False
             return False
     
-    def check_transaction_status(self, transaction_id: str) -> Tuple[str, str]:
+    def check_transaction_status(self, transaction_id: str, is_wireless_test: bool = False) -> Tuple[str, str]:
         """
         Check the status of a transaction.
-        
+
         Args:
             transaction_id: Transaction ID to check
-            
+            is_wireless_test: Whether this is a wireless test requiring extended timeouts
+
         Returns:
             Tuple containing (status, message)
         """
         if not self.url:
             return "error", "No URL configured"
-            
+
         try:
             # Sanitize transaction ID
             safe_transaction_id = self._sanitize_transaction_id(transaction_id)
-            
+
+            # Adjust timeouts for wireless tests
+            connect_timeout = 10 if is_wireless_test else self.connect_timeout
+            read_timeout = 30 if is_wireless_test else 15
+
             # Send request to status endpoint
             response = self.session.get(
                 f"{self.url}/check_result/{safe_transaction_id}",
-                timeout=(self.connect_timeout, 15)  # Use longer read timeout for status check
+                timeout=(connect_timeout, read_timeout)
             )
             
             if response.status_code == 200:
                 try:
                     data = response.json()
+
+                    # Check if server explicitly returns "unknown" status
+                    if "status" in data and data["status"] == "unknown":
+                        return "processing", "Transaction still processing - result not ready"
+
+                    # Check for error responses
+                    if "error" in data:
+                        if "Result not found" in data["error"]:
+                            return "processing", "Transaction still processing - result file not found"
+                        else:
+                            return "error", data["error"]
+
                     # If we get valid test result data, transaction is completed
-                    if "test_name" in data or "result" in data or "status" in data:
+                    if "summary" in data or "test_name" in data or "result" in data:
                         return "completed", "Transaction completed successfully"
                     else:
-                        return "unknown", "Response received but no valid result data"
+                        return "processing", "Response received but result not ready"
+
                 except json.JSONDecodeError:
                     return "error", "Invalid JSON response from server"
             elif response.status_code == 404:
@@ -238,27 +273,32 @@ class HTTPTestClient:
         except Exception as e:
             return "error", f"Error checking transaction status: {str(e)}"
     
-    def check_result(self, transaction_id: str) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+    def check_result(self, transaction_id: str, is_wireless_test: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
         Check the result of a transaction.
-        
+
         Args:
             transaction_id: Transaction ID to check
-            
+            is_wireless_test: Whether this is a wireless test requiring extended timeouts
+
         Returns:
             Tuple containing (success flag, response data, error message)
         """
         if not self.url:
             return False, None, "No URL configured"
-            
+
         try:
             # Sanitize transaction ID
             safe_transaction_id = self._sanitize_transaction_id(transaction_id)
-            
+
+            # Adjust timeouts for wireless tests
+            connect_timeout = 10 if is_wireless_test else self.connect_timeout
+            read_timeout = 30 if is_wireless_test else 15
+
             # Send request to check_result endpoint
             response = self.session.get(
                 f"{self.url}/check_result/{safe_transaction_id}",
-                timeout=(self.connect_timeout, 15)  # Use longer read timeout for result check
+                timeout=(connect_timeout, read_timeout)
             )
             
             if response.status_code == 200:
@@ -285,36 +325,44 @@ class HTTPTestClient:
     
     def wait_for_transaction_completion(self, transaction_id: str,
                                         max_retries: int = 15,
-                                        retry_delay: int = 1) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+                                        retry_delay: int = 1,
+                                        is_wireless_test: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
         Wait for a transaction to complete.
-        
+
         Args:
             transaction_id: Transaction ID to check
             max_retries: Maximum number of retries
             retry_delay: Delay between retries in seconds
-            
+            is_wireless_test: Whether this is a wireless test requiring extended timeouts
+
         Returns:
             Tuple containing (success flag, response data, error message)
         """
         if not transaction_id:
             return False, None, "No transaction ID provided"
-            
+
+        # Adjust parameters for wireless tests
+        if is_wireless_test:
+            max_retries = max(max_retries, 30)  # At least 30 retries for wireless
+            retry_delay = max(retry_delay, 2)   # At least 2 seconds between retries
+            self.logger.info(f"Extended timeout for wireless test - max_retries: {max_retries}, retry_delay: {retry_delay}s")
+
         self.logger.info(f"Waiting for transaction {transaction_id} to complete")
-        
+
         # Initial delay to allow server to process
         time.sleep(retry_delay)
-        
+
         # Implement exponential backoff
         current_delay = retry_delay
         
         for attempt in range(max_retries):
             # Check transaction status
-            status, message = self.check_transaction_status(transaction_id)
+            status, message = self.check_transaction_status(transaction_id, is_wireless_test)
             
             if status == "completed":
                 self.logger.info(f"Transaction {transaction_id} completed")
-                return self.check_result(transaction_id)
+                return self.check_result(transaction_id, is_wireless_test)
                 
             elif status == "error":
                 self.logger.error(f"Transaction {transaction_id} failed: {message}")
@@ -331,11 +379,15 @@ class HTTPTestClient:
                 
             # Wait before next attempt with exponential backoff
             time.sleep(current_delay)
-            current_delay = min(current_delay * 1.5, 10)  # Cap at 10 seconds
+            # For wireless tests, use more conservative backoff and higher cap
+            if is_wireless_test:
+                current_delay = min(current_delay * 1.2, 15)  # Slower backoff, cap at 15 seconds
+            else:
+                current_delay = min(current_delay * 1.5, 10)  # Original behavior for non-wireless
         
         # If we've exhausted all retries, try to get the result directly
         self.logger.warning(f"Transaction {transaction_id} did not complete after {max_retries} attempts")
-        return self.check_result(transaction_id)
+        return self.check_result(transaction_id, is_wireless_test)
     
     def send_test(self, test_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
@@ -356,7 +408,12 @@ class HTTPTestClient:
         # Validate test data is not empty
         if not test_data:
             return False, None, "Test data is empty"
-            
+
+        # Detect if this is a wireless test
+        is_wireless_test = self._is_wireless_test(test_data)
+        if is_wireless_test:
+            self.logger.info("Detected wireless test - using extended timeout parameters")
+
         try:
             # Simplified: Skip health check to reduce complexity and potential timeout issues
             self.logger.info(f"Sending test case to {self.url}")
@@ -373,13 +430,10 @@ class HTTPTestClient:
             if "metadata" not in test_data:
                 transaction_id = self._generate_transaction_id()
                 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-                
+
                 test_data["metadata"] = {
                     "transaction_id": transaction_id,
-                    "client_timestamp": timestamp,
-                    "created_at": timestamp,
-                    "created_by": "test_case_manager_v3",
-                    "client_version": "3.0.0"
+                    "client_timestamp": timestamp
                 }
             elif "transaction_id" not in test_data["metadata"]:
                 transaction_id = self._generate_transaction_id()
@@ -427,7 +481,7 @@ class HTTPTestClient:
                     # Check if we have a transaction ID
                     if self.last_transaction_id and "timeout" in error_msg.lower():
                         self.logger.info(f"Server reported timeout, checking transaction status for {self.last_transaction_id}")
-                        return self.wait_for_transaction_completion(self.last_transaction_id)
+                        return self.wait_for_transaction_completion(self.last_transaction_id, is_wireless_test=is_wireless_test)
                     
                     return False, response_data, error_msg
                 

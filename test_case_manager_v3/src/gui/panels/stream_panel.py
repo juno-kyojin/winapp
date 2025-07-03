@@ -464,11 +464,8 @@ class StreamPanel(ttk.Frame):
         # Update progress display
         self.queue_progress_var.set(f"Completed: {completed}/{total_tests} tests")
 
-        # Add completion stream entry
-        status_icon = "✅" if success else "❌"
-        status_text = "completed successfully" if success else "failed"
-        self._add_stream_entry("success" if success else "error",
-                              f"{status_icon} Test {test_index + 1}/{total_tests} ({test_name}) {status_text}")
+        # NOTE: Removed duplicate completion logging here to prevent double timestamps
+        # The completion message will be logged by end_queue_test_stream() in main_window.py
 
     def end_queue_execution(self, success: bool, final_message: str) -> None:
         """
@@ -483,8 +480,7 @@ class StreamPanel(ttk.Frame):
 
         self.is_queue_executing = False
 
-        # Calculate execution time
-        duration = datetime.now() - self.queue_execution["start_time"]
+        # Get queue execution info
         total_tests = self.queue_execution["total_tests"]
         completed_tests = self.queue_execution["completed_tests"]
 
@@ -496,7 +492,7 @@ class StreamPanel(ttk.Frame):
         msg_type = "success" if success else "error"
         icon = "🎉" if success else "💥"
         self._add_stream_entry(msg_type, f"{icon} {final_message}")
-        self._add_stream_entry("info", f"⏱️ Total queue execution time: {duration.total_seconds():.1f} seconds")
+        # Note: Removed total queue execution time logging as requested
         self._add_stream_entry("info", "═" * 60)  # Double separator for queue end
 
         # Reset current test display

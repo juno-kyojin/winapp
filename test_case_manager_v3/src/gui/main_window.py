@@ -412,8 +412,7 @@ class MainWindow:
         if hasattr(self, 'stream_panel') and self.stream_panel:
             self.stream_panel.start_test_stream(test_name, test_data)
 
-        # Start measuring execution time
-        start_time = time.time()
+        # Note: Execution time will be measured during actual test execution
             
         # Function to execute in a separate thread
         def execute_test_thread():
@@ -443,18 +442,21 @@ class MainWindow:
                 if hasattr(self, 'stream_panel') and self.stream_panel:
                     self.stream_panel.update_stream_status("sending", "Sending test data to device", 30)
 
+                # Start measuring ACTUAL test execution time (excluding delays and preparation)
+                test_start_time = time.time()
+
                 # Send test to device
                 success, result_data, message = self.connection_manager.send_test(
                     test_data,
                     affects_network=affects_network
                 )
 
+                # Calculate ACTUAL execution time (only test execution, excluding delays)
+                execution_time = time.time() - test_start_time
+
                 # Update stream: processing
                 if hasattr(self, 'stream_panel') and self.stream_panel:
                     self.stream_panel.update_stream_status("processing", "Device is processing test case", 60)
-
-                # Calculate execution time
-                execution_time = time.time() - start_time
 
                 # Update stream: receiving results
                 if hasattr(self, 'stream_panel') and self.stream_panel:
@@ -509,16 +511,20 @@ class MainWindow:
                             self.queue_panel.set_test_result(self._current_queue_test_index, success)
 
                         # End queue test stream with appropriate message based on success
+                        # Get total tests for proper indexing display
+                        total_tests = len(self.queue_panel.queue_items) if hasattr(self, 'queue_panel') and self.queue_panel else 1
+                        test_display_index = self._current_queue_test_index + 1
+
                         if success:
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success,
-                                                                   f"Test completed successfully")
+                            completion_msg = f"✅ Test {test_display_index}/{total_tests} ({thread_test_name}) completed successfully"
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success, completion_msg)
                         else:
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success,
-                                                                   f"Test failed: {message}")
+                            failure_msg = f"❌ Test {test_display_index}/{total_tests} ({thread_test_name}) failed: {message}"
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success, failure_msg)
 
             except Exception as e:
-                # Calculate execution time even for failed tests
-                execution_time = time.time() - start_time
+                # Set default execution time for failed tests (no actual test was executed)
+                execution_time = 0.0
 
                 # Get test name for error context
                 thread_test_name = "Unknown"

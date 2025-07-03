@@ -21,7 +21,7 @@ import importlib
 import requests
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, Tuple, List, Union, cast
+from typing import Dict, Any, Optional, Tuple
 
 from src.network.http_client import HTTPTestClient
 # from src.network.ssh_connection import SSHConnection
@@ -72,22 +72,10 @@ class ConnectionManager:
         
 
             
-        # File lock settings
-        self.file_lock_check_retries = 5
-        self.file_lock_check_delay = 1
+
             
-        # Stats for debugging
-        self.test_history: List[Dict[str, Any]] = []
-        self.max_history = 20  # Keep last 20 tests in history
-        
-        # Timeouts for different services (can be customized)
-        self.service_timeouts: Dict[str, int] = {
-            "wan": 120,
-            "network": 80,
-            "wireless": 90,
-            "system": 120,
-            "reboot": 300
-        }
+        # Basic timeout settings
+        self.default_timeout = 60
     
     def set_connection_type(self, conn_type: str) -> None:
         """
@@ -192,7 +180,7 @@ class ConnectionManager:
         else:
             self.http_client.disconnect()
         
-    def send_test(self, test_data: Dict[str, Any], test_file_path: str = "", 
+    def send_test(self, test_data: Dict[str, Any],
                 affects_network: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
         Send test case to the device for execution.
@@ -234,7 +222,7 @@ class ConnectionManager:
                 
             elif self._connection_type == self.HTTP_MODE:
                 # Use HTTP client to send test
-                http_client = cast(HTTPTestClient, self.http_client)
+                http_client = self.http_client
                 
                 # Adjust timeout for network-affecting tests
                 original_timeout = http_client.read_timeout
@@ -264,51 +252,35 @@ class ConnectionManager:
 
     def ensure_device_ready(self, affects_network: bool = False) -> bool:
         """
-        Ensure the device is ready to receive a test by sending a ping request
-        and waiting for a response. This helps prevent the empty file issue.
-        
+        Kiểm tra đơn giản xem device có sẵn sàng không.
+
         Args:
             affects_network: Whether the upcoming test affects network connectivity
-            
+
         Returns:
             True if device is ready, False otherwise
         """
         if not self.is_connected():
             self.logger.error("Not connected to device")
             return False
-            
+
         try:
-            # Set retry parameters based on test type
-            max_retries = 10 if affects_network else 5
-            retry_delay = 2
-            
-            # First, check if device is responsive
-            self.logger.info("Checking if device is ready for test...")
-            for attempt in range(max_retries):
-                try:
-                    # Send a GET request to ping endpoint
-                    response = requests.get(
-                        f"{self.http_client.url}/ping",
-                        timeout=self.http_client.connect_timeout
-                    )
-                    
-                    if response.status_code == 200:
-                        self.logger.info("Device is responsive")
-                        
-                        # Add a small delay to ensure device is fully ready
-                        wait_time = 2 if affects_network else 1
-                        time.sleep(wait_time)
-                        return True
-                        
-                except Exception as e:
-                    self.logger.debug(f"Ping attempt {attempt+1} failed: {e}")
-                
-                # Wait before retrying
-                time.sleep(retry_delay)
-                
-            self.logger.warning(f"Device may not be ready after {max_retries} attempts")
-            return False
-            
+            # Ping đơn giản để kiểm tra device
+            response = requests.get(
+                f"{self.http_client.url}/ping",
+                timeout=5
+            )
+
+            if response.status_code == 200:
+                self.logger.info("Device is ready")
+                # Chờ ngắn nếu test ảnh hưởng network
+                if affects_network:
+                    time.sleep(2)
+                return True
+            else:
+                self.logger.warning(f"Device ping returned status {response.status_code}")
+                return False
+
         except Exception as e:
             self.logger.error(f"Error checking device readiness: {e}")
             return False
@@ -511,113 +483,68 @@ class ConnectionManager:
         
         return False
 
-    def ensure_connection_before_test(self, max_retries: int = 3) -> bool:
+    def ensure_connection_before_test(self) -> bool:
         """
-        Kiểm tra kết nối trước khi chạy test và thử kết nối lại nếu mất kết nối.
-        
-        Args:
-            max_retries: Số lần thử kết nối lại tối đa
-            
+        Kiểm tra kết nối đơn giản trước khi chạy test.
+
         Returns:
             True nếu kết nối hoạt động, False nếu không thể kết nối
         """
         if self.is_connected():
-            # Kiểm tra kết nối bằng ping
+            # Kiểm tra kết nối bằng ping đơn giản
             if self.ping_server():
-                self.logger.info("Connection verified before test")
                 return True
             else:
-                self.logger.warning("Connection appears to be down, attempting to reconnect")
+                self.logger.warning("Connection check failed")
+                return False
         else:
-            self.logger.warning("Not connected, attempting to connect")
-            
-        # Thử kết nối lại
-        for attempt in range(max_retries):
-            self.logger.info(f"Reconnection attempt {attempt + 1}/{max_retries}")
-            
-            try:
-                if self._hostname is None:
-                    self.logger.error("No hostname available for reconnection")
-                    return False
-                    
-                # Thử kết nối lại với cùng thông số
-                if self._connection_type == self.HTTP_MODE:
-                    if self.http_client.connect(
-                        host=self._hostname,
-                        port=getattr(self, 'port', 6262),  # Sử dụng port 6262 nếu không có port được đặt
-                        connect_timeout=getattr(self, 'http_connect_timeout', 5),
-                        read_timeout=getattr(self, 'http_read_timeout', 60)
-                    ):
-                        self.logger.info("Successfully reconnected")
-                        return True
-                else:
-                    # SSH reconnection would go here
-                    pass
-                    
-            except Exception as e:
-                self.logger.error(f"Error during reconnection attempt: {str(e)}")
-                
-            # Tăng thời gian chờ giữa các lần thử
-            wait_time = (attempt + 1) * 2
-            self.logger.info(f"Waiting {wait_time} seconds before next attempt")
-            time.sleep(wait_time)
-            
-        self.logger.error(f"Failed to reconnect after {max_retries} attempts")
-        return False
+            self.logger.warning("Not connected")
+            return False
 
-    def send_test_with_retry(self, test_data: Dict[str, Any], test_file_path: str = "", 
+    def send_test_with_retry(self, test_data: Dict[str, Any],
                        affects_network: bool = False, max_retries: int = 3) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
-        Gửi test case với cơ chế tự động thử lại khi gặp lỗi.
-        
+        Gửi test case với cơ chế retry đơn giản.
+
         Args:
             test_data: Test case data to send
-            test_file_path: Path to test case file (optional)
             affects_network: Whether the test affects network connectivity
-            max_retries: Số lần thử lại tối đa
-            
+            max_retries: Số lần thử lại tối đa (default: 3)
+
         Returns:
             Tuple containing (success flag, response data, error message)
         """
         last_error = ""
-        
+
         for attempt in range(max_retries):
             try:
-                # Thử gửi test
+                # Gửi test
                 success, response, error = self.send_test(
                     test_data=test_data,
-                    test_file_path=test_file_path,
                     affects_network=affects_network
                 )
-                
+
                 if success:
                     if attempt > 0:
-                        self.logger.info(f"Test succeeded on attempt {attempt + 1}/{max_retries}")
+                        self.logger.info(f"Test succeeded on retry {attempt}")
                     return success, response, error
-                    
-                # Lưu lại lỗi để trả về nếu tất cả các lần thử đều thất bại
+
+                # Lưu lỗi và thử lại
                 last_error = error
-                self.logger.warning(f"Test failed on attempt {attempt + 1}/{max_retries}: {error}")
-                
-                # Tăng thời gian chờ giữa các lần thử
-                wait_time = (attempt + 1) * 5
-                self.logger.info(f"Waiting {wait_time} seconds before retry...")
-                time.sleep(wait_time)
-                
-                # Đảm bảo kết nối trước khi thử lại
-                if not self.ensure_connection_before_test():
-                    self.logger.error("Failed to reconnect before retry")
-                    return False, None, f"Failed to reconnect before retry attempt {attempt + 2}"
-                    
+                self.logger.warning(f"Test failed, attempt {attempt + 1}/{max_retries}: {error}")
+
+                # Chờ trước khi thử lại (đơn giản: 2 giây cho mỗi lần)
+                if attempt < max_retries - 1:  # Không chờ ở lần cuối
+                    time.sleep(2)
+
             except Exception as e:
                 last_error = str(e)
-                self.logger.error(f"Exception during test attempt {attempt + 1}: {last_error}")
-                
-                # Tăng thời gian chờ giữa các lần thử
-                wait_time = (attempt + 1) * 5
-                self.logger.info(f"Waiting {wait_time} seconds before retry...")
-                time.sleep(wait_time)
-        
-        # Nếu đến đây, tất cả các lần thử đều thất bại
+                self.logger.error(f"Exception on attempt {attempt + 1}: {last_error}")
+
+                # Chờ trước khi thử lại
+                if attempt < max_retries - 1:
+                    time.sleep(2)
+
+        # Tất cả các lần thử đều thất bại
         self.logger.error(f"Test failed after {max_retries} attempts")
         return False, None, f"Failed after {max_retries} attempts: {last_error}"
