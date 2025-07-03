@@ -18,6 +18,7 @@ from typing import Dict, Any, Optional, List, Callable, cast
 
 from src.core.test_case_loader import TestCaseLoader
 from src.utils.logger import get_logger
+from src.utils.test_name_extractor import TestNameExtractor
 
 
 class TemplatesPanel(ttk.Frame):
@@ -621,14 +622,17 @@ class TemplatesPanel(ttk.Frame):
             if selection:
                 template_name = self.template_listbox.get(selection[0])
             else:
-                template_name = "Unknown"
-                
+                template_name = None
+
+            # Use robust test name extraction
+            extracted_name = TestNameExtractor.extract_test_name(template_json, template_name)
+
             # Add to queue panel if parent reference is available
             if hasattr(self, 'parent') and hasattr(self.parent, 'queue_panel') and self.parent.queue_panel:
                 self.parent.queue_panel.add_to_queue(
                     template_json,
                     category,
-                    template_name
+                    extracted_name
                 )
                 
                 # Switch to queue tab
@@ -708,13 +712,16 @@ class TemplatesPanel(ttk.Frame):
             if selection:
                 template_name = self.template_listbox.get(selection[0])
             else:
-                template_name = "Unknown"
-                
+                template_name = None
+
+            # Use robust test name extraction
+            extracted_name = TestNameExtractor.extract_test_name(template_json, template_name)
+
             # Return template with metadata
             return {
                 "template_data": template_json,
                 "category": category,
-                "template_name": template_name
+                "template_name": extracted_name
             }
             
         except Exception as e:

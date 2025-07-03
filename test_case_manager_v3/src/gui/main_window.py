@@ -30,6 +30,7 @@ from src.core.result_manager import ResultManager
 # from core.result_manager import ResultManager
 
 from src.utils.logger import get_logger
+from src.utils.test_name_extractor import TestNameExtractor
 from src.network.connection_manager import ConnectionManager
 from src.network.test_executor import TestExecutor
 # from network.test_executor import TestExecutor
@@ -326,14 +327,20 @@ class MainWindow:
                 # Extract template data and metadata
                 template_data = test_data["template_data"]
                 category = test_data.get("category", "Unknown")
-                template_name = test_data.get("template_name", "Unknown Test")
-                
+                template_name = test_data.get("template_name")
+
+                # Use robust test name extraction
+                name = TestNameExtractor.extract_test_name(template_data, template_name)
+
                 # Add to queue
-                self.queue_panel.add_to_queue(template_data, category, template_name)
+                self.queue_panel.add_to_queue(template_data, category, name)
             else:
                 # Handle direct test data
                 category = test_data.get("metadata", {}).get("category", "Unknown")
-                name = test_data.get("metadata", {}).get("name", "Unknown Test")
+
+                # Use robust test name extraction
+                name = TestNameExtractor.extract_test_name(test_data)
+
                 self.queue_panel.add_to_queue(test_data, category, name)
             
             # Switch to queue tab
@@ -445,10 +452,11 @@ class MainWindow:
                 # Start measuring ACTUAL test execution time (excluding delays and preparation)
                 test_start_time = time.time()
 
-                # Send test to device
-                success, result_data, message = self.connection_manager.send_test(
+                # Send test to device using intelligent retry mechanism
+                success, result_data, message = self.connection_manager.send_test_with_retry(
                     test_data,
-                    affects_network=affects_network
+                    affects_network=affects_network,
+                    max_retries=3  # Use intelligent retry with 3 attempts for network errors only
                 )
 
                 # Calculate ACTUAL execution time (only test execution, excluding delays)

@@ -429,38 +429,25 @@ class QueuePanel(ttk.Frame):
                     self.after(0, lambda delay=delay_seconds: self._update_status(f"Waiting {delay}s before executing next test..."))
                     self._wait_with_ui_updates_background(delay_seconds)
 
-                # Execute test with network flag
+                # Execute test with network flag using intelligent retry
                 try:
-                    max_retries = 2  # Số lần thử lại tối đa cho mỗi test
-                    retry_count = 0
-                    success = False
+                    # Create completion event for this test
+                    completion_event = threading.Event()
+                    self.test_completion_events[i] = completion_event
 
-                    while retry_count <= max_retries and not success:
-                        if retry_count > 0:
-                            self._update_status(f"Retry attempt {retry_count} for test: {item['name']}")
-                            # Thêm thời gian chờ giữa các lần thử lại
-                            self._wait_with_ui_updates(20)
+                    # Execute test (thread-safe) - retry logic is now handled by connection manager
+                    if self.execute_callback is not None:
+                        execute_callback = self.execute_callback  # Capture reference for type safety
+                        self.after(0, lambda item=item, affects=affects_network: execute_callback(item["test_data"], affects))
 
-                        # Create completion event for this test
-                        completion_event = threading.Event()
-                        self.test_completion_events[i] = completion_event
-
-                        # Thực thi test (thread-safe)
-                        if self.execute_callback is not None:
-                            execute_callback = self.execute_callback  # Capture reference for type safety
-                            self.after(0, lambda item=item, affects=affects_network: execute_callback(item["test_data"], affects))
-
-                        # Wait for test completion (with timeout)
-                        if completion_event.wait(timeout=300):  # 5 minute timeout
-                            # Test completed, get the result
-                            test_success = self.current_test_results.get(i, False)
-                            success = test_success
-                        else:
-                            # Timeout occurred
-                            self.logger.error(f"Test {item['name']} timed out after 5 minutes")
-                            success = False
-
-                        retry_count += 1
+                    # Wait for test completion (with timeout)
+                    if completion_event.wait(timeout=300):  # 5 minute timeout
+                        # Test completed, get the result
+                        success = self.current_test_results.get(i, False)
+                    else:
+                        # Timeout occurred
+                        self.logger.error(f"Test {item['name']} timed out after 5 minutes")
+                        success = False
 
                     # Update status based on actual test result (thread-safe)
                     if success:

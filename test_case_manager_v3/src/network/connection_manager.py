@@ -28,6 +28,7 @@ from src.network.http_client import HTTPTestClient
 from src.utils.file_utils import ensure_directory
 from src.utils.file_lock_utils import read_file_with_lock, write_file_with_lock
 from src.utils.logger import get_logger
+from src.utils.error_types import ErrorType, should_retry_error, get_retry_reason
 
 class ConnectionManager:
     """
@@ -233,8 +234,8 @@ class ConnectionManager:
                 
                 try:
                     # Send test directly without complex retry mechanisms
-                    success, response_data, error_message = http_client.send_test(test_data)
-                    
+                    success, response_data, error_message, error_type = http_client.send_test(test_data)
+
                     # Không kiểm tra lại kết quả từ http_client.py
                     return success, response_data, error_message
                 finally:
@@ -504,47 +505,72 @@ class ConnectionManager:
     def send_test_with_retry(self, test_data: Dict[str, Any],
                        affects_network: bool = False, max_retries: int = 3) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
-        Gửi test case với cơ chế retry đơn giản.
+        Send test case with intelligent retry mechanism.
+        Only retries network/transport errors, not application errors.
 
         Args:
             test_data: Test case data to send
             affects_network: Whether the test affects network connectivity
-            max_retries: Số lần thử lại tối đa (default: 3)
+            max_retries: Maximum number of retry attempts (default: 3)
 
         Returns:
             Tuple containing (success flag, response data, error message)
         """
         last_error = ""
+        last_error_type = ErrorType.UNKNOWN_ERROR
 
         for attempt in range(max_retries):
             try:
-                # Gửi test
+                # Send test and get error classification
                 success, response, error = self.send_test(
                     test_data=test_data,
                     affects_network=affects_network
                 )
+
+                # For now, classify errors manually since send_test doesn't return error_type
+                # This will be improved when we update send_test method signature
+                if not success:
+                    from ..utils.error_types import classify_error
+                    error_type = classify_error(error)
+                else:
+                    error_type = ErrorType.NETWORK_ERROR  # Success case, not used
 
                 if success:
                     if attempt > 0:
                         self.logger.info(f"Test succeeded on retry {attempt}")
                     return success, response, error
 
-                # Lưu lỗi và thử lại
+                # Store error details
                 last_error = error
-                self.logger.warning(f"Test failed, attempt {attempt + 1}/{max_retries}: {error}")
+                last_error_type = error_type
 
-                # Chờ trước khi thử lại (đơn giản: 2 giây cho mỗi lần)
-                if attempt < max_retries - 1:  # Không chờ ở lần cuối
+                # Check if we should retry this error type
+                if not should_retry_error(error_type):
+                    retry_reason = get_retry_reason(error_type, error)
+                    self.logger.warning(f"Application error detected, skipping retry: {retry_reason}")
+                    break  # Exit retry loop immediately for application errors
+
+                # Log retry attempt for network errors
+                retry_reason = get_retry_reason(error_type, error)
+                self.logger.warning(f"Attempt {attempt + 1}/{max_retries} failed: {retry_reason}")
+
+                # Wait before retrying (only for network errors)
+                if attempt < max_retries - 1:  # Don't wait on last attempt
+                    self.logger.info(f"Waiting 2 seconds before retry {attempt + 2}")
                     time.sleep(2)
 
             except Exception as e:
                 last_error = str(e)
+                last_error_type = ErrorType.UNKNOWN_ERROR
                 self.logger.error(f"Exception on attempt {attempt + 1}: {last_error}")
 
-                # Chờ trước khi thử lại
+                # Wait before retrying exceptions (treat as network errors)
                 if attempt < max_retries - 1:
                     time.sleep(2)
 
-        # Tất cả các lần thử đều thất bại
-        self.logger.error(f"Test failed after {max_retries} attempts")
+        # All attempts failed or application error encountered
+        if last_error_type == ErrorType.APPLICATION_ERROR:
+            self.logger.error(f"Test failed due to application error (no retry): {last_error}")
+        else:
+            self.logger.error(f"Test failed after {max_retries} attempts: {last_error}")
         return False, None, f"Failed after {max_retries} attempts: {last_error}"

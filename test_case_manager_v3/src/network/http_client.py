@@ -19,6 +19,8 @@ import uuid
 import re
 from typing import Dict, Any, Tuple, Optional
 
+from ..utils.error_types import ErrorType, classify_error
+
 
 
 class HTTPTestClient:
@@ -389,25 +391,25 @@ class HTTPTestClient:
         self.logger.warning(f"Transaction {transaction_id} did not complete after {max_retries} attempts")
         return self.check_result(transaction_id, is_wireless_test)
     
-    def send_test(self, test_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+    def send_test(self, test_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str, ErrorType]:
         """
         Send test data to server for execution.
-        
+
         Args:
             test_data: Test data to send (must have test_cases array)
-            
+
         Returns:
-            Tuple containing (success flag, response data, error message)
+            Tuple containing (success flag, response data, error message, error type)
         """
         if not self.connected:
-            return False, None, "Not connected to server"
-        
+            return False, None, "Not connected to server", ErrorType.APPLICATION_ERROR
+
         if not self.url:
-            return False, None, "URL not configured"
-        
+            return False, None, "URL not configured", ErrorType.APPLICATION_ERROR
+
         # Validate test data is not empty
         if not test_data:
-            return False, None, "Test data is empty"
+            return False, None, "Test data is empty", ErrorType.APPLICATION_ERROR
 
         # Detect if this is a wireless test
         is_wireless_test = self._is_wireless_test(test_data)
@@ -424,7 +426,7 @@ class HTTPTestClient:
                 if "service" in test_data:
                     test_data = {"test_cases": [test_data]}
                 else:
-                    return False, None, "Invalid test case format - missing 'test_cases' array"
+                    return False, None, "Invalid test case format - missing 'test_cases' array", ErrorType.APPLICATION_ERROR
             
             # Add transaction ID if not present
             if "metadata" not in test_data:
@@ -465,7 +467,9 @@ class HTTPTestClient:
             if response.status_code != 200:
                 error_msg = f"Server returned status code {response.status_code}"
                 self.logger.error(f"{error_msg}: {response.text}")
-                return False, None, error_msg
+                # Classify error based on HTTP status code
+                error_type = classify_error(error_msg, response.status_code)
+                return False, None, error_msg, error_type
             
             # Try to parse response JSON
             try:
@@ -481,9 +485,14 @@ class HTTPTestClient:
                     # Check if we have a transaction ID
                     if self.last_transaction_id and "timeout" in error_msg.lower():
                         self.logger.info(f"Server reported timeout, checking transaction status for {self.last_transaction_id}")
-                        return self.wait_for_transaction_completion(self.last_transaction_id, is_wireless_test=is_wireless_test)
-                    
-                    return False, response_data, error_msg
+                        # wait_for_transaction_completion returns 3-tuple, need to add error type
+                        success, data, msg = self.wait_for_transaction_completion(self.last_transaction_id, is_wireless_test=is_wireless_test)
+                        error_type = classify_error(msg) if not success else ErrorType.NETWORK_ERROR
+                        return success, data, msg, error_type
+
+                    # Classify server error
+                    error_type = classify_error(error_msg)
+                    return False, response_data, error_msg, error_type
                 
                 # Check for successful response by examining the content
                 # Check if response indicates test failure
@@ -507,31 +516,32 @@ class HTTPTestClient:
                                         error_msg = f"Test failed: {first_failure['message']}"
 
                         self.logger.warning(f"Device reported test failure: {error_msg}")
-                        return False, response_data, error_msg
+                        # Test execution failure is an application error (test logic issue)
+                        return False, response_data, error_msg, ErrorType.APPLICATION_ERROR
 
                 # Check for successful response
-                return True, response_data, ""
-                
+                return True, response_data, "", ErrorType.NETWORK_ERROR  # Success case, error type not used
+
             except json.JSONDecodeError:
                 error_msg = "Server returned invalid JSON response"
                 self.logger.error(error_msg)
-                return False, None, error_msg
+                return False, None, error_msg, ErrorType.APPLICATION_ERROR
                 
         except requests.exceptions.ConnectTimeout:
             error_msg = f"Connection timeout ({self.connect_timeout}s)"
             self.logger.error(error_msg)
-            return False, None, error_msg
-            
+            return False, None, error_msg, ErrorType.NETWORK_ERROR
+
         except requests.exceptions.ReadTimeout:
             error_msg = f"Read timeout ({self.read_timeout}s) - Server took too long to respond"
             self.logger.error(error_msg)
-            return False, None, error_msg
-            
+            return False, None, error_msg, ErrorType.NETWORK_ERROR
+
         except requests.exceptions.ConnectionError:
             error_msg = "Connection refused or lost"
             self.logger.error(error_msg)
             self.connected = False
-            return False, None, error_msg
+            return False, None, error_msg, ErrorType.NETWORK_ERROR
             
         except Exception as e:
             error_str = str(e)
@@ -556,10 +566,13 @@ class HTTPTestClient:
                 self.logger.warning("Detected connection reset error, marking as disconnected")
                 self.connected = False
                 error_msg = f"Connection reset by server: {error_str}"
+                error_type = ErrorType.NETWORK_ERROR
             else:
                 error_msg = f"Error sending test case: {error_str}"
+                # Classify the error using our error classifier
+                error_type = classify_error(error_str)
 
-            return False, None, error_msg
+            return False, None, error_msg, error_type
 
 
     

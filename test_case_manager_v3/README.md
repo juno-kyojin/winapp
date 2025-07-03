@@ -1,130 +1,178 @@
 # Test Case Manager v3.0
 
-Ứng dụng quản lý và thực thi test case toàn diện cho việc kiểm thử thiết bị OpenWrt.
+**Comprehensive Test Case Management and Execution Tool for OpenWrt Devices**
 
-## Tổng Quan Ứng Dụng
+[![Version](https://img.shields.io/badge/version-3.0-blue.svg)](https://github.com/juno-kyojin/winapp)
+[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://github.com/juno-kyojin/winapp)
+[![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://python.org)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 
-Test Case Manager v3.0 là một công cụ GUI chạy trên Windows được thiết kế để:
+## 🚀 Overview
 
-- **Tạo và quản lý test cases** cho các thiết bị OpenWrt
-- **Thực thi test cases** từ xa thông qua giao thức HTTP
-- **Theo dõi real-time** quá trình thực thi test
-- **Phân tích kết quả** và báo cáo chi tiết
-- **Hỗ trợ batch execution** cho nhiều test cases cùng lúc
+Test Case Manager v3.0 is a professional Windows GUI application designed for comprehensive testing of OpenWrt devices. It provides an intuitive interface for creating, managing, and executing test cases remotely via HTTP protocol.
 
-### Kiến Trúc Hệ Thống
+### ✨ Key Features
 
+- 🎯 **Remote Test Execution**: Execute test cases on OpenWrt devices from Windows PC
+- 📊 **Real-time Monitoring**: Live tracking of test execution progress
+- 🔄 **Batch Processing**: Execute multiple test cases sequentially with queue management
+- 🌐 **Network Testing**: Comprehensive network connectivity and performance testing
+- 📡 **Wireless Testing**: Specialized support for WiFi configuration and testing
+- 📈 **Result Analysis**: Detailed test results with execution time tracking
+- 🔒 **Transaction Tracking**: Unique transaction IDs for reliable result mapping
+- ⚡ **Standalone Executable**: No Python installation required for end users
+
+### 🏗️ System Architecture
+
+```mermaid
+graph LR
+    A[Test Case Manager v3.0<br/>Windows PC] -->|HTTP| B[OpenWrt Device]
+    B --> C[communicate<br/>HTTP Server]
+    B --> D[auto_test<br/>Test Executor]
+
+    A --> E[Templates Panel]
+    A --> F[Queue Panel]
+    A --> G[Stream Panel]
+    A --> H[Settings Panel]
 ```
-[Test Case Manager v3.0 - Windows PC] ←→ HTTP ←→ [OpenWrt Device - rnd_autotest]
-```
 
-- **APP (PC side)**: Giao diện người dùng để tạo test và nhận kết quả
-- **auto_test (Device side)**: Component thực thi test trên thiết bị OpenWrt
-- **communicate (Device side)**: HTTP server xử lý giao tiếp giữa APP và device
+**Components:**
+- **PC Application**: Windows GUI for test management and monitoring
+- **Device Server**: HTTP server (`communicate`) handling client requests
+- **Test Engine**: Test execution engine (`auto_test`) running on OpenWrt device
 
-### Tính Năng Chính
+### 🎯 Target Users
 
-- **Transaction ID Tracking**: Mỗi test có identifier duy nhất để mapping kết quả
-- **Wireless Test Support**: Hỗ trợ đặc biệt cho wireless tests với extended timeout
-- **Real-time Monitoring**: Theo dõi tiến trình test execution trong Stream tab
-- **Queue Management**: Quản lý hàng đợi test cases và batch execution
-- **Error Handling**: Xử lý lỗi và retry mechanisms cho network issues
+- **QA Engineers**: Testing OpenWrt firmware and configurations
+- **Network Engineers**: Validating network configurations and performance
+- **DevOps Teams**: Automated testing in CI/CD pipelines
+- **Support Teams**: Troubleshooting and diagnostics
 
-## Cài Đặt và Thiết Lập
+## 📦 Installation & Setup
 
-### Yêu Cầu Hệ Thống
+### 🔧 System Requirements
 
-- **Windows 10/11** (64-bit)
-- **Python 3.8+**
-- **Network connectivity** đến thiết bị OpenWrt
-- **Port 6262** phải được mở trên thiết bị OpenWrt
+| Component | Requirement |
+|-----------|-------------|
+| **Operating System** | Windows 10/11 (64-bit) |
+| **Python** | 3.8+ (for development) |
+| **Network** | TCP connectivity to OpenWrt device |
+| **Ports** | Port 6262 open on OpenWrt device |
+| **Memory** | 4GB RAM minimum |
+| **Storage** | 100MB free space |
 
-### Cài Đặt Dependencies
+### 🚀 Quick Start (Standalone Executable)
+
+**For End Users - No Python Required:**
+
+1. **Download** the latest release from [Releases](https://github.com/juno-kyojin/winapp/releases)
+2. **Extract** the archive to your desired location
+3. **Run** `TestCaseManager.exe`
+4. **Configure** your OpenWrt device connection in Settings
+
+### 🛠️ Development Setup
+
+**For Developers:**
 
 ```bash
 # Clone repository
 git clone https://github.com/juno-kyojin/winapp.git
 cd winapp/test_case_manager_v3
 
-# Cài đặt Python dependencies
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Run from source
+python main.py
 ```
 
-### Thiết Lập Kết Nối Server
+### 🌐 Server Configuration
 
-1. **Mở ứng dụng**:
-   ```bash
-   python main.py
-   ```
+#### PC Application Setup:
+1. **Launch** the application
+2. **Navigate** to Settings panel
+3. **Configure connection**:
+   - **Server IP**: OpenWrt device IP (e.g., `192.168.1.4`)
+   - **Port**: `6262` (default communicate server port)
+   - **Timeout**: `30` seconds (recommended for wireless tests)
+4. **Test connection** to verify connectivity
 
-2. **Cấu hình connection** trong Settings panel:
-   - **Server IP**: Địa chỉ IP của thiết bị OpenWrt (ví dụ: `192.168.1.4`)
-   - **Port**: `6262` (default port của communicate server)
-   - **Timeout**: `30` seconds (khuyến nghị cho wireless tests)
-
-3. **Test connection**: Click "Test Connection" để xác minh kết nối
-
-### Thiết Lập Device Side
-
-Trên thiết bị OpenWrt, đảm bảo:
-
+#### OpenWrt Device Setup:
 ```bash
-# Chạy communicate server
+# Start communicate HTTP server
 cd /path/to/rnd_autotest/communicate
 ./communicate
 
-# Chạy auto_test component
+# Start test execution engine
 cd /path/to/rnd_autotest
 ./auto_test
 ```
-## Định Dạng Test Case
 
-### Cấu Trúc JSON Cơ Bản
+**Verify Services:**
+```bash
+# Check if communicate server is running
+netstat -ln | grep 6262
 
-Mỗi test case phải tuân theo định dạng JSON sau:
+# Check if auto_test is monitoring
+ps | grep auto_test
+```
+## 📋 Test Case Format
+
+### 📝 JSON Structure
+
+Test cases are defined in JSON format with the following structure:
 
 ```json
 {
   "test_cases": [
     {
-      "service": "tên_service",
-      "action": "tên_action",
+      "service": "service_name",
+      "action": "action_name",
       "params": {
         "parameter1": "value1",
         "parameter2": "value2"
       }
     }
-  ]
+  ],
+  "metadata": {
+    "name": "Test Case Name",
+    "description": "Description of what this test does",
+    "version": "1.0.0",
+    "tags": ["network", "connectivity"],
+    "category": "network"
+  }
 }
 ```
 
-### Các Trường Bắt Buộc
+### 🔧 Required Fields
 
-#### Test Cases Array
-- **service** (string): Tên service cần test (ping, wireless, lan, etc.)
-- **action** (string): Action cụ thể trong service (optional, default: "default")
-- **params** (object): Parameters cho test case
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `test_cases` | Array | ✅ | Array of test case objects |
+| `service` | String | ✅ | Service name (ping, wireless, lan, etc.) |
+| `action` | String | ❌ | Specific action (default: "default") |
+| `params` | Object | ✅ | Test parameters |
 
+### 🔑 Transaction ID System
 
-
-### Transaction ID Handling
-
-Transaction ID được tự động tạo với format:
+Transaction IDs are automatically generated with format:
 ```
 YYYYMMDDHHMMSS_microseconds_uuid8chars
-Ví dụ: 20250703095644_3041bf28
+Example: 20250703095644_3041bf28
 ```
 
-- **Tự động tạo**: Không cần chỉ định trong test case JSON
-- **Unique identification**: Đảm bảo mỗi test có ID duy nhất
-- **Result mapping**: Dùng để map kết quả từ device về client
+**Features:**
+- ✅ **Auto-generated**: No need to specify in test JSON
+- ✅ **Unique identification**: Each test gets unique ID
+- ✅ **Result mapping**: Maps results from device to client
+- ✅ **Tracking**: Enables real-time progress monitoring
 
 
-### Ví Dụ Test Cases Theo Service
+## 📚 Test Case Examples
 
-#### 1. Network Tests
+### 🌐 Network Tests
 
-**Ping Test:**
+#### Basic Connectivity Test
 ```json
 {
   "test_cases": [
@@ -136,11 +184,18 @@ Ví dụ: 20250703095644_3041bf28
         "count": 4
       }
     }
-  ]
+  ],
+  "metadata": {
+    "name": "Network Connectivity Test",
+    "description": "Test internet connectivity to multiple hosts",
+    "version": "1.0.0",
+    "tags": ["network", "connectivity", "ping"],
+    "category": "network"
+  }
 }
 ```
 
-**Speed Test:**
+#### Speed Test
 ```json
 {
   "test_cases": [
@@ -154,7 +209,7 @@ Ví dụ: 20250703095644_3041bf28
   ],
   "metadata": {
     "name": "Internet Speed Test",
-    "description": "Đo tốc độ internet upload/download",
+    "description": "Measure internet upload/download speeds",
     "version": "1.0.0",
     "tags": ["network", "speed", "bandwidth"],
     "category": "network"
@@ -162,9 +217,9 @@ Ví dụ: 20250703095644_3041bf28
 }
 ```
 
-#### 2. Wireless Tests
+### 📡 Wireless Tests
 
-**WiFi Configuration Test:**
+#### WiFi Access Point Configuration
 ```json
 {
   "test_cases": [
@@ -182,7 +237,7 @@ Ví dụ: 20250703095644_3041bf28
   ],
   "metadata": {
     "name": "WiFi AP Configuration Test",
-    "description": "Cấu hình và test WiFi Access Point",
+    "description": "Configure and test WiFi Access Point settings",
     "version": "1.0.0",
     "tags": ["wireless", "wifi", "ap", "configuration"],
     "category": "wireless"
@@ -190,14 +245,38 @@ Ví dụ: 20250703095644_3041bf28
 }
 ```
 
-**⚠️ Lưu Ý Wireless Tests:**
-- Wireless tests có **extended timeout** (30+ retries, 2+ second delays)
-- Có thể gây **service restart** → mất kết nối tạm thời
-- Cần **thời gian chờ lâu hơn** để hoàn thành
+#### WiFi Station Mode Test
+```json
+{
+  "test_cases": [
+    {
+      "service": "wireless",
+      "action": "wireless_edit_sta",
+      "params": {
+        "ssid": "TargetNetwork",
+        "password": "networkpassword",
+        "encryption": "psk2"
+      }
+    }
+  ],
+  "metadata": {
+    "name": "WiFi Station Connection Test",
+    "description": "Test WiFi client connection to external network",
+    "version": "1.0.0",
+    "tags": ["wireless", "wifi", "station", "client"],
+    "category": "wireless"
+  }
+}
+```
 
-#### 3. System Tests
+> ⚠️ **Wireless Test Notes:**
+> - Extended timeout (30+ retries, 2+ second delays)
+> - May cause service restart → temporary connection loss
+> - Requires longer wait times for completion
 
-**System Information:**
+### 🖥️ System Tests
+
+#### System Information
 ```json
 {
   "test_cases": [
@@ -212,7 +291,7 @@ Ví dụ: 20250703095644_3041bf28
   ],
   "metadata": {
     "name": "System Information Test",
-    "description": "Lấy thông tin hệ thống và hardware",
+    "description": "Retrieve system and hardware information",
     "version": "1.0.0",
     "tags": ["system", "info", "hardware"],
     "category": "system"
@@ -220,32 +299,57 @@ Ví dụ: 20250703095644_3041bf28
 }
 ```
 
-## Hướng Dẫn Sử Dụng
+#### LAN Configuration Test
+```json
+{
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_ip",
+      "params": {
+        "ip_address": "192.168.1.1",
+        "netmask": "255.255.255.0",
+        "dhcp_start": "192.168.1.100",
+        "dhcp_limit": "150"
+      }
+    }
+  ],
+  "metadata": {
+    "name": "LAN IP Configuration Test",
+    "description": "Test LAN interface IP configuration changes",
+    "version": "1.0.0",
+    "tags": ["lan", "network", "dhcp", "configuration"],
+    "category": "network"
+  }
+}
+```
 
-### Tạo và Thêm Test Cases
+## 🎮 User Guide
 
-1. **Tạo file JSON** theo định dạng đã mô tả ở trên
-2. **Lưu file** trong thư mục `data/templates/`
-3. **Refresh Templates** trong Templates tab
-4. **Add to Queue** để thêm vào hàng đợi thực thi
+### 📁 Creating Test Cases
 
-### Thực Thi Test Cases
+1. **Create JSON file** following the format above
+2. **Save file** in `data/templates/` directory
+3. **Refresh Templates** in Templates tab
+4. **Add to Queue** to add to execution queue
 
-#### Individual Test Execution:
-1. **Chọn test case** trong Templates tab
+### ▶️ Executing Tests
+
+#### Single Test Execution:
+1. **Select test case** in Templates tab
 2. **Click "Add to Queue"**
-3. **Click "Execute"** trong Queue tab
-4. **Theo dõi progress** trong Stream tab
+3. **Click "Execute"** in Queue tab
+4. **Monitor progress** in Stream tab
 
 #### Batch Execution:
-1. **Add multiple tests** vào Queue
+1. **Add multiple tests** to Queue
 2. **Click "Execute All"**
-3. **Monitor real-time progress** trong Stream tab
-4. **View results** khi hoàn thành
+3. **Monitor real-time progress** in Stream tab
+4. **View results** when completed
 
-### Hiểu Stream Tab
+### 📊 Understanding Stream Tab
 
-Stream tab hiển thị real-time test execution flow:
+The Stream tab provides real-time test execution monitoring:
 
 ```
 [09:30:26] 🔄 Executing test 1/3: Network Connectivity Test
@@ -256,28 +360,50 @@ Stream tab hiển thị real-time test execution flow:
 [09:30:32] 🔄 Executing test 2/3: WiFi AP Configuration Test
 ```
 
-### Timing và Flow
+**Status Icons:**
+- 🔄 **Executing**: Test is currently running
+- 📤 **Sending**: Sending test data to device
+- ⏳ **Waiting**: Polling for results
+- ✅ **Success**: Test completed successfully
+- ❌ **Failed**: Test failed or timed out
 
-- **Pre-execution delay**: 15s (để device chuẩn bị)
-- **Post-execution delay**: 25s cho network tests (để network ổn định)
-- **Wireless tests**: Extended timeout với 30+ retries
-- **Transaction polling**: Mỗi 2 giây check kết quả
+### ⏱️ Timing & Flow
 
-## Best Practices
+| Phase | Duration | Purpose |
+|-------|----------|---------|
+| **Pre-execution delay** | 15s | Device preparation time |
+| **Post-execution delay** | 25s | Network stabilization (network tests) |
+| **Wireless tests** | Extended | 30+ retries with longer timeouts |
+| **Transaction polling** | 2s intervals | Result checking frequency |
 
-### Naming Conventions
+## 📋 Best Practices
 
-- **File names**: `service_action_description.json`
-  - Ví dụ: `network_ping_connectivity.json`
-  - Ví dụ: `wireless_edit_ap_5g_config.json`
+### 📝 Naming Conventions
 
-- **Test names**: Descriptive và specific
-  - ✅ "WiFi 5G AP Configuration Test"
-  - ❌ "WiFi Test"
+#### File Names
+Use descriptive, structured naming:
+```
+service_action_description.json
+```
 
-### Test Case Structure
+**Examples:**
+- ✅ `network_ping_connectivity.json`
+- ✅ `wireless_edit_ap_5g_config.json`
+- ✅ `lan_dhcp_configuration.json`
+- ❌ `test1.json`
+- ❌ `wifi.json`
 
-#### Recommended Structure:
+#### Test Names
+Be descriptive and specific:
+- ✅ "WiFi 5G AP Configuration Test"
+- ✅ "Network Connectivity Multi-Host Test"
+- ✅ "LAN DHCP Range Configuration Test"
+- ❌ "WiFi Test"
+- ❌ "Network Test"
+
+### 🏗️ Test Case Structure
+
+#### Recommended Template:
 ```json
 {
   "test_cases": [
@@ -285,15 +411,15 @@ Stream tab hiển thị real-time test execution flow:
       "service": "service_name",
       "action": "specific_action",
       "params": {
-        // Chỉ include parameters cần thiết
-        // Sử dụng meaningful parameter names
-        // Provide default values khi có thể
+        // Include only necessary parameters
+        // Use meaningful parameter names
+        // Provide sensible default values
       }
     }
   ],
   "metadata": {
     "name": "Descriptive Test Name",
-    "description": "Chi tiết về test case này làm gì, expected behavior",
+    "description": "Detailed description of test purpose and expected behavior",
     "version": "1.0.0",
     "tags": ["relevant", "tags", "for", "categorization"],
     "category": "network|wireless|system"
@@ -301,13 +427,13 @@ Stream tab hiển thị real-time test execution flow:
 }
 ```
 
-### Wireless Test Handling
+### 📡 Wireless Test Guidelines
 
-#### Đặc Biệt Lưu Ý:
-- **Extended timeouts**: Wireless tests cần thời gian lâu hơn
-- **Service restarts**: Có thể gây mất kết nối tạm thời
-- **Sequential execution**: Không chạy parallel wireless tests
-- **Post-test delays**: Cần delay sau wireless tests
+#### Special Considerations:
+- **Extended timeouts**: Wireless tests require longer completion times
+- **Service restarts**: May cause temporary connection loss
+- **Sequential execution**: Avoid parallel wireless tests
+- **Post-test delays**: Allow time for network stabilization
 
 #### Best Practices:
 ```json
@@ -317,77 +443,76 @@ Stream tab hiển thị real-time test execution flow:
       "service": "wireless",
       "action": "wireless_edit_ap",
       "params": {
-        // Luôn specify đầy đủ parameters
         "ssid": "clear_descriptive_name",
         "password": "secure_password_min_8_chars",
-        "encryption": "psk2", // Recommended
-        "channel": "auto", // Let device choose optimal
-        "bandwidth": "80" // Specify bandwidth
+        "encryption": "psk2",
+        "channel": "auto",
+        "bandwidth": "80"
       }
     }
   ]
 }
 ```
 
-### Error Handling và Troubleshooting
+## 🔧 Troubleshooting
 
-#### Common Issues và Solutions:
+### Common Issues & Solutions
 
-**1. Connection Timeout:**
+#### 🚫 Connection Timeout
 ```
 Error: Connection timeout to 192.168.1.4:6262
 ```
 **Solutions:**
-- Kiểm tra device IP address
-- Verify port 6262 đang mở
-- Check network connectivity
-- Restart communicate server trên device
+- ✅ Verify device IP address
+- ✅ Check port 6262 is open
+- ✅ Test network connectivity
+- ✅ Restart communicate server on device
 
-**2. Transaction Stuck "Processing":**
+#### ⏳ Transaction Processing
 ```
 [09:30:26] ⏳ Waiting for result... (Attempt 15/30)
 ```
 **Solutions:**
-- Wait thêm (wireless tests cần thời gian lâu)
-- Check device logs để xem test execution status
-- Verify auto_test component đang chạy
-- Restart device components nếu cần
+- ✅ Wait longer (wireless tests need extended time)
+- ✅ Check device logs for execution status
+- ✅ Verify auto_test component is running
+- ✅ Restart device components if needed
 
-**3. "Unknown" Status Response:**
+#### ❓ Unknown Status
 ```
 Status: unknown - Transaction still processing
 ```
 **Solutions:**
-- Normal behavior - device chưa hoàn thành test
-- Wait for completion (especially wireless tests)
-- Check device-side result file creation
+- ✅ Normal behavior - device hasn't completed test
+- ✅ Wait for completion (especially wireless tests)
+- ✅ Check device-side result file creation
 
-**4. JSON Parse Error:**
+#### 📝 JSON Parse Error
 ```
 Error: Invalid JSON format in test case
 ```
 **Solutions:**
-- Validate JSON syntax using online validator
-- Check for missing commas, brackets
-- Ensure proper string escaping
+- ✅ Validate JSON syntax using online validator
+- ✅ Check for missing commas, brackets
+- ✅ Ensure proper string escaping
 
-#### Debugging Tips:
+### 🔍 Debugging Tips
 
-1. **Enable verbose logging** trong Settings
-2. **Check Stream tab** cho real-time status
-3. **Monitor device logs** để xem server-side execution
-4. **Test connection** trước khi execute tests
-5. **Use simple test cases** để debug connectivity issues
+1. **Enable verbose logging** in Settings
+2. **Monitor Stream tab** for real-time status
+3. **Check device logs** for server-side execution
+4. **Test connection** before executing tests
+5. **Use simple test cases** to debug connectivity issues
 
-## Developer Guidelines
+## 👨‍💻 Developer Guide
 
-### Code Contribution Standards
+### 🔧 Development Standards
 
-#### Code Style:
+#### Code Style Requirements:
 - **Python PEP 8** compliance
-- **Type hints** cho tất cả functions
-- **Docstrings** cho classes và methods
-- **Error handling** với proper exception types
+- **Type hints** for all functions
+- **Docstrings** for classes and methods
+- **Proper error handling** with specific exception types
 
 #### Example Code Structure:
 ```python
@@ -413,9 +538,9 @@ class TestExecutor:
             return False, None, str(e)
 ```
 
-### Extending với New Test Types
+### 🚀 Extending Functionality
 
-#### 1. Add New Service Support:
+#### Adding New Service Support:
 
 **Client-side** (`http_client.py`):
 ```python
@@ -425,11 +550,12 @@ def _is_new_service_test(self, test_data: Dict[str, Any]) -> bool:
     return any(tc.get("service") == "new_service" for tc in test_cases)
 ```
 
-**Device-side** (không được sửa `rnd_autotest/src/`):
-- Chỉ có thể modify `rnd_autotest/communicate/` components
-- New service logic phải implement trong device auto_test
+**Device-side** (Limited modifications):
+- ⚠️ **Cannot modify** `rnd_autotest/src/` components
+- ✅ **Can modify** `rnd_autotest/communicate/` components only
+- New service logic must be implemented in device auto_test
 
-#### 2. Add New GUI Components:
+#### Adding New GUI Components:
 
 **Panel Structure**:
 ```python
@@ -449,7 +575,7 @@ class NewPanel(ttk.Frame):
         # Implementation here
 ```
 
-### Architecture Overview
+### 🏗️ System Architecture
 
 #### High-Level Design:
 ```
@@ -457,19 +583,19 @@ class NewPanel(ttk.Frame):
 │        Test Case Manager v3.0       │
 │             (Windows PC)            │
 ├─────────────────────────────────────┤
-│  GUI Layer (Tkinter)               │
+│  🖥️  GUI Layer (Tkinter)            │
 │  ├── Templates Panel               │
 │  ├── Queue Panel                   │
 │  ├── Stream Panel                  │
 │  └── Settings Panel                │
 ├─────────────────────────────────────┤
-│  Business Logic Layer              │
+│  ⚙️  Business Logic Layer           │
 │  ├── Test Case Manager             │
 │  ├── HTTP Client                   │
 │  ├── Result Manager                │
 │  └── Connection Manager            │
 ├─────────────────────────────────────┤
-│  Network Layer                     │
+│  🌐 Network Layer                   │
 │  └── HTTP Communication            │
 └─────────────────────────────────────┘
                   │
@@ -478,50 +604,39 @@ class NewPanel(ttk.Frame):
 ┌─────────────────────────────────────┐
 │         OpenWrt Device              │
 ├─────────────────────────────────────┤
-│  communicate (HTTP Server)         │
+│  📡 communicate (HTTP Server)       │
 │  ├── /check_result endpoint        │
 │  ├── POST / endpoint               │
 │  └── Transaction ID handling       │
 ├─────────────────────────────────────┤
-│  auto_test (Test Execution)        │
+│  🔧 auto_test (Test Execution)      │
 │  ├── Test Case Processing          │
 │  ├── Service Execution             │
 │  └── Result File Generation        │
 └─────────────────────────────────────┘
 ```
 
-#### Communication Flow:
-1. **Client** tạo transaction ID và gửi test data
-2. **communicate** nhận request, lưu config file
-3. **auto_test** process config file, execute test
-4. **auto_test** tạo result file với timestamp
-5. **communicate** tìm result file theo transaction ID
-6. **Client** poll `/check_result` endpoint để nhận kết quả
+#### 🔄 Communication Flow:
+1. **Client** generates transaction ID and sends test data
+2. **communicate** receives request, saves config file
+3. **auto_test** processes config file, executes test
+4. **auto_test** creates result file with timestamp
+5. **communicate** finds result file by transaction ID
+6. **Client** polls `/check_result` endpoint to receive results
 
-### Requirements
+### 📋 Technical Requirements
 
-- **Python 3.8+**
-- **Tkinter** (included with Python)
-- **Requests** library for HTTP communication
-- **Network access** to OpenWrt device on port 6262
+| Component | Requirement |
+|-----------|-------------|
+| **Python** | 3.8+ |
+| **GUI Framework** | Tkinter (included with Python) |
+| **HTTP Library** | Requests |
+| **Network** | TCP access to OpenWrt device on port 6262 |
+| **OS** | Windows 10/11 (64-bit) |
 
-### Installation
+### ⚙️ Configuration
 
-```bash
-# Clone repository
-git clone https://github.com/juno-kyojin/winapp.git
-cd winapp/test_case_manager_v3
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run application
-python main.py
-```
-
-### Configuration
-
-Application sử dụng configuration file tại `data/config/config.json`:
+Application uses configuration file at `data/config/config.json`:
 
 ```json
 {
@@ -539,21 +654,45 @@ Application sử dụng configuration file tại `data/config/config.json`:
 }
 ```
 
-## License
+## 🚀 Building Standalone Executable
 
-Copyright © 2025 juno-kyojin
+For distribution without Python dependency:
+
+```bash
+# Install build dependencies
+pip install pyinstaller
+
+# Build standalone executable
+.\build.bat
+
+# Output: release/TestCaseManager.exe + data/
+```
+
+## 📄 License
+
+Copyright © 2025 juno-kyojin. All rights reserved.
 
 ---
 
-**📝 Lưu Ý Quan Trọng:**
-- Luôn test connection trước khi execute test cases
-- Wireless tests cần thời gian lâu hơn - hãy kiên nhẫn
-- Monitor Stream tab để theo dõi real-time progress
-- Backup test cases quan trọng
-- Follow naming conventions để dễ quản lý
+## 📝 Important Notes
 
-**🔧 Support:**
-- Nếu gặp issues, check troubleshooting section trước
-- Enable verbose logging để debug
-- Monitor device-side logs khi cần thiết
-- Contact team để support technical issues
+> ⚠️ **Before Testing:**
+> - Always test connection before executing test cases
+> - Wireless tests require longer completion times - be patient
+> - Monitor Stream tab for real-time progress updates
+> - Backup important test cases regularly
+> - Follow naming conventions for better organization
+
+## 🆘 Support
+
+> 🔧 **Getting Help:**
+> - Check troubleshooting section first
+> - Enable verbose logging for debugging
+> - Monitor device-side logs when necessary
+> - Contact development team for technical support
+
+## 🔗 Links
+
+- **Repository**: [https://github.com/juno-kyojin/winapp](https://github.com/juno-kyojin/winapp)
+- **Issues**: [Report bugs and feature requests](https://github.com/juno-kyojin/winapp/issues)
+- **Documentation**: [Wiki](https://github.com/juno-kyojin/winapp/wiki)
