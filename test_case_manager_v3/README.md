@@ -108,7 +108,6 @@ The application is organized into several modules:
   - `connection_manager.py`: Unified connection management
   - `http_client.py`: HTTP client for test execution
   - `ssh_connection.py`: SSH client for test execution
-  - `lan_checker.py`: Verify network connectivity
   - `test_executor.py`: Execute tests against devices
 
 - **gui**: User interface

@@ -8378,3 +8378,314 @@
 2025-07-02 16:45:07,822 - src.core.result_manager - WARNING - Test wan_edit has failed tests in summary: 1
 2025-07-02 16:45:07,824 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_afe7fbed_fail.json
 2025-07-02 16:45:07,824 - src.gui.widgets.status_bar - INFO - Status: Retry attempt 1 for test: wan_edit.json
+2025-07-02 20:45:44,305 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-02 20:45:45,126 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-02 20:45:45,127 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-02 20:45:45,127 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-02 20:45:45,127 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-02 20:45:45,643 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-02 20:45:45,678 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-02 20:45:45,679 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-02 20:45:45,691 - src.gui.panels.stream_panel - INFO - Stream Panel initialized
+2025-07-02 20:45:45,692 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-02 20:46:13,063 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-02 20:46:13,077 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.99.1:6262
+2025-07-02 20:46:18,089 - src.network.http_client - ERROR - Failed to ping server: HTTPConnectionPool(host='192.168.99.1', port=6262): Max retries exceeded with url: /ping (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x0000018D7D57C6E0>, 'Connection to 192.168.99.1 timed out. (connect timeout=5)'))
+2025-07-02 20:46:18,090 - src.gui.widgets.status_bar - INFO - Status: Connection failed
+2025-07-02 20:46:24,944 - src.main - INFO - Exiting Test Case Manager v3.0.0
+2025-07-03 08:46:52,335 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-03 08:46:53,139 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-03 08:46:53,140 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-03 08:46:53,140 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-03 08:46:53,140 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-03 08:46:53,677 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-03 08:46:53,714 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-03 08:46:53,715 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-03 08:46:53,729 - src.gui.panels.stream_panel - INFO - Stream Panel initialized
+2025-07-03 08:46:53,730 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-03 08:49:26,423 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-03 08:49:26,721 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-03 08:49:26,721 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-03 08:49:26,721 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-03 08:49:26,722 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-03 08:49:26,772 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-03 08:49:26,790 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-03 08:49:26,790 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-03 08:49:26,798 - src.gui.panels.stream_panel - INFO - Stream Panel initialized
+2025-07-03 08:49:26,799 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-03 08:53:36,616 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-03 08:53:36,620 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.2:6262
+2025-07-03 08:53:36,626 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 08:53:36,626 - src.network.http_client - INFO - Successfully pinged server at http://192.168.1.2:6262/ping
+2025-07-03 08:53:36,627 - src.gui.widgets.status_bar - INFO - Status: Connected to 192.168.1.2
+2025-07-03 08:53:42,678 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_start.json
+2025-07-03 08:53:42,959 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_start.json
+2025-07-03 08:53:43,366 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-03 08:53:45,053 - src.gui.widgets.status_bar - INFO - Status: Added test lan_edit_change_leasetime.json to queue
+2025-07-03 08:53:45,055 - src.gui.widgets.status_bar - INFO - Status: Added template lan_edit_change_leasetime.json to queue
+2025-07-03 08:53:45,055 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-03 08:53:46,334 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_start.json
+2025-07-03 08:53:50,541 - src.gui.widgets.status_bar - INFO - Status: Added test lan_edit_change_start.json to queue
+2025-07-03 08:53:50,542 - src.gui.widgets.status_bar - INFO - Status: Added template lan_edit_change_start.json to queue
+2025-07-03 08:53:50,542 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-03 08:53:52,817 - src.gui.widgets.status_bar - INFO - Status: Started queue execution: 2 tests
+2025-07-03 08:53:52,818 - src.gui.widgets.status_bar - INFO - Status: Executing test 1 of 2: lan_edit_change_leasetime.json
+2025-07-03 08:53:52,837 - src.gui.main_window - INFO - Executing test: lan_edit_leasetime
+2025-07-03 08:53:52,837 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_leasetime...
+2025-07-03 08:53:52,838 - src.gui.main_window - INFO - Sending test to device...
+2025-07-03 08:53:52,839 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.2:6262
+2025-07-03 08:53:52,844 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 08:53:52,844 - src.network.connection_manager - DEBUG - Server ping successful
+2025-07-03 08:53:52,845 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-03 08:53:52,845 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-03 08:53:52,845 - src.network.connection_manager - DEBUG - Test data: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_leasetime",
+      "params": {
+        "name": "lan",
+        "dhcp_leasetime": 43200
+      }
+    }
+  ]
+}
+2025-07-03 08:53:52,846 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:53:52,850 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 08:53:52,851 - src.network.http_client - INFO - Preparing to send test case to http://192.168.1.2:6262
+2025-07-03 08:53:52,851 - src.network.http_client - DEBUG - Test case content: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_leasetime",
+      "params": {
+        "name": "lan",
+        "dhcp_leasetime": 43200
+      }
+    }
+  ],
+  "metadata": {
+    "transaction_id": "20250703085352_9695ff97"
+  }
+}
+2025-07-03 08:53:52,851 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250703085352_9695ff97
+2025-07-03 08:53:52,852 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:32,879 - src.network.http_client - ERROR - Read timeout (40s)
+2025-07-03 08:54:32,879 - src.network.http_client - INFO - Read timeout occurred, checking transaction status for 20250703085352_9695ff97
+2025-07-03 08:54:32,880 - src.network.http_client - INFO - Waiting for transaction 20250703085352_9695ff97 to complete
+2025-07-03 08:54:33,881 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (2): 192.168.1.2:6262
+2025-07-03 08:54:33,906 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:33,906 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:34,908 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:34,937 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:34,938 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:36,439 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:36,458 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:36,459 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:38,710 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:38,729 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:38,730 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:42,106 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:42,129 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:42,130 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:47,193 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:47,221 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:47,221 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:54:54,817 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:54:54,823 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:54:54,823 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:55:04,825 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:55:04,845 - urllib3.connectionpool - DEBUG - http://192.168.1.2:6262 "GET /check_result/20250703085352_9695ff97 HTTP/1.1" 200 29
+2025-07-03 08:55:04,846 - src.network.http_client - WARNING - Unknown status for transaction 20250703085352_9695ff97: unknown
+2025-07-03 08:55:14,847 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.2
+2025-07-03 08:55:16,891 - src.network.http_client - ERROR - Transaction 20250703085352_9695ff97 failed: Error checking transaction status: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /check_result/20250703085352_9695ff97 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000249C052A990>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-03 08:55:16,892 - src.gui.widgets.status_bar - INFO - Status: Test execution failed: Transaction failed: Error checking transaction status: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /check_result/20250703085352_9695ff97 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000249C052A990>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-03 08:55:16,894 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_c97c6b93_fail.json
+2025-07-03 08:55:16,894 - src.gui.panels.queue_panel - DEBUG - Queue test 0 result set to: FAILED
+2025-07-03 08:55:16,895 - src.gui.widgets.status_bar - INFO - Status: Retry attempt 1 for test: lan_edit_change_leasetime.json
+2025-07-03 08:55:36,950 - src.gui.main_window - INFO - Executing test: lan_edit_leasetime
+2025-07-03 08:55:36,951 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_leasetime...
+2025-07-03 08:55:36,951 - src.gui.main_window - INFO - Sending test to device...
+2025-07-03 08:55:36,952 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.2:6262
+2025-07-03 08:55:39,481 - src.network.connection_manager - WARNING - Ping request failed: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /ping (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000249C050AC40>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')), but continuing
+2025-07-03 08:55:39,482 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-03 08:55:39,482 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-03 08:55:39,482 - src.network.connection_manager - DEBUG - Test data: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_leasetime",
+      "params": {
+        "name": "lan",
+        "dhcp_leasetime": 43200
+      }
+    }
+  ],
+  "metadata": {
+    "transaction_id": "20250703085352_9695ff97"
+  }
+}
+2025-07-03 08:55:39,483 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (3): 192.168.1.2:6262
+2025-07-03 08:55:41,938 - src.network.http_client - DEBUG - Health check failed: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /ping (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000249C050AFD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-03 08:55:41,939 - src.network.http_client - WARNING - Server health check failed, attempting to reconnect...
+2025-07-03 08:55:41,940 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (4): 192.168.1.2:6262
+2025-07-03 08:55:44,192 - src.network.http_client - ERROR - Failed to ping server: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /ping (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000249BFCD6B10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-03 08:55:44,193 - src.gui.widgets.status_bar - INFO - Status: Test execution failed: Server is not responding and reconnection failed
+2025-07-03 08:55:44,193 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_6091aacb_fail.json
+2025-07-03 08:55:44,194 - src.gui.panels.queue_panel - DEBUG - Queue test 0 result set to: FAILED
+2025-07-03 08:55:44,194 - src.gui.widgets.status_bar - INFO - Status: Retry attempt 2 for test: lan_edit_change_leasetime.json
+2025-07-03 08:56:04,214 - src.gui.widgets.status_bar - INFO - Status: Not connected to device. Please connect first.
+2025-07-03 08:56:12,847 - src.main - INFO - Exiting Test Case Manager v3.0.0
+2025-07-03 09:04:23,574 - __main__ - INFO - Starting Test Case Manager v3.0.0
+2025-07-03 09:04:24,356 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-03 09:04:24,356 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-03 09:04:24,356 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-03 09:04:24,357 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-03 09:04:24,844 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-03 09:04:24,863 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-03 09:04:24,863 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-03 09:04:24,874 - src.gui.panels.stream_panel - INFO - Stream Panel initialized
+2025-07-03 09:04:24,875 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-03 09:04:32,051 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-03 09:04:34,536 - src.network.http_client - ERROR - Failed to ping server: HTTPConnectionPool(host='192.168.1.2', port=6262): Max retries exceeded with url: /ping (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002B758DB46E0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-07-03 09:04:34,536 - src.gui.widgets.status_bar - INFO - Status: Connection failed
+2025-07-03 09:06:12,658 - src.main - INFO - Starting Test Case Manager v3.0.0
+2025-07-03 09:06:12,955 - src.core.test_case_loader - INFO - Discovered categories: LAN, NETWORK, WAN, WIRELESS
+2025-07-03 09:06:12,955 - src.core.test_case_loader - INFO - TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+2025-07-03 09:06:12,955 - src.core.test_case_loader - INFO - Found 4 categories
+2025-07-03 09:06:12,955 - src.core.result_manager - INFO - ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+2025-07-03 09:06:13,004 - src.gui.widgets.status_bar - INFO - Status: Ready
+2025-07-03 09:06:13,023 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_leasetime.json
+2025-07-03 09:06:13,024 - src.gui.widgets.status_bar - INFO - Status: Templates loaded successfully
+2025-07-03 09:06:13,032 - src.gui.panels.stream_panel - INFO - Stream Panel initialized
+2025-07-03 09:06:13,033 - src.gui.main_window - INFO - Test Case Manager v3.0.0 initialized
+2025-07-03 09:06:18,051 - src.gui.widgets.status_bar - INFO - Status: Connecting...
+2025-07-03 09:06:18,054 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.4:6262
+2025-07-03 09:06:18,072 - urllib3.connectionpool - DEBUG - http://192.168.1.4:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 09:06:18,073 - src.network.http_client - INFO - Successfully pinged server at http://192.168.1.4:6262/ping
+2025-07-03 09:06:18,073 - src.gui.widgets.status_bar - INFO - Status: Connected to 192.168.1.4
+2025-07-03 09:06:20,746 - src.gui.widgets.status_bar - INFO - Status: Added test lan_edit_change_leasetime.json to queue
+2025-07-03 09:06:20,748 - src.gui.widgets.status_bar - INFO - Status: Added template lan_edit_change_leasetime.json to queue
+2025-07-03 09:06:20,748 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-03 09:06:23,434 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_change_leasetime.json
+2025-07-03 09:06:23,437 - src.gui.main_window - INFO - Executing test: lan_edit_leasetime
+2025-07-03 09:06:23,437 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_leasetime...
+2025-07-03 09:06:23,664 - src.gui.widgets.status_bar - INFO - Status: Started streaming test: lan_edit_leasetime
+2025-07-03 09:06:23,665 - src.gui.widgets.status_bar - INFO - Status: Executed test lan_edit_change_leasetime.json
+2025-07-03 09:06:23,678 - src.gui.main_window - INFO - Sending test to device...
+2025-07-03 09:06:23,686 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.4:6262
+2025-07-03 09:06:23,691 - urllib3.connectionpool - DEBUG - http://192.168.1.4:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 09:06:23,692 - src.network.connection_manager - DEBUG - Server ping successful
+2025-07-03 09:06:23,692 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-03 09:06:23,692 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-03 09:06:23,693 - src.network.connection_manager - DEBUG - Test data: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_leasetime",
+      "params": {
+        "name": "lan",
+        "dhcp_leasetime": 43200
+      }
+    }
+  ]
+}
+2025-07-03 09:06:23,693 - src.network.http_client - INFO - Sending test case to http://192.168.1.4:6262
+2025-07-03 09:06:23,693 - src.network.http_client - DEBUG - Test case content: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_leasetime",
+      "params": {
+        "name": "lan",
+        "dhcp_leasetime": 43200
+      }
+    }
+  ],
+  "metadata": {
+    "transaction_id": "20250703090623_4f739649"
+  }
+}
+2025-07-03 09:06:23,693 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250703090623_4f739649
+2025-07-03 09:06:23,694 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.4
+2025-07-03 09:06:36,498 - urllib3.connectionpool - DEBUG - http://192.168.1.4:6262 "POST / HTTP/1.1" 200 127
+2025-07-03 09:06:36,498 - src.network.http_client - INFO - Received response from server
+2025-07-03 09:06:36,498 - src.network.http_client - DEBUG - Response: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+2025-07-03 09:06:36,505 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: lan_edit_leasetime
+2025-07-03 09:06:36,506 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_1a92c722_success.json
+2025-07-03 09:06:36,560 - src.gui.widgets.status_bar - INFO - Status: Test stream ended: Completed
+2025-07-03 09:06:52,708 - src.gui.widgets.status_bar - INFO - Status: Loaded template: lan_edit_change_start.json
+2025-07-03 09:06:54,011 - src.gui.widgets.status_bar - INFO - Status: Added test lan_edit_change_start.json to queue
+2025-07-03 09:06:54,012 - src.gui.widgets.status_bar - INFO - Status: Added template lan_edit_change_start.json to queue
+2025-07-03 09:06:54,012 - src.gui.widgets.status_bar - INFO - Status: Template added to queue
+2025-07-03 09:06:55,627 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_change_start.json
+2025-07-03 09:06:55,630 - src.gui.main_window - INFO - Executing test: lan_edit_ip_start
+2025-07-03 09:06:55,631 - src.gui.widgets.status_bar - INFO - Status: Executing test: lan_edit_ip_start...
+2025-07-03 09:06:55,632 - src.gui.widgets.status_bar - INFO - Status: Started streaming test: lan_edit_ip_start
+2025-07-03 09:06:55,633 - src.gui.widgets.status_bar - INFO - Status: Executed test lan_edit_change_start.json
+2025-07-03 09:06:55,638 - src.gui.main_window - INFO - Sending test to device...
+2025-07-03 09:06:55,642 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 192.168.1.4:6262
+2025-07-03 09:06:55,670 - urllib3.connectionpool - DEBUG - http://192.168.1.4:6262 "GET /ping HTTP/1.1" 200 16
+2025-07-03 09:06:55,671 - src.network.connection_manager - DEBUG - Server ping successful
+2025-07-03 09:06:55,671 - src.network.connection_manager - INFO - Connection verified before test
+2025-07-03 09:06:55,671 - src.network.connection_manager - INFO - Sending test case to device
+2025-07-03 09:06:55,671 - src.network.connection_manager - DEBUG - Test data: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_ip_start",
+      "params": {
+        "name": "lan",
+        "network_ipv4_ip": "192.168.99.1",
+        "dhcp_start": "192.168.99.80",
+        "dhco_limit": 10,
+        "dhcp_leasetime": 200,
+        "network_ipv4_mask": "255.255.255.0"
+      }
+    }
+  ]
+}
+2025-07-03 09:06:55,672 - src.network.http_client - INFO - Sending test case to http://192.168.1.4:6262
+2025-07-03 09:06:55,672 - src.network.http_client - DEBUG - Test case content: {
+  "test_cases": [
+    {
+      "service": "lan",
+      "action": "edit_ip_start",
+      "params": {
+        "name": "lan",
+        "network_ipv4_ip": "192.168.99.1",
+        "dhcp_start": "192.168.99.80",
+        "dhco_limit": 10,
+        "dhcp_leasetime": 200,
+        "network_ipv4_mask": "255.255.255.0"
+      }
+    }
+  ],
+  "metadata": {
+    "transaction_id": "20250703090655_ace7d49a"
+  }
+}
+2025-07-03 09:06:55,672 - src.network.http_client - INFO - Sending test data to server with transaction ID: 20250703090655_ace7d49a
+2025-07-03 09:06:55,673 - urllib3.connectionpool - DEBUG - Resetting dropped connection: 192.168.1.4
+2025-07-03 09:07:08,500 - urllib3.connectionpool - DEBUG - http://192.168.1.4:6262 "POST / HTTP/1.1" 200 127
+2025-07-03 09:07:08,501 - src.network.http_client - INFO - Received response from server
+2025-07-03 09:07:08,501 - src.network.http_client - DEBUG - Response: {
+  "summary": {
+    "total_test_cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "failed_services": []
+  },
+  "failed_by_service": {}
+}
+2025-07-03 09:07:08,519 - src.gui.widgets.status_bar - INFO - Status: Test executed successfully: lan_edit_ip_start
+2025-07-03 09:07:08,520 - src.core.result_manager - INFO - Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_ip_start_f7f46ccc_success.json
+2025-07-03 09:07:08,536 - src.gui.widgets.status_bar - INFO - Status: Test stream ended: Completed

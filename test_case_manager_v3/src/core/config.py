@@ -67,7 +67,7 @@ class NetworkConfig:
     
     # HTTP configuration
     http_host: str = "192.168.88.1"  # Default to same IP as SSH
-    http_port: int = 8080            # Default HTTP port
+    http_port: int = 6262            # Default HTTP port
     http_connect_timeout: int = 5    # Default connect timeout in seconds
     http_read_timeout: int = 40      # Default read timeout in seconds
     middleware_url: str = "http://192.168.88.10:5000"  # Existing setting

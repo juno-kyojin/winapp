@@ -50,7 +50,7 @@ class ConnectionManager:
         self.logger = logging.getLogger(__name__)
         
         # Initialize connection components
-        self.http_client = HTTPTestClient()
+        self.http_client: HTTPTestClient = HTTPTestClient()
         # self.ssh_client = SSHConnection()  # Hiện chưa có SSHConnection
         
         # Default to HTTP mode
@@ -159,12 +159,12 @@ class ConnectionManager:
             )
             
         else:  # HTTP mode
-            self.port = kwargs.get('port', 8080)
+            self.port = kwargs.get('port', 6262)
             self.http_connect_timeout = kwargs.get('connect_timeout', 5)  # Default to 5s like client.py
             self.http_read_timeout = kwargs.get('read_timeout', 500)  # Default to 500s like client.py
             
             # Ensure port is an integer
-            port = int(self.port) if self.port is not None else 8080
+            port = int(self.port) if self.port is not None else 6262
             
             return self.http_client.connect(
                 host=hostname,

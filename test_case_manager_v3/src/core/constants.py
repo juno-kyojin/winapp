@@ -59,7 +59,7 @@ CONNECTION_TYPE_HTTP: Final[str] = "http"     # Sử dụng HTTP API
 CONNECTION_TYPE_SSH: Final[str] = "ssh"       # Sử dụng SSH legacy
 
 # HTTP Client-Server Constants
-DEFAULT_HTTP_API_PORT: Final[int] = 8080      # Port mặc định cho API server
+DEFAULT_HTTP_API_PORT: Final[int] = 6262      # Port mặc định cho API server
 HTTP_CONNECT_TIMEOUT: Final[int] = 5          # Thời gian timeout khi kết nối HTTP (giây)
 HTTP_READ_TIMEOUT: Final[int] = 40            # Thời gian timeout khi đọc response HTTP (giây)
 HTTP_API_VERSION: Final[str] = "v1"           # API version
@@ -221,7 +221,7 @@ RESULTS_DIR: Final[Path] = TEMP_DIR / "results"
 # Default configuration
 DEFAULT_CONFIG: Final[Dict[str, Dict[str, Union[int, str, bool]]]] = {
     "connection": {
-        "http_port": 8080,
+        "http_port": 6262,
         "ssh_port": 22,
         "connect_timeout": 5,
         "read_timeout": 30,

@@ -39,9 +39,9 @@ class HTTPTestClient:
         self.url: Optional[str] = None
         self.connected: bool = False
         self.host: Optional[str] = None
-        self.port: int = 8080
+        self.port: Optional[int] = None
         self.connect_timeout: int = 5
-        self.read_timeout: int = 500
+        self.read_timeout: int = 30  # Reduced from 500s to 30s for faster failure detection
 
         self.session = requests.Session()
         self.last_transaction_id: Optional[str] = None
@@ -121,7 +121,7 @@ class HTTPTestClient:
         # Replace any characters that might cause issues with file paths
         return re.sub(r'[/\\:*?"<>|]', '_', transaction_id)
     
-    def connect(self, host: str, port: int = 8080, 
+    def connect(self, host: str, port: int = 6262,
                 connect_timeout: int = 10, read_timeout: int = 60) -> bool:
         """
         Initialize connection parameters and test connectivity.
@@ -358,13 +358,8 @@ class HTTPTestClient:
             return False, None, "Test data is empty"
             
         try:
-            # Health check before sending test
-            if not self._health_check():
-                self.logger.warning("Server health check failed, attempting to reconnect...")
-                if not self._reconnect():
-                    return False, None, "Server is not responding and reconnection failed"
-
-            self.logger.info(f"Preparing to send test case to {self.url}")
+            # Simplified: Skip health check to reduce complexity and potential timeout issues
+            self.logger.info(f"Sending test case to {self.url}")
 
             # Validate test structure
             if "test_cases" not in test_data:
@@ -474,14 +469,8 @@ class HTTPTestClient:
             return False, None, error_msg
             
         except requests.exceptions.ReadTimeout:
-            error_msg = f"Read timeout ({self.read_timeout}s)"
+            error_msg = f"Read timeout ({self.read_timeout}s) - Server took too long to respond"
             self.logger.error(error_msg)
-            
-            # When read timeout occurs, check if the server processed the request
-            if self.last_transaction_id:
-                self.logger.info(f"Read timeout occurred, checking transaction status for {self.last_transaction_id}")
-                return self.wait_for_transaction_completion(self.last_transaction_id)
-            
             return False, None, error_msg
             
         except requests.exceptions.ConnectionError:
@@ -523,8 +512,20 @@ class HTTPTestClient:
     def is_connected(self) -> bool:
         """
         Check if client is connected to server.
-        
+
         Returns:
             True if connected, False otherwise
         """
         return self.connected
+
+    def disconnect(self) -> None:
+        """
+        Disconnect from the server and clean up resources.
+        """
+        self.connected = False
+        self.url = None
+        self.host = None
+        self.port = None
+        if hasattr(self, 'session') and self.session:
+            self.session.close()
+        self.logger.info("Disconnected from HTTP server")
