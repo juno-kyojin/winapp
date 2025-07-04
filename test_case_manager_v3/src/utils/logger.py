@@ -16,8 +16,10 @@ import logging
 import logging.handlers
 import os
 import sys
+import threading
+import queue
 from pathlib import Path
-from typing import Optional, Union, Dict, Any
+from typing import Optional, Union, Dict, Any, Callable
 
 # Define constants using uppercase as per PEP 8 - Handle both development and executable environments
 def _get_base_dir() -> Path:
@@ -84,24 +86,106 @@ class ColoredConsoleHandler(logging.StreamHandler):
         return msg
 
 
+class GUILogHandler(logging.Handler):
+    """
+    Custom logging handler that sends log records to a GUI component.
+
+    This handler captures log records and sends them to a GUI callback function
+    for real-time display in the application's Logs tab.
+    """
+
+    def __init__(self, callback: Optional[Callable[[str], None]] = None):
+        """
+        Initialize the GUI log handler.
+
+        Args:
+            callback: Function to call with formatted log messages
+        """
+        super().__init__()
+        self.callback = callback
+        self.log_queue = queue.Queue()
+        self._lock = threading.Lock()
+
+    def set_callback(self, callback: Callable[[str], None]) -> None:
+        """
+        Set the callback function for log messages.
+
+        Args:
+            callback: Function to call with formatted log messages
+        """
+        with self._lock:
+            self.callback = callback
+
+            # Process any queued messages
+            while not self.log_queue.empty():
+                try:
+                    message = self.log_queue.get_nowait()
+                    if self.callback:
+                        self.callback(message)
+                except queue.Empty:
+                    break
+
+    def emit(self, record: logging.LogRecord) -> None:
+        """
+        Emit a log record to the GUI.
+
+        Args:
+            record: The log record to emit
+        """
+        try:
+            # Format the log message
+            message = self.format(record)
+
+            with self._lock:
+                if self.callback:
+                    # Send directly to GUI if callback is available
+                    self.callback(message)
+                else:
+                    # Queue the message if no callback is set yet
+                    self.log_queue.put(message)
+
+        except Exception:
+            # Silently ignore errors to prevent logging loops
+            pass
+
+
+# Global GUI log handler instance
+_gui_log_handler: Optional[GUILogHandler] = None
+
+
+def get_gui_log_handler() -> GUILogHandler:
+    """
+    Get the global GUI log handler instance.
+
+    Returns:
+        The global GUI log handler instance
+    """
+    global _gui_log_handler
+    if _gui_log_handler is None:
+        _gui_log_handler = GUILogHandler()
+    return _gui_log_handler
+
+
 def setup_logging(
     log_level: str = DEFAULT_LOG_LEVEL,
     log_to_file: bool = True,
     log_to_console: bool = True,
+    log_to_gui: bool = True,
     log_file_name: str = DEFAULT_LOG_FILENAME
 ) -> logging.Logger:
     """
     Setup centralized logging configuration.
-    
+
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         log_to_file: Whether to log to file
         log_to_console: Whether to log to console
+        log_to_gui: Whether to log to GUI (Logs tab)
         log_file_name: Name of the log file
-        
+
     Returns:
         Configured root logger
-        
+
     Raises:
         ValueError: If log_level is invalid
         OSError: If log directory cannot be created
@@ -155,10 +239,17 @@ def setup_logging(
         console_handler.setFormatter(formatter)
         console_handler.setLevel(numeric_level)
         root_logger.addHandler(console_handler)
-    
+
+    # Add GUI handler if requested
+    if log_to_gui:
+        gui_handler = get_gui_log_handler()
+        gui_handler.setFormatter(formatter)
+        gui_handler.setLevel(numeric_level)
+        root_logger.addHandler(gui_handler)
+
     # Log initial message
     root_logger.info(f"Logging initialized - Level: {log_level}")
-    
+
     return root_logger
 
 

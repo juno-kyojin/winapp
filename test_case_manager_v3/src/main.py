@@ -18,42 +18,7 @@ from typing import List, Optional
 
 from src.core.config import AppConfig
 from src.core.constants import APP_NAME, APP_VERSION, LOG_DIR
-
-def setup_logger(level: int = logging.INFO, log_file: Optional[str] = None, max_size_mb: int = 10) -> None:
-    """
-    Setup logging configuration.
-    """
-    # Configure root logger
-    root_logger = logging.getLogger()
-
-    # Clear existing handlers to prevent duplicates
-    if root_logger.handlers:
-        root_logger.handlers.clear()
-
-    root_logger.setLevel(level)
-
-    # Console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(level)
-    console_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    console_handler.setFormatter(console_format)
-    root_logger.addHandler(console_handler)
-
-    # File handler (if log_file is provided)
-    if log_file:
-        try:
-            # Create directory if it doesn't exist
-            log_dir = os.path.dirname(log_file)
-            if log_dir and not os.path.exists(log_dir):
-                os.makedirs(log_dir)
-
-            file_handler = logging.FileHandler(log_file)
-            file_handler.setLevel(level)
-            file_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            file_handler.setFormatter(file_format)
-            root_logger.addHandler(file_handler)
-        except Exception as e:
-            print(f"Warning: Could not setup file logging: {e}", file=sys.stderr)
+from src.utils.logger import setup_logging
 
 def parse_arguments(args: Optional[List[str]] = None) -> argparse.Namespace:
     """
@@ -91,11 +56,13 @@ def main(args: Optional[List[str]] = None) -> int:
         # Create logs directory if it doesn't exist
         LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-        # Setup logging
-        setup_logger(
-            level=log_level,
-            log_file=str(LOG_DIR / "app.log"),
-            max_size_mb=10
+        # Setup centralized logging with GUI support
+        setup_logging(
+            log_level=logging.getLevelName(log_level),
+            log_to_file=True,
+            log_to_console=True,
+            log_to_gui=True,
+            log_file_name=str(LOG_DIR / "app.log")
         )
         
         # Get logger

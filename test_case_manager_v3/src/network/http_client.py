@@ -233,9 +233,9 @@ class HTTPTestClient:
             # Sanitize transaction ID
             safe_transaction_id = self._sanitize_transaction_id(transaction_id)
 
-            # Adjust timeouts for wireless tests
-            connect_timeout = 10 if is_wireless_test else self.connect_timeout
-            read_timeout = 30 if is_wireless_test else 15
+            # Adjust timeouts for wireless tests - increased for better reliability
+            connect_timeout = 15 if is_wireless_test else self.connect_timeout  # Increased from 10s to 15s
+            read_timeout = 60 if is_wireless_test else 15  # Increased from 30s to 60s
 
             # Send request to status endpoint
             response = self.session.get(
@@ -293,9 +293,9 @@ class HTTPTestClient:
             # Sanitize transaction ID
             safe_transaction_id = self._sanitize_transaction_id(transaction_id)
 
-            # Adjust timeouts for wireless tests
-            connect_timeout = 10 if is_wireless_test else self.connect_timeout
-            read_timeout = 30 if is_wireless_test else 15
+            # Adjust timeouts for wireless tests - match check_transaction_status timeouts
+            connect_timeout = 15 if is_wireless_test else self.connect_timeout  # Increased from 10s to 15s
+            read_timeout = 60 if is_wireless_test else 15  # Increased from 30s to 60s
 
             # Send request to check_result endpoint
             response = self.session.get(
@@ -306,19 +306,35 @@ class HTTPTestClient:
             if response.status_code == 200:
                 try:
                     data = response.json()
-                    
+
                     # Check if response contains error
                     if "error" in data:
-                        return False, data, data["error"]
-                    
-                    # Check if response contains result
-                    if "summary" in data:
+                        error_msg = data["error"]
+                        # For wireless tests, be more tolerant of "Result not found" errors
+                        if is_wireless_test and "Result not found" in error_msg:
+                            self.logger.debug(f"Wireless test result not ready yet: {error_msg}")
+                            return False, data, "Result file not ready - wireless test may still be processing"
+                        return False, data, error_msg
+
+                    # Check if response contains result data
+                    if "summary" in data or "test_name" in data or "result" in data:
+                        self.logger.info(f"Successfully retrieved result for transaction {transaction_id}")
                         return True, data, ""
-                    
+
+                    # For wireless tests, provide more specific feedback
+                    if is_wireless_test:
+                        return False, data, "Wireless test result not ready - may require additional processing time"
+
                     return True, data, ""
-                    
-                except json.JSONDecodeError:
+
+                except json.JSONDecodeError as e:
+                    self.logger.error(f"Invalid JSON response from server: {str(e)}")
                     return False, None, "Invalid JSON response from server"
+            elif response.status_code == 404:
+                # Result file not found - more specific handling for wireless tests
+                if is_wireless_test:
+                    return False, None, "Wireless test result file not found - test may still be processing or writing result"
+                return False, None, "Result file not found"
             else:
                 return False, None, f"Server returned status code {response.status_code}"
                 
@@ -344,11 +360,12 @@ class HTTPTestClient:
         if not transaction_id:
             return False, None, "No transaction ID provided"
 
-        # Adjust parameters for wireless tests
+        # Adjust parameters for wireless tests - significantly increased for complex wireless operations
         if is_wireless_test:
-            max_retries = max(max_retries, 30)  # At least 30 retries for wireless
-            retry_delay = max(retry_delay, 2)   # At least 2 seconds between retries
+            max_retries = max(max_retries, 60)  # Increased to 60 retries for wireless (was 30)
+            retry_delay = max(retry_delay, 3)   # Increased to 3 seconds between retries (was 2)
             self.logger.info(f"Extended timeout for wireless test - max_retries: {max_retries}, retry_delay: {retry_delay}s")
+            self.logger.info("Wireless tests may require extended time for service restarts and network reconfiguration")
 
         self.logger.info(f"Waiting for transaction {transaction_id} to complete")
 
@@ -383,12 +400,28 @@ class HTTPTestClient:
             time.sleep(current_delay)
             # For wireless tests, use more conservative backoff and higher cap
             if is_wireless_test:
-                current_delay = min(current_delay * 1.2, 15)  # Slower backoff, cap at 15 seconds
+                current_delay = min(current_delay * 1.3, 20)  # Increased: 1.3x multiplier, cap at 20 seconds
+                self.logger.debug(f"Wireless test backoff: next delay = {current_delay}s")
             else:
                 current_delay = min(current_delay * 1.5, 10)  # Original behavior for non-wireless
         
         # If we've exhausted all retries, try to get the result directly
         self.logger.warning(f"Transaction {transaction_id} did not complete after {max_retries} attempts")
+
+        # For wireless tests, make multiple final attempts with longer delays
+        if is_wireless_test:
+            self.logger.info("Making enhanced final attempts for wireless test result retrieval")
+            for final_attempt in range(3):  # 3 final attempts
+                self.logger.info(f"Final wireless test attempt {final_attempt + 1}/3")
+                time.sleep(5)  # 5 second delay between final attempts
+                success, data, msg = self.check_result(transaction_id, is_wireless_test)
+                if success:
+                    self.logger.info(f"Wireless test result retrieved on final attempt {final_attempt + 1}")
+                    return success, data, msg
+                self.logger.debug(f"Final attempt {final_attempt + 1} failed: {msg}")
+
+            return False, None, f"Timeout waiting for wireless test result after {max_retries} attempts + 3 final attempts"
+
         return self.check_result(transaction_id, is_wireless_test)
     
     def send_test(self, test_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str, ErrorType]:

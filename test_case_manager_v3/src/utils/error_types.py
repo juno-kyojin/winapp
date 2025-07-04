@@ -77,7 +77,15 @@ class ErrorClassifier:
             r"peer.*reset",
             r"transport.*error",
             r"ssl.*error",
-            r"certificate.*error"
+            r"certificate.*error",
+
+            # Connection establishment failures
+            r"failed.*to.*ensure.*connection",
+            r"failed.*to.*connect.*to.*device",
+            r"connection.*lost.*to.*device",
+            r"device.*not.*reachable",
+            r"cannot.*reach.*device",
+            r"device.*connection.*failed"
         ]
         
         # Application error indicators (case-insensitive)

@@ -18,7 +18,55 @@ from typing import Dict, Any, Optional, List, Callable, cast
 
 from src.core.test_case_loader import TestCaseLoader
 from src.utils.logger import get_logger
-from src.utils.test_name_extractor import TestNameExtractor
+
+
+def extract_test_name(test_data: Dict[str, Any], template_name: Optional[str] = None) -> str:
+    """
+    Extract test name from test data with fallback strategies.
+
+    Args:
+        test_data: Test data to extract name from
+        template_name: Optional template name as fallback
+
+    Returns:
+        Test name string, or "unknown" if cannot be determined
+    """
+    # Strategy 1: Check metadata.name
+    if "metadata" in test_data and isinstance(test_data["metadata"], dict):
+        name = test_data["metadata"].get("name")
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 2: Check direct name field
+    if "name" in test_data:
+        name = test_data["name"]
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 3: Generate from service and action
+    if "test_cases" in test_data and test_data["test_cases"]:
+        first_case = test_data["test_cases"][0]
+        service = first_case.get("service", "")
+        action = first_case.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 4: Direct service and action
+    elif "service" in test_data and "action" in test_data:
+        service = test_data.get("service", "")
+        action = test_data.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 5: Use template name if provided
+    if template_name:
+        name = template_name
+        if name.endswith('.json'):
+            name = name[:-5]
+        if name and name.strip():
+            return name.strip()
+
+    return "unknown"
 
 
 class TemplatesPanel(ttk.Frame):
@@ -625,7 +673,7 @@ class TemplatesPanel(ttk.Frame):
                 template_name = None
 
             # Use robust test name extraction
-            extracted_name = TestNameExtractor.extract_test_name(template_json, template_name)
+            extracted_name = extract_test_name(template_json, template_name)
 
             # Add to queue panel if parent reference is available
             if hasattr(self, 'parent') and hasattr(self.parent, 'queue_panel') and self.parent.queue_panel:
@@ -715,7 +763,7 @@ class TemplatesPanel(ttk.Frame):
                 template_name = None
 
             # Use robust test name extraction
-            extracted_name = TestNameExtractor.extract_test_name(template_json, template_name)
+            extracted_name = extract_test_name(template_json, template_name)
 
             # Return template with metadata
             return {

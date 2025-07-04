@@ -30,6 +30,37 @@ from src.utils.file_lock_utils import read_file_with_lock, write_file_with_lock
 from src.utils.logger import get_logger
 from src.utils.error_types import ErrorType, should_retry_error, get_retry_reason
 
+
+def affects_network_connectivity(test_data: Dict[str, Any]) -> bool:
+    """
+    Check if a test affects network connectivity.
+
+    This function detects tests that may disrupt network connectivity,
+    requiring special handling for connection recovery and extended timeouts.
+
+    Args:
+        test_data: Test data to check
+
+    Returns:
+        True if test affects network connectivity, False otherwise
+    """
+    # Check test_cases array format
+    if "test_cases" in test_data and test_data["test_cases"]:
+        for test_case in test_data["test_cases"]:
+            service = test_case.get("service", "").lower()
+            action = test_case.get("action", "").lower()
+            if service in ["network", "lan", "wan", "wireless"] and action in ["edit", "create", "delete"]:
+                return True
+
+    # Check direct service format
+    elif "service" in test_data:
+        service = test_data.get("service", "").lower()
+        action = test_data.get("action", "").lower()
+        if service in ["network", "lan", "wan", "wireless"] and action in ["edit", "create", "delete"]:
+            return True
+
+    return False
+
 class ConnectionManager:
     """
     Unified connection manager for both SSH and HTTP connections.
@@ -459,54 +490,94 @@ class ConnectionManager:
             time.sleep(5)
             return False
 
-    def _is_important_test(self, test_data: Dict[str, Any]) -> bool:
-        """
-        Check if test is important (affects network or system configuration).
-        
-        Args:
-            test_data: Test data to check
-            
-        Returns:
-            True if test is important, False otherwise
-        """
-        if "test_cases" in test_data and len(test_data["test_cases"]) > 0:
-            for test_case in test_data["test_cases"]:
-                service = test_case.get("service", "").lower()
-                action = test_case.get("action", "").lower()
-                
-                # Network-affecting services
-                if service in ["wan", "lan", "wireless", "firewall", "network"]:
-                    return True
-                    
-                # System-affecting actions
-                if action in ["create", "delete", "edit", "update", "restart", "reboot"]:
-                    return True
-        
-        return False
+
 
     def ensure_connection_before_test(self) -> bool:
         """
         Kiểm tra kết nối đơn giản trước khi chạy test.
+        Tự động thử kết nối lại nếu kết nối bị mất.
 
         Returns:
             True nếu kết nối hoạt động, False nếu không thể kết nối
         """
+        # Kiểm tra kết nối hiện tại
         if self.is_connected():
             # Kiểm tra kết nối bằng ping đơn giản
             if self.ping_server():
                 return True
             else:
-                self.logger.warning("Connection check failed")
-                return False
+                self.logger.warning("Connection check failed, attempting to reconnect...")
+                # Thử kết nối lại
+                return self._attempt_reconnection()
         else:
-            self.logger.warning("Not connected")
-            return False
+            self.logger.warning("Not connected, attempting to reconnect...")
+            # Thử kết nối lại
+            return self._attempt_reconnection()
+
+    def _attempt_reconnection(self, max_attempts: int = 3) -> bool:
+        """
+        Thử kết nối lại với thiết bị.
+
+        Args:
+            max_attempts: Số lần thử tối đa
+
+        Returns:
+            True nếu kết nối thành công, False nếu thất bại
+        """
+        for attempt in range(max_attempts):
+            try:
+                self.logger.info(f"Reconnection attempt {attempt + 1}/{max_attempts}")
+
+                # Đóng kết nối cũ nếu có
+                if self.http_client:
+                    self.http_client.disconnect()
+
+                # Thử kết nối lại với thông số đã lưu
+                if hasattr(self, '_hostname') and self._hostname:
+                    # Sử dụng thông số kết nối đã lưu
+                    connection_params = {}
+                    if hasattr(self, 'port') and self.port:
+                        connection_params['port'] = self.port
+                    if hasattr(self, 'http_connect_timeout') and self.http_connect_timeout:
+                        connection_params['connect_timeout'] = self.http_connect_timeout
+                    if hasattr(self, 'http_read_timeout') and self.http_read_timeout:
+                        connection_params['read_timeout'] = self.http_read_timeout
+
+                    if self.connect(self._hostname, **connection_params):
+                        # Kiểm tra kết nối bằng ping
+                        if self.ping_server():
+                            self.logger.info(f"Reconnection successful on attempt {attempt + 1}")
+                            return True
+                        else:
+                            self.logger.warning(f"Reconnection attempt {attempt + 1} failed ping test")
+                    else:
+                        self.logger.warning(f"Reconnection attempt {attempt + 1} failed to establish connection")
+                else:
+                    self.logger.error("No hostname stored for reconnection")
+                    return False
+
+                # Chờ trước khi thử lại
+                if attempt < max_attempts - 1:
+                    wait_time = 2 * (attempt + 1)  # Tăng dần thời gian chờ: 2s, 4s, 6s
+                    self.logger.info(f"Waiting {wait_time}s before next reconnection attempt")
+                    time.sleep(wait_time)
+
+            except Exception as e:
+                self.logger.error(f"Exception during reconnection attempt {attempt + 1}: {e}")
+                if attempt < max_attempts - 1:
+                    time.sleep(2)
+
+        self.logger.error(f"Failed to reconnect after {max_attempts} attempts")
+        return False
+
+
 
     def send_test_with_retry(self, test_data: Dict[str, Any],
                        affects_network: bool = False, max_retries: int = 3) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
         Send test case with intelligent retry mechanism.
         Only retries network/transport errors, not application errors.
+        Enhanced handling for network-affecting tests that may disrupt connectivity.
 
         Args:
             test_data: Test case data to send
@@ -519,8 +590,20 @@ class ConnectionManager:
         last_error = ""
         last_error_type = ErrorType.UNKNOWN_ERROR
 
+        if affects_network:
+            self.logger.info("Detected network-affecting test - using enhanced connectivity handling")
+
         for attempt in range(max_retries):
             try:
+                # For network-affecting tests, add extra connection validation before sending
+                if affects_network and attempt > 0:
+                    self.logger.info("Network-affecting test retry - performing enhanced connection validation")
+                    if not self.ensure_connection_before_test():
+                        self.logger.warning("Connection validation failed for network-affecting test retry")
+                        last_error = "Failed to ensure connection to device"
+                        last_error_type = ErrorType.NETWORK_ERROR
+                        continue
+
                 # Send test and get error classification
                 success, response, error = self.send_test(
                     test_data=test_data,
@@ -545,6 +628,11 @@ class ConnectionManager:
                 last_error_type = error_type
 
                 # Check if we should retry this error type
+                # For network-affecting tests, be more aggressive about retrying connection failures
+                if affects_network and "connection" in error.lower():
+                    self.logger.info("Network-affecting test connection failure - treating as network error for retry")
+                    error_type = ErrorType.NETWORK_ERROR
+
                 if not should_retry_error(error_type):
                     retry_reason = get_retry_reason(error_type, error)
                     self.logger.warning(f"Application error detected, skipping retry: {retry_reason}")
@@ -556,8 +644,10 @@ class ConnectionManager:
 
                 # Wait before retrying (only for network errors)
                 if attempt < max_retries - 1:  # Don't wait on last attempt
-                    self.logger.info(f"Waiting 2 seconds before retry {attempt + 2}")
-                    time.sleep(2)
+                    # Use longer wait time for network-affecting tests that may disrupt connectivity
+                    wait_time = 10 if affects_network else 2
+                    self.logger.info(f"Waiting {wait_time} seconds before retry {attempt + 2}")
+                    time.sleep(wait_time)
 
             except Exception as e:
                 last_error = str(e)

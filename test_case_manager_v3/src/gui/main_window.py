@@ -30,8 +30,56 @@ from src.core.result_manager import ResultManager
 # from core.result_manager import ResultManager
 
 from src.utils.logger import get_logger
-from src.utils.test_name_extractor import TestNameExtractor
-from src.network.connection_manager import ConnectionManager
+from src.network.connection_manager import ConnectionManager, affects_network_connectivity
+
+
+def extract_test_name(test_data: Dict[str, Any], template_name: Optional[str] = None) -> str:
+    """
+    Extract test name from test data with fallback strategies.
+
+    Args:
+        test_data: Test data to extract name from
+        template_name: Optional template name as fallback
+
+    Returns:
+        Test name string, or "unknown" if cannot be determined
+    """
+    # Strategy 1: Check metadata.name
+    if "metadata" in test_data and isinstance(test_data["metadata"], dict):
+        name = test_data["metadata"].get("name")
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 2: Check direct name field
+    if "name" in test_data:
+        name = test_data["name"]
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 3: Generate from service and action
+    if "test_cases" in test_data and test_data["test_cases"]:
+        first_case = test_data["test_cases"][0]
+        service = first_case.get("service", "")
+        action = first_case.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 4: Direct service and action
+    elif "service" in test_data and "action" in test_data:
+        service = test_data.get("service", "")
+        action = test_data.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 5: Use template name if provided
+    if template_name:
+        name = template_name
+        if name.endswith('.json'):
+            name = name[:-5]
+        if name and name.strip():
+            return name.strip()
+
+    return "unknown"
 from src.network.test_executor import TestExecutor
 # from network.test_executor import TestExecutor
 
@@ -41,7 +89,7 @@ from src.gui.panels.templates_panel import TemplatesPanel
 from src.gui.panels.queue_panel import QueuePanel
 
 # from gui.panels.history_panel import HistoryPanel
-# from gui.panels.logs_panel import LogsPanel
+from src.gui.panels.logs_panel import LogsPanel
 
 # Import dialogs (will be implemented separately)
 # from gui.dialogs.preferences_dialog import PreferencesDialog
@@ -85,7 +133,7 @@ class MainWindow:
         # Panels
         self.connection_panel: Optional[ConnectionPanel] = None
         self.templates_panel: Optional[TemplatesPanel] = None
-        # self.logs_panel: Optional[LogsPanel] = None
+        self.logs_panel: Optional[LogsPanel] = None
         
         # Setup UI
         self._setup_window()
@@ -279,8 +327,16 @@ class MainWindow:
         if hasattr(self, 'queue_panel') and hasattr(self, 'stream_panel') and self.queue_panel and self.stream_panel:
             self.queue_panel.stream_panel = self.stream_panel
 
-        # Initialize other panels with placeholders for now
-        self._show_placeholder(self.logs_tab, "Logs Panel")
+        # Initialize Logs Panel
+        try:
+            self.logs_panel = LogsPanel(
+                self.logs_tab,
+                self._update_status
+            )
+            self.logs_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        except Exception as e:
+            self.logger.error(f"Failed to initialize Logs Panel: {e}")
+            self._show_placeholder(self.logs_tab, "Logs Panel")
     
     def _show_placeholder(self, parent: ttk.Frame, panel_name: str) -> None:
         """
@@ -330,7 +386,7 @@ class MainWindow:
                 template_name = test_data.get("template_name")
 
                 # Use robust test name extraction
-                name = TestNameExtractor.extract_test_name(template_data, template_name)
+                name = extract_test_name(template_data, template_name)
 
                 # Add to queue
                 self.queue_panel.add_to_queue(template_data, category, name)
@@ -339,7 +395,7 @@ class MainWindow:
                 category = test_data.get("metadata", {}).get("category", "Unknown")
 
                 # Use robust test name extraction
-                name = TestNameExtractor.extract_test_name(test_data)
+                name = extract_test_name(test_data)
 
                 self.queue_panel.add_to_queue(test_data, category, name)
             
@@ -697,13 +753,8 @@ class MainWindow:
         # Execute tests one by one
         for test_data in test_queue:
             # Check if the test affects network connectivity
-            affects_network = False
-            if "test_cases" in test_data and len(test_data["test_cases"]) > 0:
-                service = test_data["test_cases"][0].get("service", "").lower()
-                action = test_data["test_cases"][0].get("action", "").lower()
-                if service in ["wan", "network", "wireless"] or "network" in action:
-                    affects_network = True
-                    
+            affects_network = affects_network_connectivity(test_data)
+
             # Execute the test
             self._execute_test(test_data, affects_network=affects_network)
             

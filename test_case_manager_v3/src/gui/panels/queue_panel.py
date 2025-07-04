@@ -20,6 +20,7 @@ from typing import Dict, Any, Optional, List, Callable, cast
 from datetime import datetime
 
 from src.utils.logger import get_logger
+from src.network.connection_manager import affects_network_connectivity
 
 
 class QueuePanel(ttk.Frame):
@@ -257,26 +258,14 @@ class QueuePanel(ttk.Frame):
     def _check_if_affects_network(self, test_data: Dict[str, Any]) -> bool:
         """
         Check if a test affects network connectivity.
-        
+
         Args:
             test_data: Test data to check
-            
+
         Returns:
             True if test affects network, False otherwise
         """
-        if "test_cases" in test_data:
-            for test_case in test_data["test_cases"]:
-                service = test_case.get("service", "").lower()
-                action = test_case.get("action", "").lower()
-                if service in ["network", "lan", "wan", "wireless"] and action in ["edit", "create", "delete"]:
-                    return True
-        elif "service" in test_data:
-            service = test_data.get("service", "").lower()
-            action = test_data.get("action", "").lower()
-            if service in ["network", "lan", "wan", "wireless"] and action in ["edit", "create", "delete"]:
-                return True
-        
-        return False
+        return affects_network_connectivity(test_data)
     
     def _execute_selected(self) -> None:
         """Execute the selected test."""
