@@ -157,28 +157,30 @@ class ResultManager:
     def load_result(self, result_file: Union[str, Path]) -> Dict[str, Any]:
         """
         Load a test result from file.
-        
+
         Args:
             result_file: Path to the result file
-            
+
         Returns:
             Dictionary containing the test result data
-            
+
         Raises:
             FileOperationError: If file cannot be read or contains invalid JSON
         """
+        # Initialize file_path outside try block to ensure it's always bound
+        file_path = Path(result_file)
+
         try:
-            file_path = Path(result_file)
             if not file_path.exists():
                 raise FileOperationError(
                     f"Result file not found: {file_path}",
                     str(file_path),
                     "read"
                 )
-                
+
             with file_path.open('r', encoding='utf-8') as f:
                 return json.load(f)
-                
+
         except json.JSONDecodeError as e:
             self.logger.error(f"JSON parsing error in {file_path}: {str(e)}")
             raise FileOperationError(

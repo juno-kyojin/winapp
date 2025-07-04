@@ -196,17 +196,11 @@ class MainWindow:
         content_frame.grid(row=0, column=0, sticky="ew", padx=15, pady=10)
         content_frame.columnconfigure(1, weight=1)
 
-        try:
-            # Add logo
-            from src.utils.image_utils import LogoWidget
-            logo_widget = LogoWidget(content_frame, size=(40, 40))
-            logo_widget.grid(row=0, column=0, padx=(0, 12), pady=0, sticky="w")
-        except Exception as e:
-            self.logger.debug(f"Could not create logo widget: {e}")
+        # No logo - just keep the title
 
-        # Add title and version in a more compact layout
+        # Add title and version in a clean layout
         title_frame = ttk.Frame(content_frame)
-        title_frame.grid(row=0, column=1, sticky="w", pady=0)
+        title_frame.grid(row=0, column=0, sticky="w", pady=0)
 
         # Create horizontal layout for title and version
         title_version_frame = ttk.Frame(title_frame)

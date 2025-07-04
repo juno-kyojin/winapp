@@ -22,15 +22,26 @@ This directory contains visual assets for Test Case Manager v1.0.
 - Background: Transparent
 - Usage: Main window header, about dialog
 
+## Build Integration
+
+**Important**: When building the standalone executable with `build.bat`, all assets in this directory are **embedded directly into the .exe file**. This means:
+
+1. **No separate assets folder** is created in the release directory
+2. **Assets are loaded from memory** when the application runs
+3. **Smaller distribution package** - only .exe and data folder needed
+4. **Better security** - assets cannot be modified by users
+
 ## Adding Your Logo
 
 1. Place your logo files in this directory:
    - `logo.ico` - For window icon
    - `logo.png` - For GUI display
 
-2. The application will automatically detect and use these files
+2. Run `build.bat` to create executable with embedded assets
 
-3. If files are not found, the application will run without logo (graceful fallback)
+3. The application will automatically detect and use embedded assets
+
+4. If files are not found, the application will run without logo (graceful fallback)
 
 ## Logo Design Guidelines
 

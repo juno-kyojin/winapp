@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 from typing import Optional, Tuple
 import tkinter as tk
-from tkinter import PhotoImage
 from PIL import Image, ImageTk
 import logging
 
@@ -20,18 +19,22 @@ logger = logging.getLogger(__name__)
 def get_assets_dir() -> Path:
     """
     Get the assets directory path.
-    
+
     Returns:
         Path to assets directory
     """
     if getattr(sys, 'frozen', False):
-        # Running as compiled executable
-        base_dir = Path(sys.executable).parent
+        # Running as compiled executable - assets are embedded
+        # PyInstaller extracts to sys._MEIPASS
+        if hasattr(sys, '_MEIPASS'):
+            return Path(getattr(sys, '_MEIPASS')) / "assets"
+        else:
+            # Fallback to executable directory
+            return Path(sys.executable).parent / "assets"
     else:
         # Running as script
         base_dir = Path(__file__).parent.parent.parent
-    
-    return base_dir / "assets"
+        return base_dir / "assets"
 
 def get_logo_path(filename: str) -> Optional[Path]:
     """
@@ -67,7 +70,7 @@ def load_window_icon() -> Optional[str]:
     
     return None
 
-def load_logo_image(size: Tuple[int, int] = (64, 64)) -> Optional[PhotoImage]:
+def load_logo_image(size: Tuple[int, int] = (64, 64)) -> Optional[ImageTk.PhotoImage]:
     """
     Load logo image for display in GUI.
     
@@ -96,7 +99,7 @@ def load_logo_image(size: Tuple[int, int] = (64, 64)) -> Optional[PhotoImage]:
     
     return None
 
-def create_default_logo(size: Tuple[int, int] = (64, 64)) -> PhotoImage:
+def create_default_logo(size: Tuple[int, int] = (64, 64)) -> ImageTk.PhotoImage:
     """
     Create a default logo when no logo file is available.
     
@@ -147,8 +150,9 @@ def create_default_logo(size: Tuple[int, int] = (64, 64)) -> PhotoImage:
         
     except Exception as e:
         logger.warning(f"Failed to create default logo: {e}")
-        # Return a very simple fallback
-        return PhotoImage(width=size[0], height=size[1])
+        # Return a very simple fallback using PIL
+        fallback_img = Image.new('RGBA', size, (0, 100, 200, 255))
+        return ImageTk.PhotoImage(fallback_img)
 
 def set_window_icon(window: tk.Tk) -> bool:
     """
@@ -197,42 +201,86 @@ class LogoWidget:
     
     def _load_logo(self) -> None:
         """Load logo image."""
+        logger.info(f"Loading logo image with size {self.size}")
+
         # Try to load custom logo first
         self.logo_image = load_logo_image(self.size)
-        
-        # If no custom logo, create default
-        if not self.logo_image:
+
+        if self.logo_image:
+            logger.info("Custom logo loaded successfully")
+        else:
+            logger.warning("Custom logo failed to load, creating default logo")
+            # If no custom logo, create default
             self.logo_image = create_default_logo(self.size)
+            if self.logo_image:
+                logger.info("Default logo created successfully")
+            else:
+                logger.error("Failed to create default logo")
     
     def _create_widget(self) -> None:
         """Create the logo label widget."""
         try:
+            logger.info("Creating logo label widget...")
+
             # Try to get parent background color for better integration
-            parent_bg = None
+            parent_bg = "#f0f0f0"  # Default light gray background
             if hasattr(self.parent, 'cget'):
                 try:
-                    parent_bg = self.parent.cget('bg')
+                    bg_color = self.parent.cget('bg')
+                    if bg_color and bg_color != "":
+                        parent_bg = bg_color
+                        logger.info(f"Using parent background color: {parent_bg}")
                 except:
-                    pass
+                    logger.info("Could not get parent background, using default")
 
-            self.label = tk.Label(
-                self.parent,
-                image=self.logo_image,
-                bg=parent_bg,
-                bd=0,  # No border
-                highlightthickness=0  # No highlight
-            )
+            # Ensure we have a logo image
+            if self.logo_image:
+                logger.info("Creating label with logo image")
+                self.label = tk.Label(
+                    self.parent,
+                    image=self.logo_image,
+                    bg=parent_bg,
+                    bd=2,  # Small border for visibility
+                    relief="solid",
+                    highlightthickness=0
+                )
+                logger.info("Logo image label created successfully")
+            else:
+                logger.warning("No logo image available, creating text fallback")
+                # Fallback: create simple text label
+                self.label = tk.Label(
+                    self.parent,
+                    text="🏢",
+                    font=("Segoe UI", 28),
+                    bg=parent_bg,
+                    fg="#2E86AB",  # Blue color for visibility
+                    bd=2,
+                    relief="solid",
+                    highlightthickness=0
+                )
+                logger.info("Text fallback label created successfully")
+
         except Exception as e:
-            logger.warning(f"Failed to create logo widget: {e}")
-            # Fallback: create simple text label
-            self.label = tk.Label(
-                self.parent,
-                text="📱",
-                font=("Segoe UI", 24),
-                bg=parent_bg,
-                bd=0,
-                highlightthickness=0
-            )
+            logger.error(f"Failed to create logo widget: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
+
+            # Final fallback: create simple text label with high visibility
+            try:
+                self.label = tk.Label(
+                    self.parent,
+                    text="🏢",
+                    font=("Segoe UI", 28),
+                    bg="#f0f0f0",
+                    fg="#2E86AB",
+                    bd=2,
+                    relief="solid",
+                    highlightthickness=0
+                )
+                logger.info("Final fallback label created successfully")
+            except Exception as final_e:
+                logger.error(f"Even final fallback failed: {final_e}")
+                self.label = None
     
     def pack(self, **kwargs) -> None:
         """Pack the logo widget."""
@@ -242,7 +290,11 @@ class LogoWidget:
     def grid(self, **kwargs) -> None:
         """Grid the logo widget."""
         if self.label:
+            logger.info(f"Gridding logo widget with kwargs: {kwargs}")
             self.label.grid(**kwargs)
+            logger.info("Logo widget gridded successfully")
+        else:
+            logger.error("Cannot grid logo widget - label is None")
     
     def place(self, **kwargs) -> None:
         """Place the logo widget."""

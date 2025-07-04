@@ -451,6 +451,22 @@ Khi gặp sự cố không thể tự giải quyết:
 
 ---
 
+## 📦 Cấu trúc thư mục Release
+
+Sau khi build thành công, thư mục `release/` sẽ chứa:
+
+```
+release/
+├── TestCaseManager.exe     # File thực thi chính 
+└── data/                  # Dữ liệu ứng dụng
+    ├── config/            # File cấu hình
+    ├── logs/              # File log
+    ├── temp/              # File tạm
+    └── templates/         # Template test case
+```
+
+---
+
 **Test Case Manager v1.0** - Công cụ quản lý và thực thi test case chuyên nghiệp cho thiết bị OpenWrt
 
 Copyright © 2025. Tất cả quyền được bảo lưu.

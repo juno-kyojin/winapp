@@ -133,18 +133,11 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-REM Copy assets folder to release folder
-echo Copying assets folder...
-if exist assets (
-    xcopy assets release\assets /E /I /Y
-    if %ERRORLEVEL% NEQ 0 (
-        echo WARNING: Failed to copy assets folder!
-    ) else (
-        echo ✓ Assets folder copied successfully
-    )
-) else (
-    echo WARNING: Assets folder not found, skipping...
-)
+REM Assets are now embedded in the executable, no need to copy separately
+echo ✓ Assets embedded in executable (no separate assets folder needed)
+
+REM Remove any existing assets folder from release (assets are now embedded)
+if exist release\assets rmdir /S /Q release\assets
 
 REM Verify final release structure
 echo Verifying release structure...
@@ -158,7 +151,7 @@ if not exist release\data (
     exit /b 1
 )
 
-echo ✓ Release verification passed
+echo ✓ Release verification passed (assets embedded in executable)
 
 REM Clean up build artifacts
 echo Cleaning up build artifacts...
@@ -172,13 +165,14 @@ echo ============================================================
 echo Build Complete!
 echo ============================================================
 echo 📁 Release folder: release\
-echo 📄 Executable: release\TestCaseManager.exe
+echo 📄 Executable: release\TestCaseManager.exe (with embedded assets)
 echo 📂 Data folder: release\data\
 echo
 echo ✅ Ready for distribution:
-echo   - Single executable file (no source code visible)
+echo   - Single executable file with embedded assets (no source code visible)
 echo   - Data folder with templates and configuration
 echo   - No Python installation required on target systems
+echo   - No separate assets folder needed (embedded in .exe)
 echo
 echo 🚀 To run the application:
 echo   1. Navigate to: release\
@@ -188,6 +182,7 @@ echo 📝 The application will:
 echo   - Create logs in: data\logs\
 echo   - Load test cases from: data\templates\
 echo   - Store configuration in: data\config\
+echo   - Load embedded assets automatically
 echo ============================================================
 
 exit /b 0

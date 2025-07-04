@@ -1,5 +1,4 @@
 # Build artifacts và executables
-release/
 dist/
 build/
 *.exe

@@ -147,3 +147,446 @@
 [2025-07-04 14:06:48] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
 [2025-07-04 14:06:48] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
 [2025-07-04 14:06:54] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:09:48] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:09:48] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:09:49] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:09:49] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:09:49] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:09:49] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:09:49] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:09:49] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:09:49] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:09:49] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:09:49] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:09:49] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:09:49] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:09:53] INFO - src.gui.widgets.status_bar: Status: Connection settings saved
+[2025-07-04 14:09:55] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:09:56] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:09:56] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:09:57] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:09:57] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:09:57] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:09:57] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:09:57] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:09:57] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:09:57] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:09:57] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:09:57] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:09:57] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:09:57] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:10:00] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-04 14:10:05] ERROR - src.network.http_client: Failed to ping server: HTTPConnectionPool(host='192.168.1.4', port=6262): Max retries exceeded with url: /ping (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x00000224E0EF8440>, 'Connection to 192.168.1.4 timed out. (connect timeout=5)'))
+[2025-07-04 14:10:05] INFO - src.gui.widgets.status_bar: Status: Connection failed
+[2025-07-04 14:10:24] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:25] INFO - src.gui.widgets.status_bar: Status: Loaded template: ping.json
+[2025-07-04 14:10:25] INFO - src.gui.widgets.status_bar: Status: Loaded template: ping.json
+[2025-07-04 14:10:28] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:29] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-04 14:10:29] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-04 14:10:30] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:32] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-04 14:10:32] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-04 14:10:33] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:34] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-04 14:10:35] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:37] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 14:10:37] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 14:10:38] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:40] INFO - src.gui.widgets.status_bar: Status: Template saved successfully
+[2025-07-04 14:10:40] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 14:10:42] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:42] INFO - src.gui.widgets.status_bar: Status: Template saved successfully
+[2025-07-04 14:10:43] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 14:10:43] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_sta.json
+[2025-07-04 14:10:44] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:48] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:10:48] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:10:49] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:50] INFO - src.gui.widgets.status_bar: Status: Template saved successfully
+[2025-07-04 14:10:50] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-04 14:10:51] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 14:10:52] INFO - src.gui.widgets.status_bar: Status: Template saved successfully
+[2025-07-04 14:10:55] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:20:19] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:20:19] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:20:20] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:20:20] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:20:20] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:20:20] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:20:20] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:20:20] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:20:20] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:20:20] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:20:20] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:20:20] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:20:20] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:20:55] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:21:56] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:21:56] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:21:56] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:21:56] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:21:56] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:21:56] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:21:56] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:21:56] INFO - src.gui.main_window: Creating logo widget...
+[2025-07-04 14:21:56] INFO - src.gui.main_window: Logo widget created successfully
+[2025-07-04 14:21:56] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:21:56] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:21:56] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:21:56] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:21:56] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:21:56] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:25:01] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:25:01] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:25:01] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:25:01] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:25:01] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:25:01] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:25:01] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:25:01] INFO - src.gui.main_window: Creating logo widget...
+[2025-07-04 14:25:01] INFO - src.utils.image_utils: Loading logo image with size (64, 64)
+[2025-07-04 14:25:01] INFO - src.utils.image_utils: Custom logo loaded successfully
+[2025-07-04 14:25:01] INFO - src.gui.main_window: Logo widget created successfully
+[2025-07-04 14:25:01] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:25:02] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:25:02] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:25:02] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:25:02] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:25:02] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:30:27] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:30:27] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:30:28] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:30:28] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:30:28] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:30:28] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:30:28] INFO - src.gui.main_window: Creating logo widget...
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Loading logo image with size (80, 80)
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Custom logo loaded successfully
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Creating logo label widget...
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Could not get parent background, using default
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Creating label with logo image
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Logo image label created successfully
+[2025-07-04 14:30:28] INFO - src.gui.main_window: LogoWidget created, has label: True
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Gridding logo widget with kwargs: {'row': 0, 'column': 0, 'padx': (0, 15), 'pady': 5, 'sticky': 'w'}
+[2025-07-04 14:30:28] INFO - src.utils.image_utils: Logo widget gridded successfully
+[2025-07-04 14:30:28] INFO - src.gui.main_window: Logo widget gridded successfully
+[2025-07-04 14:30:28] INFO - src.gui.main_window: Logo widget update_idletasks called
+[2025-07-04 14:30:28] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:30:28] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:30:28] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:30:28] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:30:28] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:30:28] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:31:15] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:31:15] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:31:15] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:31:15] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:31:15] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:31:15] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:31:15] INFO - src.gui.main_window: Creating logo widget...
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Loading logo image with size (80, 80)
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Custom logo loaded successfully
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Creating logo label widget...
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Could not get parent background, using default
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Creating label with logo image
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Logo image label created successfully
+[2025-07-04 14:31:15] INFO - src.gui.main_window: LogoWidget created, has label: True
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Gridding logo widget with kwargs: {'row': 0, 'column': 0, 'padx': (0, 15), 'pady': 5, 'sticky': 'w'}
+[2025-07-04 14:31:15] INFO - src.utils.image_utils: Logo widget gridded successfully
+[2025-07-04 14:31:15] INFO - src.gui.main_window: Logo widget gridded successfully
+[2025-07-04 14:31:15] INFO - src.gui.main_window: Logo widget update_idletasks called
+[2025-07-04 14:31:16] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:31:16] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:31:16] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:31:16] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:31:16] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:31:16] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:31:23] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:32:40] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:32:40] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:32:41] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:32:41] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:32:41] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:32:41] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:32:41] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:32:41] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:32:41] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:32:41] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:32:41] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:32:41] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:32:41] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:40:59] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:40:59] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:40:59] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:40:59] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:40:59] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:40:59] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:40:59] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:40:59] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:41:00] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:41:00] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:41:00] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:41:00] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:41:00] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:45:05] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:45:05] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:45:06] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:45:06] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:45:06] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:45:06] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:45:06] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:45:06] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:45:06] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:45:06] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:45:06] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:45:06] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:45:06] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:46:34] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:46:34] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:46:34] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:46:34] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:46:34] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:46:34] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:46:34] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:46:34] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:46:34] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:46:34] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:46:34] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:46:34] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:46:34] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:46:40] INFO - src.core.config: Configuration saved successfully
+[2025-07-04 14:46:40] INFO - src.gui.panels.connection_panel: Connection settings saved: HTTP - 192.168.1.4
+[2025-07-04 14:46:41] INFO - src.gui.widgets.status_bar: Status: Connection settings saved
+[2025-07-04 14:46:43] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:46:54] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:46:54] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:46:54] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:46:54] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:46:54] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:46:54] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:46:54] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:46:54] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:46:55] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:46:55] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:46:55] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:46:55] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:46:55] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:47:01] INFO - src.core.config: Configuration saved successfully
+[2025-07-04 14:47:01] INFO - src.gui.panels.connection_panel: Connection settings saved: HTTP - 192.168.1.4
+[2025-07-04 14:47:02] INFO - src.gui.widgets.status_bar: Status: Connection settings saved
+[2025-07-04 14:47:03] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:47:05] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:47:05] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:47:05] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:47:05] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:47:05] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:47:05] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:47:05] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:47:05] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:47:05] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:47:05] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:47:05] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:47:05] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:47:05] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:47:17] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 14:47:45] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:47:45] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:47:45] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:47:45] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:47:45] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:47:45] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:47:45] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:47:45] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:47:45] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:47:45] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:47:45] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:47:45] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:47:45] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:47:48] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 15:13:47] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 15:13:47] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 15:13:48] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 15:13:48] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 15:13:48] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 15:13:48] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 15:13:48] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 15:13:48] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 15:13:48] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 15:13:48] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 15:13:48] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 15:13:48] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 15:13:48] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 15:13:58] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-04 15:13:58] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-04 15:13:58] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-04 15:14:01] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 15:14:01] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 15:15:44] INFO - src.gui.widgets.status_bar: Status: Added test wireless_wireless_edit_ap to queue
+[2025-07-04 15:15:44] INFO - src.gui.widgets.status_bar: Status: Added template wireless_config_ap.json to queue
+[2025-07-04 15:15:44] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-04 15:15:50] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_ap
+[2025-07-04 15:15:50] INFO - src.gui.main_window: Executing test: wireless_wireless_edit_ap
+[2025-07-04 15:15:50] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_ap...
+[2025-07-04 15:15:51] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wireless_wireless_edit_ap
+[2025-07-04 15:15:51] INFO - src.gui.widgets.status_bar: Status: Executed test wireless_wireless_edit_ap
+[2025-07-04 15:15:51] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:15:51] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:15:51] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:15:51] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:15:51] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704151551_d083ec24
+[2025-07-04 15:15:57] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-04 15:15:57] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: wireless_wireless_edit_ap
+[2025-07-04 15:15:57] INFO - src.gui.main_window: Executing test: wireless_wireless_edit_ap
+[2025-07-04 15:15:57] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_ap...
+[2025-07-04 15:15:57] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:16:02] WARNING - src.network.connection_manager: Ping request failed: HTTPConnectionPool(host='192.168.1.4', port=6262): Read timed out. (read timeout=5), but continuing
+[2025-07-04 15:16:02] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:16:02] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:16:02] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:16:02] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704151551_d083ec24
+[2025-07-04 15:16:07] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:16:07] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_edit_ap
+[2025-07-04 15:16:07] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_edit_ap_144cf12f_success.json
+[2025-07-04 15:16:07] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-04 15:16:08] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-04 15:16:24] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:16:24] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_edit_ap
+[2025-07-04 15:16:24] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_edit_ap_c2c64f38_success.json
+[2025-07-04 15:16:24] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-04 15:19:50] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 15:19:51] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 15:19:51] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_sta.json
+[2025-07-04 15:19:52] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 15:19:53] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_ap.json
+[2025-07-04 15:25:41] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-04 15:25:41] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-04 15:25:41] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-04 15:25:48] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-04 15:25:48] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: wireless_wireless_edit_ap
+[2025-07-04 15:25:48] INFO - src.gui.main_window: Executing test: wireless_wireless_edit_ap
+[2025-07-04 15:25:48] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_ap...
+[2025-07-04 15:25:48] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:25:48] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:25:48] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:25:48] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:25:48] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704151551_d083ec24
+[2025-07-04 15:26:05] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:26:05] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_edit_ap
+[2025-07-04 15:26:05] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_edit_ap_a4a33892_success.json
+[2025-07-04 15:26:05] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-04 15:26:06] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-04 15:42:38] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 15:42:38] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_sta.json
+[2025-07-04 15:42:40] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_sta.json
+[2025-07-04 15:42:41] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_radio.json
+[2025-07-04 15:42:42] INFO - src.gui.widgets.status_bar: Status: Added test wireless_wireless_config_radio to queue
+[2025-07-04 15:42:42] INFO - src.gui.widgets.status_bar: Status: Added template wireless_config_radio.json to queue
+[2025-07-04 15:42:42] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-04 15:42:45] INFO - src.gui.widgets.status_bar: Status: Loaded template: wireless_config_sta.json
+[2025-07-04 15:42:46] INFO - src.gui.widgets.status_bar: Status: Added test wireless_wireless_edit_sta to queue
+[2025-07-04 15:42:46] INFO - src.gui.widgets.status_bar: Status: Added template wireless_config_sta.json to queue
+[2025-07-04 15:42:46] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-04 15:42:50] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 3 tests
+[2025-07-04 15:42:50] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 3: wireless_wireless_edit_ap
+[2025-07-04 15:42:50] INFO - src.gui.main_window: Executing test: wireless_wireless_edit_ap
+[2025-07-04 15:42:50] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_ap...
+[2025-07-04 15:42:50] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:42:50] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:42:50] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:42:50] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:42:50] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704151551_d083ec24
+[2025-07-04 15:43:06] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:43:06] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_edit_ap
+[2025-07-04 15:43:06] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_edit_ap_dcf59e43_success.json
+[2025-07-04 15:43:06] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 25s for device to stabilize...
+[2025-07-04 15:43:31] INFO - src.gui.widgets.status_bar: Status: Executing test 2 of 3: wireless_wireless_config_radio
+[2025-07-04 15:43:31] INFO - src.gui.widgets.status_bar: Status: Waiting 20s before executing next test...
+[2025-07-04 15:43:51] INFO - src.gui.main_window: Executing test: wireless_wireless_config_radio
+[2025-07-04 15:43:51] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_config_radio...
+[2025-07-04 15:43:51] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:43:51] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:43:51] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:43:51] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:43:51] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704154351_9d781b22
+[2025-07-04 15:44:19] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:44:19] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_config_radio
+[2025-07-04 15:44:19] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_config_radio_6a59ea47_success.json
+[2025-07-04 15:44:19] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 25s for device to stabilize...
+[2025-07-04 15:44:44] INFO - src.gui.widgets.status_bar: Status: Executing test 3 of 3: wireless_wireless_edit_sta
+[2025-07-04 15:44:44] INFO - src.gui.widgets.status_bar: Status: Waiting 20s before executing next test...
+[2025-07-04 15:45:04] INFO - src.gui.main_window: Executing test: wireless_wireless_edit_sta
+[2025-07-04 15:45:04] INFO - src.gui.widgets.status_bar: Status: Executing test: wireless_wireless_edit_sta...
+[2025-07-04 15:45:04] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:45:04] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:45:04] INFO - src.network.http_client: Detected wireless test - using extended timeout parameters
+[2025-07-04 15:45:04] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:45:04] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704154504_9b87c937
+[2025-07-04 15:45:36] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:45:36] WARNING - src.network.http_client: Server reported error: Timeout waiting for result
+[2025-07-04 15:45:36] INFO - src.network.http_client: Server reported timeout, checking transaction status for 20250704154504_9b87c937
+[2025-07-04 15:45:36] INFO - src.network.http_client: Extended timeout for wireless test - max_retries: 60, retry_delay: 3s
+[2025-07-04 15:45:36] INFO - src.network.http_client: Wireless tests may require extended time for service restarts and network reconfiguration
+[2025-07-04 15:45:36] INFO - src.network.http_client: Waiting for transaction 20250704154504_9b87c937 to complete
+[2025-07-04 15:45:39] INFO - src.network.http_client: Transaction 20250704154504_9b87c937 completed
+[2025-07-04 15:45:39] INFO - src.network.http_client: Successfully retrieved result for transaction 20250704154504_9b87c937
+[2025-07-04 15:45:39] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wireless_wireless_edit_sta
+[2025-07-04 15:45:39] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wireless_wireless_edit_sta_15a899ff_success.json
+[2025-07-04 15:45:39] INFO - src.gui.widgets.status_bar: Status: Executed 3 tests
+[2025-07-04 15:45:40] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 3/3 tests successful
+[2025-07-04 15:49:56] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-04 15:49:56] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-04 15:49:57] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-04 15:49:58] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-04 15:50:01] INFO - src.gui.widgets.status_bar: Status: Added test wan_delete to queue
+[2025-07-04 15:50:01] INFO - src.gui.widgets.status_bar: Status: Added template None to queue
+[2025-07-04 15:50:01] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-04 15:50:08] INFO - src.gui.widgets.status_bar: Status: Executing test: wan_delete
+[2025-07-04 15:50:08] INFO - src.gui.main_window: Executing test: wan_delete
+[2025-07-04 15:50:08] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-04 15:50:08] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_delete...
+[2025-07-04 15:50:08] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_delete
+[2025-07-04 15:50:08] INFO - src.gui.widgets.status_bar: Status: Executed test wan_delete
+[2025-07-04 15:50:08] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:50:08] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-04 15:50:08] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:50:08] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-04 15:50:08] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:50:08] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704155008_0c74024c
+[2025-07-04 15:50:24] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:50:24] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wan_delete
+[2025-07-04 15:50:24] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_delete_58def079_success.json
+[2025-07-04 15:50:24] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-04 15:50:29] INFO - src.gui.widgets.status_bar: Status: Executing test: wan_delete
+[2025-07-04 15:50:29] INFO - src.gui.main_window: Executing test: wan_delete
+[2025-07-04 15:50:29] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-04 15:50:29] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_delete...
+[2025-07-04 15:50:29] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_delete
+[2025-07-04 15:50:29] INFO - src.gui.widgets.status_bar: Status: Executed test wan_delete
+[2025-07-04 15:50:29] INFO - src.gui.main_window: Sending test to device...
+[2025-07-04 15:50:29] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-04 15:50:29] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-04 15:50:29] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-04 15:50:29] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-04 15:50:29] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250704155008_0c74024c
+[2025-07-04 15:50:44] INFO - src.network.http_client: Received response from server
+[2025-07-04 15:50:44] INFO - src.gui.widgets.status_bar: Status: Test executed successfully: wan_delete
+[2025-07-04 15:50:44] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_delete_61ff7e62_success.json
+[2025-07-04 15:50:45] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-04 15:51:37] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-04 16:16:46] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 16:16:46] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 16:16:46] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 16:16:46] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 16:16:46] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 16:16:46] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 16:16:47] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 16:16:47] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 16:16:47] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 16:16:47] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 16:16:47] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 16:16:47] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 16:16:47] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 16:16:52] INFO - src.main: Exiting Test Case Manager v1.0.0

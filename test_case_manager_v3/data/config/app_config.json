@@ -1,0 +1,34 @@
+{
+  "network": {
+    "connection_type": "http",
+    "ssh_host": "192.168.1.4",
+    "ssh_port": 22,
+    "ssh_username": "root",
+    "ssh_password": "",
+    "connection_timeout": 15,
+    "remote_config_path": "/root/config",
+    "remote_result_path": "/root/result",
+    "http_host": "192.168.1.4",
+    "http_port": 6262,
+    "http_connect_timeout": 5,
+    "http_read_timeout": 40,
+    "middleware_url": "http://192.168.88.10:5000"
+  },
+  "test": {
+    "default_timeout": 120,
+    "max_concurrent_tests": 1,
+    "auto_cleanup": true,
+    "cleanup_interval_hours": 24,
+    "retry_attempts": 3,
+    "retry_delay": 5
+  },
+  "gui": {
+    "window_width": 1200,
+    "window_height": 800,
+    "auto_save_settings": true,
+    "log_level": "INFO",
+    "theme": "default",
+    "font_family": "Segoe UI",
+    "font_size": 9
+  }
+}
