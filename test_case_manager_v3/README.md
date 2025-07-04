@@ -81,11 +81,8 @@ python run.py
 5. **Lưu** cấu hình bằng nút "Save Settings"
 #### Thiết lập thiết bị OpenWrt:
 ```bash
-# Khởi động communicate HTTP server
-cd /path/to/rnd_autotest/communicate
-./communicate
 
-# Khởi động test execution engine
+# Khởi động test execution engine + communicate
 cd /path/to/rnd_autotest
 ./auto_test
 ```
@@ -327,9 +324,9 @@ sequenceDiagram
 ### 🌐 Giao thức giao tiếp
 
 #### HTTP API Endpoints:
-- `POST /send_test`: Gửi test case để thực thi
+- `POST /`: Gửi test case để thực thi (root endpoint)
 - `GET /check_result/{transaction_id}`: Kiểm tra kết quả test
-- `GET /status`: Kiểm tra trạng thái server
+- `GET /ping`: Kiểm tra trạng thái server
 
 #### Luồng dữ liệu:
 1. PC gửi test case qua HTTP POST
@@ -357,9 +354,9 @@ ping 192.168.1.1
 # Kiểm tra port 6262
 telnet 192.168.1.1 6262
 
-# Khởi động lại communicate server
-cd /path/to/rnd_autotest/communicate
-./communicate
+# Khởi động lại server
+
+./server
 ```
 
 #### 2. Test Execution Failed
@@ -395,19 +392,22 @@ cd /path/to/rnd_autotest/communicate
 #### Kiểm tra trạng thái device:
 ```bash
 # Kiểm tra process đang chạy
-ps | grep -E "(communicate|auto_test)"
+ps | grep communicate
 
 # Kiểm tra port listening
 netstat -ln | grep 6262
 
 # Kiểm tra log device (nếu có)
-tail -f /var/log/messages
+tail -f application.log
 ```
 
 #### Test kết nối thủ công:
 ```bash
-# Test HTTP endpoint
-curl -X POST http://192.168.1.1:6262/send_test \
+# Test ping endpoint
+curl -X GET http://192.168.1.1:6262/ping
+
+# Test gửi test case
+curl -X POST http://192.168.1.1:6262/ \
   -H "Content-Type: application/json" \
   -d '{"test_cases":[{"service":"ping","params":{"host":"8.8.8.8"}}]}'
 ```
