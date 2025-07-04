@@ -117,19 +117,42 @@ class QueuePanel(ttk.Frame):
             text="Execute Selected",
             command=self._execute_selected
         ).pack(fill=tk.X, padx=5, pady=5)
-        
+
         ttk.Button(
             actions_frame,
             text="Execute All",
             command=self._execute_all
         ).pack(fill=tk.X, padx=5, pady=5)
-        
+
+        # Separator for reordering buttons
+        ttk.Separator(actions_frame, orient='horizontal').pack(fill=tk.X, padx=5, pady=5)
+
+        # Reordering buttons
+        self.move_up_button = ttk.Button(
+            actions_frame,
+            text="Move Up",
+            command=self._move_up,
+            state=tk.DISABLED
+        )
+        self.move_up_button.pack(fill=tk.X, padx=5, pady=2)
+
+        self.move_down_button = ttk.Button(
+            actions_frame,
+            text="Move Down",
+            command=self._move_down,
+            state=tk.DISABLED
+        )
+        self.move_down_button.pack(fill=tk.X, padx=5, pady=2)
+
+        # Separator for management buttons
+        ttk.Separator(actions_frame, orient='horizontal').pack(fill=tk.X, padx=5, pady=5)
+
         ttk.Button(
             actions_frame,
             text="Remove Selected",
             command=self._remove_selected
         ).pack(fill=tk.X, padx=5, pady=5)
-        
+
         ttk.Button(
             actions_frame,
             text="Clear Queue",
@@ -192,7 +215,10 @@ class QueuePanel(ttk.Frame):
                     queue_item["added"]
                 )
             )
-            
+
+            # Update button states in case this is the first item
+            self._update_button_states()
+
             self._update_status(f"Added test {name} to queue")
         except Exception as e:
             self.logger.error(f"Error adding test to queue: {e}")
@@ -204,24 +230,27 @@ class QueuePanel(ttk.Frame):
     def _on_item_selected(self, event: tk.Event) -> None:
         """
         Handle item selection.
-        
+
         Args:
             event: Selection event
         """
         selection = self.queue_tree.selection()
         if not selection:
+            self.selected_item = None
+            self._update_button_states()
             return
-            
+
         # Get selected item
         item = selection[0]
         item_values = self.queue_tree.item(item, "values")
-        
+
         # Find corresponding queue item
         selected_id = item_values[0]
         for i, queue_item in enumerate(self.queue_items):
             if queue_item["id"] == selected_id:
                 self.selected_item = i
                 self._show_item_details(queue_item)
+                self._update_button_states()
                 break
     
     def _show_item_details(self, item: Dict[str, Any]) -> None:
@@ -566,12 +595,15 @@ class QueuePanel(ttk.Frame):
         
         # Reset selected item
         self.selected_item = None
-        
+
         # Clear details
         self.details_text.config(state=tk.NORMAL)
         self.details_text.delete(1.0, tk.END)
         self.details_text.config(state=tk.DISABLED)
-        
+
+        # Update button states
+        self._update_button_states()
+
         self._update_status(f"Removed test {item['name']} from queue")
     
     def _clear_queue(self) -> None:
@@ -601,14 +633,132 @@ class QueuePanel(ttk.Frame):
         
         # Reset selected item
         self.selected_item = None
-        
+
         # Clear details
         self.details_text.config(state=tk.NORMAL)
         self.details_text.delete(1.0, tk.END)
         self.details_text.config(state=tk.DISABLED)
-        
+
+        # Update button states
+        self._update_button_states()
+
         self._update_status("Queue cleared")
-    
+
+    def _move_up(self) -> None:
+        """Move the selected test case up in the queue."""
+        if self.selected_item is None or self.selected_item == 0:
+            return
+
+        # Check if execution is in progress
+        if self.is_executing:
+            messagebox.showwarning(
+                "Execution in Progress",
+                "Cannot reorder queue while test execution is in progress."
+            )
+            return
+
+        # Get current item
+        current_item = self.queue_items[self.selected_item]
+
+        # Swap with previous item
+        self.queue_items[self.selected_item], self.queue_items[self.selected_item - 1] = \
+            self.queue_items[self.selected_item - 1], self.queue_items[self.selected_item]
+
+        # Update selected index
+        self.selected_item -= 1
+
+        # Refresh the tree view
+        self._refresh_queue_tree()
+
+        # Reselect the moved item
+        self._select_item_by_index(self.selected_item)
+
+        # Update button states
+        self._update_button_states()
+
+        self._update_status(f"Moved test '{current_item['name']}' up in queue")
+
+    def _move_down(self) -> None:
+        """Move the selected test case down in the queue."""
+        if self.selected_item is None or self.selected_item >= len(self.queue_items) - 1:
+            return
+
+        # Check if execution is in progress
+        if self.is_executing:
+            messagebox.showwarning(
+                "Execution in Progress",
+                "Cannot reorder queue while test execution is in progress."
+            )
+            return
+
+        # Get current item
+        current_item = self.queue_items[self.selected_item]
+
+        # Swap with next item
+        self.queue_items[self.selected_item], self.queue_items[self.selected_item + 1] = \
+            self.queue_items[self.selected_item + 1], self.queue_items[self.selected_item]
+
+        # Update selected index
+        self.selected_item += 1
+
+        # Refresh the tree view
+        self._refresh_queue_tree()
+
+        # Reselect the moved item
+        self._select_item_by_index(self.selected_item)
+
+        # Update button states
+        self._update_button_states()
+
+        self._update_status(f"Moved test '{current_item['name']}' down in queue")
+
+    def _update_button_states(self) -> None:
+        """Update the state of move buttons based on current selection."""
+        if self.selected_item is None or len(self.queue_items) <= 1:
+            # No selection or only one item - disable both buttons
+            self.move_up_button.config(state=tk.DISABLED)
+            self.move_down_button.config(state=tk.DISABLED)
+        else:
+            # Enable/disable based on position
+            self.move_up_button.config(
+                state=tk.NORMAL if self.selected_item > 0 else tk.DISABLED
+            )
+            self.move_down_button.config(
+                state=tk.NORMAL if self.selected_item < len(self.queue_items) - 1 else tk.DISABLED
+            )
+
+    def _refresh_queue_tree(self) -> None:
+        """Refresh the entire queue tree view to reflect current order."""
+        # Clear current tree
+        for item in self.queue_tree.get_children():
+            self.queue_tree.delete(item)
+
+        # Re-add all items in current order
+        for queue_item in self.queue_items:
+            self.queue_tree.insert(
+                "",
+                tk.END,
+                values=(
+                    queue_item["id"],
+                    queue_item["name"],
+                    queue_item["category"],
+                    queue_item["status"],
+                    queue_item["added"]
+                )
+            )
+
+    def _select_item_by_index(self, index: int) -> None:
+        """Select an item in the tree by its index in the queue."""
+        if 0 <= index < len(self.queue_items):
+            # Get all tree items
+            tree_items = self.queue_tree.get_children()
+            if index < len(tree_items):
+                # Select the item at the specified index
+                self.queue_tree.selection_set(tree_items[index])
+                self.queue_tree.focus(tree_items[index])
+                # Ensure the item is visible
+                self.queue_tree.see(tree_items[index])
+
     def _update_item_in_tree(self, item: Dict[str, Any]) -> None:
         """
         Update an item in the treeview.
