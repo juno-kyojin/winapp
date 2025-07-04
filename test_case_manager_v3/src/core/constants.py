@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Constants for Test Case Manager v3.0
+Constants for Test Case Manager v1.0
 
 This module defines all application-wide constants including default values,
 file paths, network settings, and configuration parameters.
@@ -19,7 +19,7 @@ from typing import Dict, List, Final, Set, Tuple, Union
 # Application Information
 # ------------------------------------------------------------------
 APP_NAME: Final[str] = "Test Case Manager"
-APP_VERSION: Final[str] = "3.0.0"
+APP_VERSION: Final[str] = "1.0.0"
 APP_AUTHOR: Final[str] = "juno-kyojin"
 
 # ------------------------------------------------------------------

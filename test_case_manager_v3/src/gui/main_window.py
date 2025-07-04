@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Main Window for Test Case Manager v3.0
+Main Window for Test Case Manager v1.0
 
 This module implements the main application window with tabbed interface,
 menu bar, status bar, and core application functionality.
@@ -93,7 +93,7 @@ from src.gui.panels.logs_panel import LogsPanel
 
 # Import dialogs (will be implemented separately)
 # from gui.dialogs.preferences_dialog import PreferencesDialog
-from src.gui.dialogs.about_dialog import AboutDialog
+# from src.gui.dialogs.about_dialog import AboutDialog
 # from gui.dialogs.test_details_dialog import TestDetailsDialog
 
 # Import widgets
@@ -138,6 +138,7 @@ class MainWindow:
         # Setup UI
         self._setup_window()
         self._create_menu()
+        self._create_header()
         self._create_tabs()
         self._create_status_bar()
         
@@ -165,20 +166,71 @@ class MainWindow:
         self.root.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
         
         # Set grid weights for proper resizing
-        self.root.rowconfigure(0, weight=1)  # Main content expands
-        self.root.rowconfigure(1, weight=0)  # Status bar fixed height
+        self.root.rowconfigure(0, weight=0)  # Header fixed height
+        self.root.rowconfigure(1, weight=1)  # Main content expands
+        self.root.rowconfigure(2, weight=0)  # Status bar fixed height
         self.root.columnconfigure(0, weight=1)  # Expand horizontally
         
         # Set window icon (if available)
         try:
-            # TODO: Add application icon
-            pass
-        except Exception:
-            pass
+            from src.utils.image_utils import set_window_icon
+            set_window_icon(self.root)
+        except Exception as e:
+            self.logger.debug(f"Could not set window icon: {e}")
         
         # Handle window closing
         self.root.protocol("WM_DELETE_WINDOW", self._on_closing)
-    
+
+    def _create_header(self) -> None:
+        """Create the application header with logo and title."""
+        if not self.root:
+            return
+
+        # Create header frame with better styling
+        header_frame = ttk.Frame(self.root, style="Header.TFrame")
+        header_frame.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
+        header_frame.columnconfigure(1, weight=1)  # Title expands
+
+        # Create inner frame for content with padding
+        content_frame = ttk.Frame(header_frame)
+        content_frame.grid(row=0, column=0, sticky="ew", padx=15, pady=10)
+        content_frame.columnconfigure(1, weight=1)
+
+        try:
+            # Add logo
+            from src.utils.image_utils import LogoWidget
+            logo_widget = LogoWidget(content_frame, size=(40, 40))
+            logo_widget.grid(row=0, column=0, padx=(0, 12), pady=0, sticky="w")
+        except Exception as e:
+            self.logger.debug(f"Could not create logo widget: {e}")
+
+        # Add title and version in a more compact layout
+        title_frame = ttk.Frame(content_frame)
+        title_frame.grid(row=0, column=1, sticky="w", pady=0)
+
+        # Create horizontal layout for title and version
+        title_version_frame = ttk.Frame(title_frame)
+        title_version_frame.pack(anchor="w")
+
+        title_label = ttk.Label(
+            title_version_frame,
+            text=f"{APP_NAME}",
+            font=("Segoe UI", 14, "bold")
+        )
+        title_label.pack(side="left")
+
+        version_label = ttk.Label(
+            title_version_frame,
+            text=f" v{APP_VERSION}",
+            font=("Segoe UI", 10),
+            foreground="gray"
+        )
+        version_label.pack(side="left", padx=(5, 0))
+
+        # Add separator
+        separator = ttk.Separator(self.root, orient="horizontal")
+        separator.grid(row=0, column=0, sticky="ew", pady=(55, 0))
+
     def _create_menu(self) -> None:
         """Create the application menu bar."""
         if not self.root:
@@ -221,7 +273,7 @@ class MainWindow:
             return
             
         self.notebook = ttk.Notebook(self.root)
-        self.notebook.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.notebook.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
         
         # Create tab frames - these will be populated by panels
         self.connection_tab = ttk.Frame(self.notebook)
@@ -244,7 +296,7 @@ class MainWindow:
             
         # Cast the root to tk.Widget which is what StatusBar expects
         self.status_bar = StatusBar(cast(tk.Widget, self.root))
-        self.status_bar.grid(row=1, column=0, sticky="ew")
+        self.status_bar.grid(row=2, column=0, sticky="ew")
     
     def _initialize_panels(self) -> None:
         """Initialize panels for each tab."""
@@ -777,11 +829,89 @@ class MainWindow:
             )
     
     def _show_about(self) -> None:
-        """Show about dialog."""
+        """Show about dialog with logo."""
         if not self.root:
             return
-            
-        dialog = AboutDialog(self.root)
+
+        # Create about dialog window
+        about_window = tk.Toplevel(self.root)
+        about_window.title("About Test Case Manager")
+        about_window.geometry("400x300")
+        about_window.resizable(False, False)
+
+        # Center the dialog
+        about_window.transient(self.root)
+        about_window.grab_set()
+
+        # Create main frame
+        main_frame = ttk.Frame(about_window, padding="20")
+        main_frame.pack(fill="both", expand=True)
+
+        try:
+            # Add logo
+            from src.utils.image_utils import load_logo_image
+            logo_image = load_logo_image(size=(64, 64))
+            if logo_image:
+                logo_label = ttk.Label(main_frame, image=logo_image)
+                setattr(logo_label, 'image', logo_image)  # Keep a reference
+                logo_label.pack(pady=(0, 15))
+            else:
+                # Fallback: create a simple text logo
+                logo_text = ttk.Label(
+                    main_frame,
+                    text="📱",
+                    font=("Segoe UI", 32)
+                )
+                logo_text.pack(pady=(0, 15))
+        except Exception as e:
+            self.logger.debug(f"Could not create logo in about dialog: {e}")
+            # Fallback: create a simple text logo
+            logo_text = ttk.Label(
+                main_frame,
+                text="📱",
+                font=("Segoe UI", 32)
+            )
+            logo_text.pack(pady=(0, 15))
+
+        # Add application info
+        app_label = ttk.Label(
+            main_frame,
+            text=f"{APP_NAME}",
+            font=("Segoe UI", 16, "bold"),
+            anchor="center"
+        )
+        app_label.pack(pady=(0, 5))
+
+        version_label = ttk.Label(
+            main_frame,
+            text=f"Version {APP_VERSION}",
+            font=("Segoe UI", 12),
+            anchor="center"
+        )
+        version_label.pack(pady=(0, 10))
+
+        description_label = ttk.Label(
+            main_frame,
+            text="OpenWrt Test Case Management Tool\nfor Network Device Testing",
+            font=("Segoe UI", 10),
+            anchor="center",
+            justify="center"
+        )
+        description_label.pack(pady=(0, 20))
+
+        # Add close button
+        close_button = ttk.Button(
+            main_frame,
+            text="Close",
+            command=about_window.destroy
+        )
+        close_button.pack(pady=(10, 0))
+
+        # Center the window on parent
+        about_window.update_idletasks()
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (about_window.winfo_width() // 2)
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (about_window.winfo_height() // 2)
+        about_window.geometry(f"+{x}+{y}")
     
     def _on_closing(self) -> None:
         """Handle window closing."""

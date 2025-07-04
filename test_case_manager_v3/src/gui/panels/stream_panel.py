@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Stream Panel for Test Case Manager v3.0
+Stream Panel for Test Case Manager v1.0
 
 This panel displays real-time test execution flow from PC to device,
 showing the complete test lifecycle and communication status.

@@ -2,5 +2,5 @@
 # -*- coding: utf-8 -*-
  
 """
-Tests package for Test Case Manager v3.0
-""" 
+Tests package for Test Case Manager v1.0
+"""

@@ -1,8 +1,8 @@
-# Test Case Manager v3.0 - Hướng dẫn sử dụng
+# Test Case Manager v1.0 - Hướng dẫn sử dụng
 
 **Công cụ quản lý và thực thi Test Case toàn diện cho thiết bị OpenWrt**
 
-[![Phiên bản](https://img.shields.io/badge/phiên_bản-3.0-blue.svg)](https://github.com/juno-kyojin/winapp)
+[![Phiên bản](https://img.shields.io/badge/phiên_bản-1.0-blue.svg)](https://github.com/juno-kyojin/winapp)
 [![Nền tảng](https://img.shields.io/badge/nền_tảng-Windows-lightgrey.svg)](https://github.com/juno-kyojin/winapp)
 [![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://python.org)
 
@@ -16,7 +16,7 @@
 
 ## 🚀 Tổng quan
 
-Test Case Manager v3.0 là ứng dụng Windows chuyên nghiệp được thiết kế để kiểm thử toàn diện các thiết bị OpenWrt. Ứng dụng cung cấp giao diện trực quan để tạo, quản lý và thực thi các test case từ xa thông qua giao thức HTTP.
+Test Case Manager v1.0 là ứng dụng Windows chuyên nghiệp được thiết kế để kiểm thử toàn diện các thiết bị OpenWrt. Ứng dụng cung cấp giao diện trực quan để tạo, quản lý và thực thi các test case từ xa thông qua giao thức HTTP.
 
 ### ✨ Tính năng chính
 
@@ -58,7 +58,7 @@ Test Case Manager v3.0 là ứng dụng Windows chuyên nghiệp được thiế
 ```bash
 # Clone repository
 git clone https://github.com/juno-kyojin/winapp.git
-cd winapp/test_case_manager_v3
+cd winapp/test_case_manager_v1
 
 # Cài đặt dependencies
 pip install -r requirements.txt
@@ -70,7 +70,7 @@ python run.py
 ### 🌐 Cấu hình kết nối
 
 #### Thiết lập ứng dụng PC:
-1. **Khởi chạy** ứng dụng Test Case Manager v3.0
+1. **Khởi chạy** ứng dụng Test Case Manager v1.0
 2. **Chuyển** đến tab "Connection"
 3. **Cấu hình** thông tin kết nối:
    - **Host**: Địa chỉ IP thiết bị OpenWrt (ví dụ: `192.168.1.1`)
@@ -100,7 +100,7 @@ ps | grep auto_test
 
 ### 🖥️ Giao diện chính
 
-Ứng dụng Test Case Manager v3.0 có giao diện với 5 tab chính:
+Ứng dụng Test Case Manager v1.0 có giao diện với 5 tab chính:
 
 #### 1. � Tab Connection (Kết nối)
 **Mục đích**: Cấu hình và quản lý kết nối đến thiết bị OpenWrt
@@ -241,9 +241,9 @@ ps | grep auto_test
 
 ### 📋 Tổng quan kiến trúc
 
-Hệ thống Test Case Manager v3.0 bao gồm hai thành phần chính:
+Hệ thống Test Case Manager v1.0 bao gồm hai thành phần chính:
 
-1. **Test Case Manager v3.0** (Windows PC): Ứng dụng GUI để quản lý và giám sát test
+1. **Test Case Manager v1.0** (Windows PC): Ứng dụng GUI để quản lý và giám sát test
 2. **OpenWrt Device**: Thiết bị chạy các thành phần server và test execution
 
 ### 🔄 Sơ đồ luồng thực thi
@@ -257,7 +257,7 @@ sequenceDiagram
     participant Stream
     participant Device
 
-    Note over User, Device: Test Case Manager v3.0 - User Workflow
+    Note over User, Device: Test Case Manager v1.0 - User Workflow
 
     %% Setup Phase
     rect rgb(240, 248, 255)
@@ -451,6 +451,6 @@ Khi gặp sự cố không thể tự giải quyết:
 
 ---
 
-**Test Case Manager v3.0** - Công cụ quản lý và thực thi test case chuyên nghiệp cho thiết bị OpenWrt
+**Test Case Manager v1.0** - Công cụ quản lý và thực thi test case chuyên nghiệp cho thiết bị OpenWrt
 
 Copyright © 2025. Tất cả quyền được bảo lưu.

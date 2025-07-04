@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-HTTP client for Test Case Manager v3.0
+HTTP client for Test Case Manager v1.0
 
 This module provides client functionality for communicating with
 OpenWrt test servers via HTTP.

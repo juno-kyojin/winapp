@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Logging utilities for Test Case Manager v3.0
+Logging utilities for Test Case Manager v1.0
 
 This module provides centralized logging configuration and utilities
 for consistent logging throughout the application.

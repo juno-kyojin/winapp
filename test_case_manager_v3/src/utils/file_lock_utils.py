@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-File Lock Utils for Test Case Manager v3.0
+File Lock Utils for Test Case Manager v1.0
 
 This module provides file locking utilities to prevent race conditions
 when reading and writing files.

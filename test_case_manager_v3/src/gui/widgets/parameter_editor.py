@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Parameter Editor Widget for Test Case Manager v3.0
+Parameter Editor Widget for Test Case Manager v1.0
 
 This module provides a widget for editing test case parameters.
 

@@ -33,4 +33,4 @@ echo.
 echo Cleanup completed! Ready for commit.
 echo.
 echo To commit, run:
-echo git commit -m "Update Test Case Manager v3.0: Fix executable environment and build system"
+echo git commit -m "Update Test Case Manager v1.0: Fix executable environment and build system"

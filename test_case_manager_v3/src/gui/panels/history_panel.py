@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-History Panel for Test Case Manager v3.0
+History Panel for Test Case Manager v1.0
 
 This panel displays the history of test executions and their results.
 

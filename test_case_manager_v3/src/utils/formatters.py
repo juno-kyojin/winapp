@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Formatting utilities for Test Case Manager v3.0
+Formatting utilities for Test Case Manager v1.0
 
 This module provides formatting functions for timestamps, file sizes,
 durations, and other display data.

@@ -1,20 +1,20 @@
 @echo off
-REM Build script for Test Case Manager v3.0
+REM Build script for Test Case Manager v1.0
 REM This script builds an executable version of the application using PyInstaller
 
 echo ============================================================
-echo Building Test Case Manager v3.0 Standalone Executable
+echo Building Test Case Manager v1.0 Standalone Executable
 echo ============================================================
 
 REM Check if we're in the correct directory
 if not exist src (
-    echo ERROR: Source directory not found. Make sure you're in the test_case_manager_v3 directory.
+    echo ERROR: Source directory not found. Make sure you're in the test_case_manager_v1 directory.
     echo Current directory: %CD%
     exit /b 1
 )
 
 if not exist run.py (
-    echo ERROR: run.py not found. Make sure you're in the test_case_manager_v3 directory.
+    echo ERROR: run.py not found. Make sure you're in the test_case_manager_v1 directory.
     exit /b 1
 )
 
@@ -76,6 +76,9 @@ python -m PyInstaller --name="TestCaseManager" ^
             --hidden-import=tkinter.messagebox ^
             --hidden-import=tkinter.filedialog ^
             --hidden-import=requests ^
+            --hidden-import=PIL ^
+            --hidden-import=PIL.Image ^
+            --hidden-import=PIL.ImageTk ^
             --hidden-import=json ^
             --hidden-import=logging ^
             --hidden-import=threading ^
@@ -88,6 +91,7 @@ python -m PyInstaller --name="TestCaseManager" ^
             --hidden-import=re ^
             --hidden-import=argparse ^
             --hidden-import=typing ^
+            --add-data="assets;assets" ^
             --paths=. ^
             --noupx ^
             run.py
@@ -127,6 +131,19 @@ xcopy data release\data /E /I /Y
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Failed to copy data folder!
     exit /b 1
+)
+
+REM Copy assets folder to release folder
+echo Copying assets folder...
+if exist assets (
+    xcopy assets release\assets /E /I /Y
+    if %ERRORLEVEL% NEQ 0 (
+        echo WARNING: Failed to copy assets folder!
+    ) else (
+        echo ✓ Assets folder copied successfully
+    )
+) else (
+    echo WARNING: Assets folder not found, skipping...
 )
 
 REM Verify final release structure

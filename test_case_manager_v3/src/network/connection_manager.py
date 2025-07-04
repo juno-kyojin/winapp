@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Connection Manager for Test Case Manager v3.0
+Connection Manager for Test Case Manager v1.0
 
 This module provides a unified interface for connecting to devices
 via either SSH or HTTP, sending test commands, and retrieving results.

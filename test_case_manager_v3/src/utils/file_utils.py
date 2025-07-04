@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-File utilities for Test Case Manager v3.0
+File utilities for Test Case Manager v1.0
 
 This module provides utility functions for file operations.
 

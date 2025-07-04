@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Widgets package for Test Case Manager v3.0
+Widgets package for Test Case Manager v1.0
 
 This package provides reusable widgets for the Test Case Manager.
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Validation utilities for Test Case Manager v3.0
+Validation utilities for Test Case Manager v1.0
 
 This module provides input validation functions for IP addresses,
 ports, filenames, and other data types.

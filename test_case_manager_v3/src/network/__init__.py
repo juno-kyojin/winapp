@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Network module for Test Case Manager v3.0
+Network module for Test Case Manager v1.0
 
 This module provides networking functionality for the Test Case Manager.
 

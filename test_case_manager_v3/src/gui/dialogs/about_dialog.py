@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-About Dialog for Test Case Manager v3.0
+About Dialog for Test Case Manager v1.0
 
 This module provides an about dialog for displaying application information.
 

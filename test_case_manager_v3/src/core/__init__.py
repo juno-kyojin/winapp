@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Core package for Test Case Manager v3.0
+Core package for Test Case Manager v1.0
 
 This package provides core functionality for the Test Case Manager.
 

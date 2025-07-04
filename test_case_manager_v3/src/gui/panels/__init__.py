@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Panel components package for Test Case Manager v3.0
+Panel components package for Test Case Manager v1.0
 
 This package provides panel components for the Test Case Manager.
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Configuration management for Test Case Manager v3.0
+Configuration management for Test Case Manager v1.0
 
 This module handles application configuration loading, saving, and validation.
 It provides a centralized configuration system with default values and

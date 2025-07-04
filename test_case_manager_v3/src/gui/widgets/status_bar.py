@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Status Bar Widget for Test Case Manager v3.0
+Status Bar Widget for Test Case Manager v1.0
 
 This module provides a status bar widget for displaying status information.
 

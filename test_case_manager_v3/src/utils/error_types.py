@@ -1,8 +1,8 @@
 """
-Error classification system for Test Case Manager v3.0.
+Error classification system for Test Case Manager v1.0.
 
 This module provides error type classification to distinguish between
-network errors (which should be retried) and application errors 
+network errors (which should be retried) and application errors
 (which should fail immediately).
 """
 

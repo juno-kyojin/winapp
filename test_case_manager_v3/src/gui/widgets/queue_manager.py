@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Queue Manager Widget for Test Case Manager v3.0
+Queue Manager Widget for Test Case Manager v1.0
 
 This module provides a widget for managing test case execution queue.
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test Case Loader module for Test Case Manager v3.0
+Test Case Loader module for Test Case Manager v1.0
 
 This module provides functionality for loading test cases from templates
 directory, discovering category directories, and managing test case files.

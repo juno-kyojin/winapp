@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Run script for Test Case Manager v3.0
+Run script for Test Case Manager v1.0
 
 This script is the entry point for the Test Case Manager application.
 It sets up the Python path and launches the application.

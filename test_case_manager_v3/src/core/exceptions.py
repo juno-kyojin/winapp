@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Custom exceptions for Test Case Manager v3.0
+Custom exceptions for Test Case Manager v1.0
 
 This module defines custom exception classes for better error handling
 and debugging throughout the application.

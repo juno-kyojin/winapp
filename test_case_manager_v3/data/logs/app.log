@@ -1,1 +1,149 @@
  
+[2025-07-04 10:58:57] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 10:58:57] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 10:58:58] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 10:58:58] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 10:58:58] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 10:58:58] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 10:58:58] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 10:58:58] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 10:58:58] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 10:58:58] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 10:58:58] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 10:58:58] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 10:59:01] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 11:00:03] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:00:03] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:00:03] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:00:03] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:00:03] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:00:03] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:00:03] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:00:03] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:00:03] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:00:03] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:00:03] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:00:03] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 11:05:27] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:05:27] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:05:27] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:05:27] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:05:27] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:05:27] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:05:27] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.png
+[2025-07-04 11:05:27] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:05:27] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:05:27] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:05:27] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:05:27] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:05:27] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 11:05:38] INFO - src.gui.widgets.status_bar: Status: Opening documentation in browser
+[2025-07-04 11:05:49] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 11:06:20] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:06:20] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:06:20] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:06:20] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:06:20] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:06:20] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:06:20] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 11:06:20] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:06:20] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:06:20] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:06:20] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:06:20] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:06:20] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 11:06:37] INFO - src.gui.widgets.status_bar: Status: Preferences dialog not yet implemented
+[2025-07-04 11:06:40] INFO - src.gui.widgets.status_bar: Status: Export results feature not yet implemented
+[2025-07-04 11:06:47] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-04 11:06:55] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:06:55] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-04 11:06:55] INFO - src.gui.widgets.status_bar: Status: Imported template: wan_delete.json
+[2025-07-04 11:06:57] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-04 11:06:59] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:06:59] INFO - src.gui.widgets.status_bar: Status: Deleted template: wan_delete.json
+[2025-07-04 11:07:00] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-04 11:07:01] INFO - src.gui.widgets.status_bar: Status: JSON formatted successfully
+[2025-07-04 11:08:54] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:08:54] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:08:54] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:08:54] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:08:54] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:08:54] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:08:54] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 11:08:54] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:08:54] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:08:54] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:08:54] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:08:54] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:08:54] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 11:09:14] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 11:12:39] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:12:39] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:12:40] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:12:40] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:12:40] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:12:40] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:12:40] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 11:12:40] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:12:40] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:12:40] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:12:40] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:12:40] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:12:40] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 11:12:56] INFO - src.gui.widgets.status_bar: Status: Template validation completed
+[2025-07-04 11:13:11] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 11:13:29] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 11:13:29] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 11:13:29] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 11:13:29] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 11:13:29] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 11:13:29] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 11:13:29] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 11:13:30] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 11:13:30] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 11:13:30] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 11:13:30] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 11:13:30] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 11:13:30] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 13:39:32] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 13:39:32] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 13:39:32] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 13:39:32] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 13:39:32] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 13:39:32] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 13:39:32] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 13:39:32] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 13:39:32] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 13:39:32] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 13:39:32] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 13:39:32] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 13:39:32] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 13:39:40] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 13:39:41] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 13:39:41] INFO - src.main: Starting Test Case Manager v3.0.0
+[2025-07-04 13:39:41] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 13:39:41] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 13:39:41] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 13:39:41] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 13:39:41] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 13:39:41] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 13:39:41] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 13:39:41] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 13:39:41] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 13:39:41] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 13:39:41] INFO - src.gui.main_window: Test Case Manager v3.0.0 initialized
+[2025-07-04 13:39:55] INFO - src.main: Exiting Test Case Manager v3.0.0
+[2025-07-04 14:06:48] INFO - root: Logging initialized - Level: INFO
+[2025-07-04 14:06:48] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-04 14:06:48] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-04 14:06:48] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-04 14:06:48] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-04 14:06:48] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-04 14:06:48] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-04 14:06:48] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-04 14:06:48] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-04 14:06:48] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-04 14:06:48] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-04 14:06:48] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-04 14:06:48] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-04 14:06:54] INFO - src.main: Exiting Test Case Manager v1.0.0

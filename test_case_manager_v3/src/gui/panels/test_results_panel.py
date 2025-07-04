@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test Results Panel for Test Case Manager v3.0
+Test Results Panel for Test Case Manager v1.0
 
 This panel displays real-time test execution results.
 

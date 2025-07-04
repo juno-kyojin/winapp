@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Dialog windows package for Test Case Manager v3.0
+Dialog windows package for Test Case Manager v1.0
 
 This package provides dialog windows for the Test Case Manager.
 

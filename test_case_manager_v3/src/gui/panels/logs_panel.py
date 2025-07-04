@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Logs Panel for Test Case Manager v3.0
+Logs Panel for Test Case Manager v1.0
 
 This module implements the Logs tab that displays real-time application logs
 with proper formatting, filtering, and search capabilities.
@@ -395,7 +395,7 @@ class LogsPanel(ttk.Frame, LoggerMixin):
 
             if filename:
                 with open(filename, 'w', encoding='utf-8') as f:
-                    f.write(f"Test Case Manager v3.0 - Log Export\n")
+                    f.write(f"Test Case Manager v1.0 - Log Export\n")
                     f.write(f"Exported: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                     f.write(f"Total entries: {len(self.log_messages)}\n")
                     f.write("-" * 80 + "\n\n")

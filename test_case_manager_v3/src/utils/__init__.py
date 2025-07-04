@@ -1,5 +1,5 @@
 """
-Utility modules for Test Case Manager v3.0
+Utility modules for Test Case Manager v1.0
 
 This package contains common utility modules used throughout the application.
 """

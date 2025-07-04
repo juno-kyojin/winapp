@@ -2,5 +2,5 @@
 # -*- coding: utf-8 -*-
  
 """
-Integration tests package for Test Case Manager v3.0
-""" 
+Integration tests package for Test Case Manager v1.0
+"""

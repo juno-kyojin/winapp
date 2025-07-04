@@ -2,7 +2,7 @@
 # # -*- coding: utf-8 -*-
 
 # """
-# SSH Connection Manager for Test Case Manager v3.0
+# SSH Connection Manager for Test Case Manager v1.0
 
 # This module provides SSH connection functionality for communicating with
 # network devices via SSH.

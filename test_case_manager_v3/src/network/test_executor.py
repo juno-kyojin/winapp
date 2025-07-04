@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test Executor for Test Case Manager v3.0
+Test Executor for Test Case Manager v1.0
 
 This module provides specialized test execution functionality with
 enhanced error handling and retry mechanisms, particularly for dealing

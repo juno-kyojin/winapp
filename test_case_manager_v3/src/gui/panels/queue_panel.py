@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Queue Panel for Test Case Manager v3.0
+Queue Panel for Test Case Manager v1.0
 
 This module provides a panel for managing test execution queue.
 

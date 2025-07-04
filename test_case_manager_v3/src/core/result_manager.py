@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test Result Manager for Test Case Manager v3.0
+Test Result Manager for Test Case Manager v1.0
 
 This module handles test result operations including saving, loading,
 and managing test execution results.

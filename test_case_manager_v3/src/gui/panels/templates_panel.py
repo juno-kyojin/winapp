@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Templates Panel for Test Case Manager v3.0
+Templates Panel for Test Case Manager v1.0
 
 This module provides a panel for browsing and managing test templates.
 
@@ -367,7 +367,7 @@ class TemplatesPanel(ttk.Frame):
             "metadata": {
                 "description": "New template",
                 "category": category,
-                "created_by": "Test Case Manager v3.0"
+                "created_by": "Test Case Manager v1.0"
             }
         }
         

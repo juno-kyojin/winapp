@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test Case Manager v3.0
+Test Case Manager v1.0
 
 Main entry point for the application.
 

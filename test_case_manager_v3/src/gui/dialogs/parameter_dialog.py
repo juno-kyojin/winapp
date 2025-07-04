@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Parameter Dialog for Test Case Manager v3.0
+Parameter Dialog for Test Case Manager v1.0
 
 This module provides a dialog for editing test case parameters.
 

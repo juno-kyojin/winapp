@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-GUI package for Test Case Manager v3.0
+GUI package for Test Case Manager v1.0
 
 This package provides the graphical user interface for the Test Case Manager.
 
