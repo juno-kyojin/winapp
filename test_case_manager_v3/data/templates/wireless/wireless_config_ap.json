@@ -7,10 +7,11 @@
         "frequency": "2G",
         "wifi_mode": "ap",
         "encryption": "psk2+ccmp",
-        "ssid": "1.maimai2G",
-        "password": "1234567890",
+        "ssid": "han_lap_5G",
+        "password": "12345678",
         "disable_mode": "0"
       }
     }
   ]
 }
+

@@ -20,29 +20,8 @@ from src.core.test_case_loader import TestCaseLoader
 from src.utils.logger import get_logger
 
 
-def extract_test_name(test_data: Dict[str, Any], template_name: Optional[str] = None) -> str:
-    """Extract test name from test data - simplified version."""
-    # Check metadata.name first
-    if "metadata" in test_data and isinstance(test_data["metadata"], dict):
-        name = test_data["metadata"].get("name")
-        if name and isinstance(name, str) and name.strip():
-            return name.strip()
-
-    # Check direct name field
-    if "name" in test_data:
-        name = test_data["name"]
-        if name and isinstance(name, str) and name.strip():
-            return name.strip()
-
-    # Use template name if provided
-    if template_name:
-        name = template_name
-        if name.endswith('.json'):
-            name = name[:-5]
-        if name and name.strip():
-            return name.strip()
-
-    return "unknown"
+# Import test name utilities
+from src.utils.formatters import extract_test_name
 
 
 
@@ -742,11 +721,12 @@ class TemplatesPanel(ttk.Frame):
             # Use robust test name extraction
             extracted_name = extract_test_name(template_json, template_name)
 
-            # Return template with metadata
+            # Return template with metadata - preserve original template filename
             return {
                 "template_data": template_json,
                 "category": category,
-                "template_name": extracted_name
+                "template_name": template_name,  # Keep original filename
+                "extracted_name": extracted_name  # Store extracted name separately
             }
 
         except Exception as e:

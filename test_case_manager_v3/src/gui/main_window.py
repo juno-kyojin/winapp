@@ -30,6 +30,8 @@ from src.core.result_manager import ResultManager
 
 # Utility imports
 from src.utils.logger import get_logger
+from src.utils.script_verifier import ScriptVerifier
+from src.utils.formatters import extract_test_name, get_test_display_name
 
 # Network imports
 from src.network.connection_manager import ConnectionManager, affects_network_connectivity
@@ -45,53 +47,7 @@ from src.gui.panels.logs_panel import LogsPanel
 from src.gui.widgets.status_bar import StatusBar
 
 
-def extract_test_name(test_data: Dict[str, Any], template_name: Optional[str] = None) -> str:
-    """
-    Extract test name from test data with fallback strategies.
 
-    Args:
-        test_data: Test data to extract name from
-        template_name: Optional template name as fallback
-
-    Returns:
-        Test name string, or "unknown" if cannot be determined
-    """
-    # Strategy 1: Check metadata.name
-    if "metadata" in test_data and isinstance(test_data["metadata"], dict):
-        name = test_data["metadata"].get("name")
-        if name and isinstance(name, str) and name.strip():
-            return name.strip()
-
-    # Strategy 2: Check direct name field
-    if "name" in test_data:
-        name = test_data["name"]
-        if name and isinstance(name, str) and name.strip():
-            return name.strip()
-
-    # Strategy 3: Generate from service and action
-    if "test_cases" in test_data and test_data["test_cases"]:
-        first_case = test_data["test_cases"][0]
-        service = first_case.get("service", "")
-        action = first_case.get("action", "")
-        if service and action:
-            return f"{service}_{action}"
-
-    # Strategy 4: Direct service and action
-    elif "service" in test_data and "action" in test_data:
-        service = test_data.get("service", "")
-        action = test_data.get("action", "")
-        if service and action:
-            return f"{service}_{action}"
-
-    # Strategy 5: Use template name if provided
-    if template_name:
-        name = template_name
-        if name.endswith('.json'):
-            name = name[:-5]
-        if name and name.strip():
-            return name.strip()
-
-    return "unknown"
 
 
 
@@ -120,6 +76,7 @@ class MainWindow:
         self.result_manager = ResultManager()
         self.connection_manager = ConnectionManager()
         self.test_executor = TestExecutor(self.connection_manager)
+        self.script_verifier = ScriptVerifier()  # For automatic script execution
 
         # UI components
         self.root: Optional[tk.Tk] = None
@@ -425,10 +382,14 @@ class MainWindow:
                 # Extract template data and metadata
                 template_data = test_data["template_data"]
                 category = test_data.get("category", "Unknown")
-                template_name = test_data.get("template_name")
+                template_name = test_data.get("template_name")  # Original filename
+                extracted_name = test_data.get("extracted_name")  # Pre-extracted name
 
-                # Use robust test name extraction
-                name = extract_test_name(template_data, template_name)
+                # Use pre-extracted name if available, otherwise extract from template
+                if extracted_name:
+                    name = extracted_name
+                else:
+                    name = extract_test_name(template_data, template_name)
 
                 # Add to queue
                 self.queue_panel.add_to_queue(template_data, category, name)
@@ -475,17 +436,8 @@ class MainWindow:
             )
             return
 
-        # Get test name for display
-        test_name = "Unknown"
-        if "metadata" in test_data and "name" in test_data["metadata"]:
-            test_name = test_data["metadata"]["name"]
-        elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
-            service = test_data["test_cases"][0].get("service", "")
-            action = test_data["test_cases"][0].get("action", "")
-            if service and action:
-                test_name = f"{service}_{action}"
-            elif service:
-                test_name = service
+        # Get test name for display using utility function
+        test_name = get_test_display_name(test_data)
 
         # Validate test structure
         if "test_cases" not in test_data and "service" not in test_data:
@@ -522,19 +474,8 @@ class MainWindow:
         # Function to execute in a separate thread
         def execute_test_thread():
             try:
-                # Get test name for thread context
-                thread_test_name = "Unknown"
-                if "metadata" in test_data and "name" in test_data["metadata"]:
-                    thread_test_name = test_data["metadata"]["name"]
-                elif "metadata" in test_data and "test_id" in test_data["metadata"]:
-                    thread_test_name = test_data["metadata"]["test_id"]
-                elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
-                    service = test_data["test_cases"][0].get("service", "")
-                    action = test_data["test_cases"][0].get("action", "")
-                    if service and action:
-                        thread_test_name = f"{service}_{action}"
-                    elif service:
-                        thread_test_name = service
+                # Get test name for thread context using utility function
+                thread_test_name = get_test_display_name(test_data)
 
                 # Update stream: preparing to send
                 if hasattr(self, 'stream_panel') and self.stream_panel:
@@ -568,15 +509,56 @@ class MainWindow:
                 if hasattr(self, 'stream_panel') and self.stream_panel:
                     self.stream_panel.update_stream_status("receiving", "Receiving test results from device", 90)
 
-                # Update status
+                # Automatic Script Verification Logic
+                final_status = "fail"  # Default to fail
+                final_message = message
+                verification_message = ""
+
                 if success:
-                    status = "success"
-                    self._update_status(f"Test executed successfully: {thread_test_name}")
+                    # Device test passed - check if verification is needed
+                    self.logger.info("Device test passed - checking for script verification requirement")
+
+                    try:
+                        # Check if verification is needed and execute if required
+                        verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(result_data)
+
+                        if verification_needed:
+                            # Update stream: verification
+                            if hasattr(self, 'stream_panel') and self.stream_panel:
+                                self.stream_panel.update_stream_status("verification", "Running PC-side verification script", 95)
+
+                            self.logger.info(f"Script verification executed: {verification_msg}")
+                            verification_message = f" | Verification: {verification_msg}"
+
+                            if verification_passed:
+                                final_status = "success"
+                                final_message = f"Device test passed and verification successful{verification_message}"
+                                self.logger.info(f"Final result: SUCCESS - {final_message}")
+                            else:
+                                final_status = "fail"
+                                final_message = f"Device test passed but verification failed{verification_message}"
+                                self.logger.warning(f"Final result: FAIL - {final_message}")
+                        else:
+                            # No verification needed - device result is final
+                            final_status = "success"
+                            final_message = f"Test completed successfully (no verification required)"
+                            self.logger.info(f"Final result: SUCCESS - {final_message}")
+
+                    except Exception as e:
+                        # Verification error - treat as failure
+                        final_status = "fail"
+                        final_message = f"Device test passed but verification error: {str(e)}"
+                        self.logger.error(f"Verification error: {e}")
+
                 else:
-                    status = "fail"
-                    self._update_status(f"Test execution failed: {message}")
+                    # Device test failed - no need for verification
+                    final_status = "fail"
+                    final_message = f"Device test failed: {message}"
+                    self.logger.info(f"Final result: FAIL - Device test failed, skipping verification")
 
-
+                # Update final status
+                status = final_status
+                self._update_status(f"Test completed: {thread_test_name} - {final_status.upper()}")
 
                 # Save result to history
                 try:
@@ -587,13 +569,16 @@ class MainWindow:
                         {
                             "test_data": test_data,
                             "result_data": result_data,
-                            "message": message,
+                            "message": final_message,  # Use final message with verification info
+                            "original_device_message": message,  # Keep original device message
+                            "verification_message": verification_message,  # Store verification details
                             "metadata": {
                                 "test_id": thread_test_name,
                                 "status": status,
                                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                                 "affects_network": affects_network,
-                                "execution_time": execution_time
+                                "execution_time": execution_time,
+                                "verification_executed": verification_message != ""  # Track if verification ran
                             }
                         }
                     )
@@ -603,48 +588,40 @@ class MainWindow:
                 except Exception as e:
                     self.logger.error(f"Error saving result to history: {e}")
 
-                # End stream with success
+                # End stream with final status
                 if hasattr(self, 'stream_panel') and self.stream_panel:
-                    final_message = f"Test completed successfully in {execution_time:.1f}s" if success else f"Test failed: {message}"
-                    self.stream_panel.end_test_stream(success, final_message)
+                    stream_message = f"Test completed in {execution_time:.1f}s - {final_status.upper()}: {final_message}"
+                    self.stream_panel.end_test_stream(final_status == "success", stream_message)
 
                     # If we're in queue execution mode, also store the execution time and end queue test stream
                     if self.stream_panel.is_queue_executing and hasattr(self, '_current_queue_test_index'):
                         self.stream_panel.set_queue_test_execution_time(self._current_queue_test_index, execution_time)
 
-                        # Report test result to queue panel for accurate tracking
+                        # Report test result to queue panel for accurate tracking (use final status)
+                        final_success = (final_status == "success")
                         if hasattr(self, 'queue_panel') and self.queue_panel:
-                            self.queue_panel.set_test_result(self._current_queue_test_index, success)
+                            self.queue_panel.set_test_result(self._current_queue_test_index, final_success)
 
-                        # End queue test stream with appropriate message based on success
+                        # End queue test stream with appropriate message based on final status
                         # Get total tests for proper indexing display
                         total_tests = len(self.queue_panel.queue_items) if hasattr(self, 'queue_panel') and self.queue_panel else 1
                         test_display_index = self._current_queue_test_index + 1
 
-                        if success:
+                        if final_success:
                             completion_msg = f"✅ Test {test_display_index}/{total_tests} ({thread_test_name}) completed successfully"
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success, completion_msg)
+                            if verification_message:
+                                completion_msg += f" (with verification)"
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, completion_msg)
                         else:
-                            failure_msg = f"❌ Test {test_display_index}/{total_tests} ({thread_test_name}) failed: {message}"
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, success, failure_msg)
+                            failure_msg = f"❌ Test {test_display_index}/{total_tests} ({thread_test_name}) failed: {final_message}"
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, failure_msg)
 
             except Exception as e:
                 # Set default execution time for failed tests (no actual test was executed)
                 execution_time = 0.0
 
-                # Get test name for error context
-                thread_test_name = "Unknown"
-                if "metadata" in test_data and "name" in test_data["metadata"]:
-                    thread_test_name = test_data["metadata"]["name"]
-                elif "metadata" in test_data and "test_id" in test_data["metadata"]:
-                    thread_test_name = test_data["metadata"]["test_id"]
-                elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
-                    service = test_data["test_cases"][0].get("service", "")
-                    action = test_data["test_cases"][0].get("action", "")
-                    if service and action:
-                        thread_test_name = f"{service}_{action}"
-                    elif service:
-                        thread_test_name = service
+                # Get test name for error context using utility function
+                thread_test_name = get_test_display_name(test_data)
 
                 # Handle any exceptions
                 error_msg = f"Error executing test: {str(e)}"

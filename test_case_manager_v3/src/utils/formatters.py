@@ -12,7 +12,7 @@ Created: 2025-06-12
 """
 
 import datetime
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
 
 def format_timestamp(
@@ -134,11 +134,11 @@ def format_test_status(status: str) -> str:
 def format_connection_status(connected: bool, host: Optional[str] = None) -> str:
     """
     Format connection status for display.
-    
+
     Args:
         connected: Whether connection is established
         host: Optional host information
-        
+
     Returns:
         Formatted connection status string
     """
@@ -151,4 +151,86 @@ def format_connection_status(connected: bool, host: Optional[str] = None) -> str
         if host:
             return f"🔴 Disconnected from {host}"
         else:
-            return "🔴 Disconnected" 
+            return "🔴 Disconnected"
+
+
+def extract_test_name(test_data: Dict[str, Any], template_name: Optional[str] = None) -> str:
+    """
+    Extract test name from test data with fallback strategies.
+
+    Args:
+        test_data: Test data to extract name from
+        template_name: Optional template name as fallback
+
+    Returns:
+        Test name string, or "unknown" if cannot be determined
+    """
+    # Strategy 1: Check metadata.name
+    if "metadata" in test_data and isinstance(test_data["metadata"], dict):
+        name = test_data["metadata"].get("name")
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 2: Check direct name field
+    if "name" in test_data:
+        name = test_data["name"]
+        if name and isinstance(name, str) and name.strip():
+            return name.strip()
+
+    # Strategy 3: Generate from service and action in test_cases
+    if "test_cases" in test_data and test_data["test_cases"]:
+        first_case = test_data["test_cases"][0]
+        service = first_case.get("service", "")
+        action = first_case.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 4: Direct service and action (for single test case format)
+    elif "service" in test_data and "action" in test_data:
+        service = test_data.get("service", "")
+        action = test_data.get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+
+    # Strategy 5: Use template name if provided
+    if template_name:
+        name = template_name
+        if name.endswith('.json'):
+            name = name[:-5]
+        if name and name.strip():
+            return name.strip()
+
+    return "unknown"
+
+
+def get_test_display_name(test_data: Dict[str, Any]) -> str:
+    """
+    Get test name for display purposes (used in execution context).
+
+    This is a simplified version focused on runtime display,
+    separate from queue/template name extraction.
+
+    Args:
+        test_data: Test data to extract display name from
+
+    Returns:
+        Test name for display
+    """
+    # Check metadata.name first
+    if "metadata" in test_data and "name" in test_data["metadata"]:
+        return test_data["metadata"]["name"]
+
+    # Check metadata.test_id
+    elif "metadata" in test_data and "test_id" in test_data["metadata"]:
+        return test_data["metadata"]["test_id"]
+
+    # Extract from test_cases structure
+    elif "test_cases" in test_data and len(test_data["test_cases"]) > 0:
+        service = test_data["test_cases"][0].get("service", "")
+        action = test_data["test_cases"][0].get("action", "")
+        if service and action:
+            return f"{service}_{action}"
+        elif service:
+            return service
+
+    return "Unknown"

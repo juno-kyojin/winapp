@@ -133,6 +133,33 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+REM Copy ToolWL folder to release folder (for script verification)
+echo Copying ToolWL folder...
+if exist ToolWL (
+    xcopy ToolWL release\ToolWL /E /I /Y
+    if %ERRORLEVEL% NEQ 0 (
+        echo ERROR: Failed to copy ToolWL folder!
+        exit /b 1
+    )
+    echo ✓ ToolWL folder copied successfully
+) else (
+    echo WARNING: ToolWL folder not found - script verification may not work
+)
+
+REM Copy wifi_connect module to ToolWL if it exists separately
+echo Checking for wifi_connect module...
+if exist ..\wifi_connect\wifi_connect (
+    echo Copying wifi_connect module to ToolWL...
+    xcopy ..\wifi_connect\wifi_connect release\ToolWL\wifi_connect /E /I /Y
+    if %ERRORLEVEL% NEQ 0 (
+        echo WARNING: Failed to copy wifi_connect module
+    ) else (
+        echo ✓ wifi_connect module copied successfully
+    )
+) else (
+    echo ✓ wifi_connect module already included in ToolWL or not needed
+)
+
 REM Assets are now embedded in the executable, no need to copy separately
 echo ✓ Assets embedded in executable (no separate assets folder needed)
 
@@ -151,6 +178,12 @@ if not exist release\data (
     exit /b 1
 )
 
+if not exist release\ToolWL (
+    echo WARNING: ToolWL folder not found in release folder - script verification may not work
+) else (
+    echo ✓ ToolWL folder verified
+)
+
 echo ✓ Release verification passed (assets embedded in executable)
 
 REM Clean up build artifacts
@@ -167,10 +200,12 @@ echo ============================================================
 echo 📁 Release folder: release\
 echo 📄 Executable: release\TestCaseManager.exe (with embedded assets)
 echo 📂 Data folder: release\data\
+echo 🔧 ToolWL folder: release\ToolWL\ (verification scripts)
 echo
 echo ✅ Ready for distribution:
 echo   - Single executable file with embedded assets (no source code visible)
 echo   - Data folder with templates and configuration
+echo   - ToolWL folder with verification scripts (external, modifiable)
 echo   - No Python installation required on target systems
 echo   - No separate assets folder needed (embedded in .exe)
 echo
@@ -183,6 +218,12 @@ echo   - Create logs in: data\logs\
 echo   - Load test cases from: data\templates\
 echo   - Store configuration in: data\config\
 echo   - Load embedded assets automatically
+echo   - Execute verification scripts from: ToolWL\
+echo
+echo 🔧 Adding new verification scripts:
+echo   - Add new .py scripts to: release\ToolWL\
+echo   - Scripts must follow input.txt/output.txt interface
+echo   - No rebuild required for new scripts
 echo ============================================================
 
 exit /b 0
