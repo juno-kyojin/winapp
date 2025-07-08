@@ -8,7 +8,7 @@
     "connection_timeout": 15,
     "remote_config_path": "/root/config",
     "remote_result_path": "/root/result",
-    "http_host": "192.168.1.4",
+    "http_host": "192.168.1.212313",
     "http_port": 6262,
     "http_connect_timeout": 5,
     "http_read_timeout": 40,

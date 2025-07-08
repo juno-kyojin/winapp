@@ -15,7 +15,7 @@ from tkinter import ttk, messagebox
 import threading
 from typing import Dict, Any, Optional, Callable
 
-from src.core.config import AppConfig
+from src.core.config import AppConfig, save_config
 from src.network.test_executor import TestExecutor
 from src.utils.logger import get_logger
 
@@ -66,6 +66,9 @@ class ConnectionPanel(ttk.Frame):
         
         # Create UI
         self._create_ui()
+
+        # Load settings from config
+        self._load_settings_from_config()
     
     def _create_ui(self) -> None:
         """Create the UI components."""
@@ -274,11 +277,16 @@ class ConnectionPanel(ttk.Frame):
     def _toggle_connection_ui(self) -> None:
         """Toggle between HTTP and SSH connection UI."""
         connection_type = self.connection_type_var.get()
-        
+
+        # Update host field based on connection type
         if connection_type == "http":
+            # Switch to HTTP host
+            self.host_var.set(self.config.network.http_host)
             self.ssh_frame.pack_forget()
             self.http_frame.pack(fill=tk.X)
         else:
+            # Switch to SSH host
+            self.host_var.set(self.config.network.ssh_host)
             self.http_frame.pack_forget()
             self.ssh_frame.pack(fill=tk.X)
     
@@ -393,17 +401,79 @@ class ConnectionPanel(ttk.Frame):
             self._update_status(f"Connection test error: {str(e)}")
             messagebox.showerror("Connection Test", f"Connection test error: {str(e)}")
             self._update_connection_status(False)
-    
+
+    def _load_settings_from_config(self) -> None:
+        """Load connection settings from configuration."""
+        try:
+            # Load network configuration
+            network_config = self.config.network
+
+            # Set connection type
+            self.connection_type_var.set(network_config.connection_type)
+
+            # Set host based on connection type
+            if network_config.connection_type == "http":
+                self.host_var.set(network_config.http_host)
+            else:
+                self.host_var.set(network_config.ssh_host)
+
+            # Set HTTP settings
+            self.http_port_var.set(str(network_config.http_port))
+            self.http_connect_timeout_var.set(str(network_config.http_connect_timeout))
+            self.http_read_timeout_var.set(str(network_config.http_read_timeout))
+
+            # Set SSH settings
+            self.ssh_port_var.set(str(network_config.ssh_port))
+            self.ssh_username_var.set(network_config.ssh_username)
+            self.ssh_password_var.set(network_config.ssh_password)
+
+            # Update UI to show correct connection type
+            self._toggle_connection_ui()
+
+            self.logger.info("Settings loaded from configuration")
+
+        except Exception as e:
+            self.logger.error(f"Load settings error: {e}")
+            self._update_status(f"Failed to load settings: {str(e)}")
+
     def _save_settings(self) -> None:
         """Save connection settings to configuration."""
         try:
-            # In a real implementation, we would save to the config object
-            # and then call a save method on it
-            messagebox.showinfo("Settings Saved", "Connection settings saved")
+            # Update network configuration with current UI values
+            connection_type = self.connection_type_var.get()
+            host_value = self.host_var.get()
+
+            self.config.network.connection_type = connection_type
+
+            # Update appropriate host field based on connection type
+            if connection_type == "http":
+                self.config.network.http_host = host_value
+            else:
+                self.config.network.ssh_host = host_value
+
+            # Update other settings
+            self.config.network.http_port = int(self.http_port_var.get())
+            self.config.network.http_connect_timeout = int(self.http_connect_timeout_var.get())
+            self.config.network.http_read_timeout = int(self.http_read_timeout_var.get())
+            self.config.network.ssh_port = int(self.ssh_port_var.get())
+            self.config.network.ssh_username = self.ssh_username_var.get()
+            self.config.network.ssh_password = self.ssh_password_var.get()
+
+            # Save configuration to file
+            save_config(self.config)
+
+            messagebox.showinfo("Settings Saved", "Connection settings saved successfully")
             self._update_status("Connection settings saved")
+            self.logger.info("Connection settings saved to configuration file")
+
+        except ValueError as e:
+            error_msg = f"Invalid input values: {str(e)}"
+            self.logger.error(f"Save settings error: {error_msg}")
+            messagebox.showerror("Save Error", error_msg)
         except Exception as e:
-            self.logger.error(f"Save settings error: {e}")
-            messagebox.showerror("Save Error", f"Failed to save settings: {str(e)}")
+            error_msg = f"Failed to save settings: {str(e)}"
+            self.logger.error(f"Save settings error: {error_msg}")
+            messagebox.showerror("Save Error", error_msg)
     
     def _update_status(self, message: str) -> None:
         """

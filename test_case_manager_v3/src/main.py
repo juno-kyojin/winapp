@@ -16,7 +16,7 @@ import logging
 import argparse
 from typing import List, Optional
 
-from src.core.config import AppConfig
+from src.core.config import AppConfig, load_config
 from src.core.constants import APP_NAME, APP_VERSION, LOG_DIR
 from src.utils.logger import setup_logging
 
@@ -46,7 +46,7 @@ def main(args: Optional[List[str]] = None) -> int:
     
     try:
         # Load configuration
-        config = AppConfig(parsed_args.config)
+        config = load_config()
         
         # Setup logging
         log_level = logging.DEBUG if parsed_args.debug else logging.INFO

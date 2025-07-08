@@ -13,21 +13,14 @@ Created: 2025-06-12
 
 import json
 import logging
-import os
 import time
 import uuid
-import socket
 import importlib
 import requests
 from datetime import datetime
-from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 
 from src.network.http_client import HTTPTestClient
-# from src.network.ssh_connection import SSHConnection
-from src.utils.file_utils import ensure_directory
-from src.utils.file_lock_utils import read_file_with_lock, write_file_with_lock
-from src.utils.logger import get_logger
 from src.utils.error_types import ErrorType, should_retry_error, get_retry_reason
 
 
@@ -101,14 +94,29 @@ class ConnectionManager:
         self.network_timeout = 500  # Longer timeout for network-affecting tests - increased to match client.py
         self.between_tests_delay = 2  # Seconds to wait between tests
         self.network_test_delay = 5  # Seconds to wait after network-affecting tests
-        
 
-            
+        # SSH connection (not implemented yet)
+        # self.ssh_connection = None
 
-            
-        # Basic timeout settings
-        self.default_timeout = 60
-    
+    # def _initialize_ssh_connection(self) -> bool:
+    #     """
+    #     Initialize SSH connection if not already initialized.
+    #
+    #     Returns:
+    #         True if SSH connection is available, False otherwise
+    #     """
+    #     if self.ssh_connection is None:
+    #         try:
+    #             # Use importlib for dynamic import to avoid errors if module doesn't exist
+    #             ssh_module = importlib.import_module('network.ssh_connection')
+    #             SSHConnection = getattr(ssh_module, 'SSHConnection')
+    #             self.ssh_connection = SSHConnection()
+    #             return True
+    #         except (ImportError, AttributeError) as e:
+    #             self.logger.error(f"Could not load SSH module: {e}")
+    #             return False
+    #     return True
+
     def set_connection_type(self, conn_type: str) -> None:
         """
         Set the connection type to use.
@@ -123,15 +131,9 @@ class ConnectionManager:
         self._connection_type = conn_type.lower()
         self.logger.info(f"Connection type set to {self._connection_type}")
         
-        # Initialize SSH if needed
-        if conn_type.lower() == self.SSH_MODE and self.ssh_connection is None:
-            try:
-                # Use importlib for dynamic import to avoid errors if module doesn't exist
-                ssh_module = importlib.import_module('network.ssh_connection')
-                SSHConnection = getattr(ssh_module, 'SSHConnection')
-                self.ssh_connection = SSHConnection()
-            except (ImportError, AttributeError) as e:
-                self.logger.error(f"Could not load SSH module: {e}")
+        # Initialize SSH if needed (SSH not implemented yet)
+        # if conn_type.lower() == self.SSH_MODE:
+        #     self._initialize_ssh_connection()
     
     def connect(self, hostname: str, **kwargs) -> bool:
         """
@@ -154,29 +156,26 @@ class ConnectionManager:
         """
         self._hostname = hostname
         
+        # SSH mode not implemented yet
         if self._connection_type == self.SSH_MODE:
-            # Lazy load SSH module
-            if self.ssh_connection is None:
-                try:
-                    ssh_module = importlib.import_module('network.ssh_connection')
-                    SSHConnection = getattr(ssh_module, 'SSHConnection')
-                    self.ssh_connection = SSHConnection()
-                except (ImportError, AttributeError) as e:
-                    self.logger.error(f"Could not load SSH module: {e}")
-                    return False
-            
-            # SSH connection requires more parameters
-            self.username = kwargs.get('username')
-            self.password = kwargs.get('password')
-            self.config_path = kwargs.get('config_path')
-            self.result_path = kwargs.get('result_path')
-            
-            return self.ssh_connection.connect(
-                hostname=hostname,
-                username=self.username,
-                password=self.password,
-                timeout=kwargs.get('timeout', 10)
-            )
+            self.logger.error("SSH connection mode not implemented yet")
+            return False
+            # # Initialize SSH connection
+            # if not self._initialize_ssh_connection():
+            #     return False
+            #
+            # # SSH connection requires more parameters
+            # self.username = kwargs.get('username')
+            # self.password = kwargs.get('password')
+            # self.config_path = kwargs.get('config_path')
+            # self.result_path = kwargs.get('result_path')
+            #
+            # return self.ssh_connection.connect(
+            #     hostname=hostname,
+            #     username=self.username,
+            #     password=self.password,
+            #     timeout=kwargs.get('timeout', 10)
+            # )
             
         else:  # HTTP mode
             self.port = kwargs.get('port', 6262)
@@ -196,19 +195,24 @@ class ConnectionManager:
     def is_connected(self) -> bool:
         """
         Check if connected to remote host.
-        
+
         Returns:
             True if connected, False otherwise
         """
         if self._connection_type == self.SSH_MODE:
-            return self.ssh_connection is not None and self.ssh_connection.is_connected()
+            # SSH not implemented yet
+            return False
+            # return self.ssh_connection is not None and self.ssh_connection.is_connected()
         else:
             return self.http_client.is_connected()
     
     def disconnect(self) -> None:
         """Disconnect from remote host."""
-        if self._connection_type == self.SSH_MODE and self.ssh_connection is not None:
-            self.ssh_connection.disconnect()
+        if self._connection_type == self.SSH_MODE:
+            # SSH not implemented yet
+            pass
+            # if self.ssh_connection is not None:
+            #     self.ssh_connection.disconnect()
         else:
             self.http_client.disconnect()
         
@@ -265,7 +269,7 @@ class ConnectionManager:
                 
                 try:
                     # Send test directly without complex retry mechanisms
-                    success, response_data, error_message, error_type = http_client.send_test(test_data)
+                    success, response_data, error_message, _ = http_client.send_test(test_data)
 
                     # Không kiểm tra lại kết quả từ http_client.py
                     return success, response_data, error_message
