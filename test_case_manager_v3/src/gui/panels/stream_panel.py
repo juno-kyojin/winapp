@@ -179,9 +179,16 @@ class StreamPanel(ttk.Frame):
             test_name: Name of the test being executed
             test_data: Test data being sent
         """
-        # If we're in queue execution mode, don't start individual test stream
-        # The queue execution will handle the streaming
+        # Prevent duplicate logging during queue execution
+        # Queue execution uses start_queue_test_stream() instead
         if self.is_queue_executing:
+            # Still update current test info for consistency
+            self.current_test = {
+                "name": test_name,
+                "data": test_data,
+                "start_time": datetime.now(),
+                "status": "Starting"
+            }
             return
 
         self.current_test = {
@@ -253,10 +260,10 @@ class StreamPanel(ttk.Frame):
             success: Whether the test completed successfully
             final_message: Final status message
         """
-        # If we're in queue execution mode, don't end individual test stream
-        # The queue execution will handle the streaming
-        if self.is_queue_executing:
-            return
+        # Allow individual test stream ending even during queue execution
+        # This provides consistent detailed logging for both single and queue execution
+        # if self.is_queue_executing:
+        #     return
 
         if not self.is_streaming:
             return
@@ -273,8 +280,8 @@ class StreamPanel(ttk.Frame):
         icon = "🎉" if success else "💥"
         self._add_stream_entry(msg_type, f"{icon} {final_message}")
 
-        # Add execution time
-        if self.current_test and "start_time" in self.current_test:
+        # Add execution time only if not in queue execution mode (to avoid duplicates)
+        if not self.is_queue_executing and self.current_test and "start_time" in self.current_test:
             duration = datetime.now() - self.current_test["start_time"]
             self._add_stream_entry("info", f"⏱️ Total execution time: {duration.total_seconds():.1f} seconds")
 

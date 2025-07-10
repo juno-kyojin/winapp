@@ -2289,3 +2289,533 @@ UnicodeEncodeError: 'charmap' codec can't encode character '\u1eaf' in position 
 [2025-07-10 11:25:43] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_07a1cf91_fail.json
 [2025-07-10 11:25:43] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Failed
 [2025-07-10 11:40:12] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-10 13:53:28] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 13:53:28] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 13:53:29] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 13:53:29] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 13:53:29] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 13:53:29] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 13:53:29] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 13:53:29] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 13:53:29] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 13:53:29] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 13:53:29] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 13:53:29] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 13:53:29] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 13:53:29] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 13:55:31] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 13:55:31] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 13:55:31] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 13:55:32] INFO - src.gui.widgets.status_bar: Status: Testing connection...
+[2025-07-10 13:55:32] INFO - src.gui.widgets.status_bar: Status: Connection test successful
+[2025-07-10 13:55:43] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-10 13:55:43] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 13:55:45] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-10 13:55:45] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-10 13:55:45] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 13:55:46] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-10 13:55:46] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 13:55:46] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 13:55:46] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 13:55:46] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-10 13:55:46] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 13:55:46] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 13:55:46] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 13:55:46] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710135546_5ffaf366
+[2025-07-10 13:55:56] INFO - src.network.http_client: Received response from server
+[2025-07-10 13:55:56] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-10 13:55:56] INFO - src.utils.script_verifier: Using Python executable: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe
+[2025-07-10 13:56:49] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra thời gian thuê bao còn lại ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> Lease Expires: 11 July 2025 01:55:55
+-> Thời điểm kiểm tra: Thursday, July 10, 2025 01:56:49 PM
+-> Thời gian thuê bao còn lại: ~43145 giây.
+-> Thời gian thuê bao cấu hình: 43200 giây.
+-> Kết quả: Thời gian còn lại hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-10 13:56:49] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-10 13:56:49] INFO - src.utils.script_verifier: Script output content: '1'
+[2025-07-10 13:56:49] INFO - src.utils.script_verifier: Verification script passed: lan_edit_leasetime.py (execution time: 53.56s)
+[2025-07-10 13:56:49] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_leasetime.py (execution time: 53.56s)
+[2025-07-10 13:56:49] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_leasetime.py (execution time: 53.56s)
+[2025-07-10 13:56:49] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - SUCCESS
+[2025-07-10 13:56:49] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_df8ed160_success.json
+[2025-07-10 13:56:49] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 13:56:56] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-10 13:56:56] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: lan_edit_leasetime
+[2025-07-10 13:56:56] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 13:56:56] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 13:56:56] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 13:56:56] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 13:56:56] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 13:56:56] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 13:56:56] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710135546_5ffaf366
+[2025-07-10 13:57:04] INFO - src.network.http_client: Received response from server
+[2025-07-10 13:57:04] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-10 13:57:04] INFO - src.utils.script_verifier: Using Python executable: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe
+[2025-07-10 13:57:57] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra thời gian thuê bao còn lại ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> Lease Expires: 11 July 2025 01:57:03
+-> Thời điểm kiểm tra: Thursday, July 10, 2025 01:57:57 PM
+-> Thời gian thuê bao còn lại: ~43145 giây.
+-> Thời gian thuê bao cấu hình: 43200 giây.
+-> Kết quả: Thời gian còn lại hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-10 13:57:57] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-10 13:57:57] INFO - src.utils.script_verifier: Script output content: '1'
+[2025-07-10 13:57:57] INFO - src.utils.script_verifier: Verification script passed: lan_edit_leasetime.py (execution time: 53.55s)
+[2025-07-10 13:57:57] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_leasetime.py (execution time: 53.55s)
+[2025-07-10 13:57:57] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_leasetime.py (execution time: 53.55s)
+[2025-07-10 13:57:57] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - SUCCESS
+[2025-07-10 13:57:57] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_af6ae897_success.json
+[2025-07-10 13:57:58] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 13:57:58] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-10 13:57:59] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-10 14:04:39] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-10 14:04:39] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: lan_edit_leasetime
+[2025-07-10 14:04:39] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 14:04:39] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 14:04:39] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 14:04:39] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:04:39] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:04:39] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:04:39] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710135546_5ffaf366
+[2025-07-10 14:04:39] ERROR - src.network.http_client: Exception during test send: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-07-10 14:04:39] WARNING - src.network.http_client: Detected connection reset error, marking as disconnected
+[2025-07-10 14:04:39] WARNING - src.network.connection_manager: Attempt 1/3 failed: Network error detected, will retry: Connection reset by server: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-07-10 14:04:39] INFO - src.network.connection_manager: Waiting 2 seconds before retry 2
+[2025-07-10 14:04:41] WARNING - src.network.connection_manager: Not connected, attempting to reconnect...
+[2025-07-10 14:04:41] INFO - src.network.connection_manager: Reconnection attempt 1/3
+[2025-07-10 14:04:41] INFO - src.network.http_client: Disconnected from HTTP server
+[2025-07-10 14:04:41] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:04:41] INFO - src.network.connection_manager: Reconnection successful on attempt 1
+[2025-07-10 14:04:41] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:04:41] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:04:41] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710135546_5ffaf366
+[2025-07-10 14:04:48] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:04:48] INFO - src.network.connection_manager: Test succeeded on retry 1
+[2025-07-10 14:04:48] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-10 14:04:48] INFO - src.utils.script_verifier: Using Python executable: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe
+[2025-07-10 14:05:42] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra thời gian thuê bao còn lại ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> Lease Expires: 11 July 2025 02:04:48
+-> Thời điểm kiểm tra: Thursday, July 10, 2025 02:05:42 PM
+-> Thời gian thuê bao còn lại: ~43145 giây.
+-> Thời gian thuê bao cấu hình: 43200 giây.
+-> Kết quả: Thời gian còn lại hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-10 14:05:42] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-10 14:05:42] INFO - src.utils.script_verifier: Script output content: '1'
+[2025-07-10 14:05:42] INFO - src.utils.script_verifier: Verification script passed: lan_edit_leasetime.py (execution time: 53.71s)
+[2025-07-10 14:05:42] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_leasetime.py (execution time: 53.71s)
+[2025-07-10 14:05:42] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_leasetime.py (execution time: 53.71s)
+[2025-07-10 14:05:42] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - SUCCESS
+[2025-07-10 14:05:42] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_a0a69fae_success.json
+[2025-07-10 14:05:42] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:05:42] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-10 14:05:43] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-10 14:07:03] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 14:07:03] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 14:07:03] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 14:07:03] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 14:07:03] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 14:07:03] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 14:07:03] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 14:07:03] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 14:07:03] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 14:07:03] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:07:03] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 14:07:03] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 14:07:03] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 14:07:03] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 14:07:06] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:07:06] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:07:07] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-10 14:07:08] INFO - src.gui.widgets.status_bar: Status: Added test wan_delete to queue
+[2025-07-10 14:07:08] INFO - src.gui.widgets.status_bar: Status: Added template wan_delete.json to queue
+[2025-07-10 14:07:08] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:07:09] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:07:10] INFO - src.gui.widgets.status_bar: Status: Added test wan_create to queue
+[2025-07-10 14:07:10] INFO - src.gui.widgets.status_bar: Status: Added template wan_create.json to queue
+[2025-07-10 14:07:10] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:07:11] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-10 14:07:12] INFO - src.gui.widgets.status_bar: Status: Added test wan_edit to queue
+[2025-07-10 14:07:12] INFO - src.gui.widgets.status_bar: Status: Added template wan_edit.json to queue
+[2025-07-10 14:07:12] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:07:14] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 3 tests
+[2025-07-10 14:07:14] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 3: wan_delete
+[2025-07-10 14:07:14] INFO - src.gui.widgets.status_bar: Status: Not connected to device. Please connect first.
+[2025-07-10 14:07:20] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 14:07:20] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:07:20] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 14:07:43] INFO - src.gui.widgets.status_bar: Status: Testing connection...
+[2025-07-10 14:07:43] INFO - src.gui.widgets.status_bar: Status: Connection test successful
+[2025-07-10 14:07:53] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-10 14:07:54] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 14:07:54] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 14:07:54] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 14:07:54] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 14:07:54] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 14:07:54] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 14:07:54] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 14:07:54] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 14:07:54] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 14:07:54] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:07:54] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 14:07:54] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 14:07:54] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 14:07:54] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 14:07:59] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 14:07:59] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:07:59] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 14:08:02] INFO - src.gui.widgets.status_bar: Status: Loaded template: ping.json
+[2025-07-10 14:08:02] INFO - src.gui.widgets.status_bar: Status: Loaded template: ping.json
+[2025-07-10 14:08:03] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:08:03] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:08:04] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:08:05] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-10 14:08:05] INFO - src.gui.widgets.status_bar: Status: Added test wan_delete to queue
+[2025-07-10 14:08:05] INFO - src.gui.widgets.status_bar: Status: Added template wan_delete.json to queue
+[2025-07-10 14:08:05] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:08:07] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-10 14:08:07] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:08:08] INFO - src.gui.widgets.status_bar: Status: Added test wan_create to queue
+[2025-07-10 14:08:08] INFO - src.gui.widgets.status_bar: Status: Added template wan_create.json to queue
+[2025-07-10 14:08:08] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:08:09] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-10 14:08:10] INFO - src.gui.widgets.status_bar: Status: Added test wan_edit to queue
+[2025-07-10 14:08:10] INFO - src.gui.widgets.status_bar: Status: Added template wan_edit.json to queue
+[2025-07-10 14:08:10] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:08:12] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 3 tests
+[2025-07-10 14:08:12] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 3: wan_delete
+[2025-07-10 14:08:12] INFO - src.gui.main_window: Executing test: wan_delete
+[2025-07-10 14:08:12] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:08:12] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_delete...
+[2025-07-10 14:08:12] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_delete
+[2025-07-10 14:08:12] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:08:12] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:08:12] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:08:12] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:08:12] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:08:12] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710140812_71d6fb2c
+[2025-07-10 14:08:29] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:08:29] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:08:29] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:08:29] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_delete - SUCCESS
+[2025-07-10 14:08:29] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_delete_1b17a502_success.json
+[2025-07-10 14:08:29] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:08:29] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 40s for device to stabilize...
+[2025-07-10 14:09:09] INFO - src.gui.widgets.status_bar: Status: Executing test 2 of 3: wan_create
+[2025-07-10 14:09:09] INFO - src.gui.widgets.status_bar: Status: Waiting 30s before executing next test...
+[2025-07-10 14:09:39] INFO - src.gui.main_window: Executing test: wan_create
+[2025-07-10 14:09:39] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:09:39] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_create...
+[2025-07-10 14:09:39] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_create
+[2025-07-10 14:09:39] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:09:39] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:09:39] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:09:39] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:09:39] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:09:39] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710140939_db0fcf07
+[2025-07-10 14:09:55] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:09:55] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:09:55] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:09:55] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_create - SUCCESS
+[2025-07-10 14:09:55] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_create_5a38db14_success.json
+[2025-07-10 14:09:55] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:09:55] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 40s for device to stabilize...
+[2025-07-10 14:10:35] INFO - src.gui.widgets.status_bar: Status: Executing test 3 of 3: wan_edit
+[2025-07-10 14:10:35] INFO - src.gui.widgets.status_bar: Status: Waiting 30s before executing next test...
+[2025-07-10 14:11:05] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:11:05] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:11:05] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:11:05] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_edit
+[2025-07-10 14:11:05] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:11:05] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:11:05] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:11:05] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:11:05] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:11:05] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710141105_9e40de81
+[2025-07-10 14:11:22] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:11:22] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:11:22] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:11:22] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:11:22] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_e536ab2b_success.json
+[2025-07-10 14:11:22] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:11:22] INFO - src.gui.widgets.status_bar: Status: Executed 3 tests
+[2025-07-10 14:11:23] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 3/3 tests successful
+[2025-07-10 14:11:32] INFO - src.gui.widgets.status_bar: Status: Executing test: wan_edit
+[2025-07-10 14:11:32] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:11:32] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:11:32] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:11:32] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_edit
+[2025-07-10 14:11:32] INFO - src.gui.widgets.status_bar: Status: Executed test wan_edit
+[2025-07-10 14:11:32] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:11:32] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:11:32] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:11:32] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:11:32] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:11:32] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710141105_9e40de81
+[2025-07-10 14:11:50] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:11:50] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:11:50] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:11:50] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:11:50] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_5bee77ca_success.json
+[2025-07-10 14:11:50] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:32:54] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-10 14:34:47] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 14:34:47] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 14:34:48] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 14:34:48] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 14:34:48] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 14:34:48] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 14:34:48] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 14:34:48] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 14:34:48] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 14:34:48] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:34:48] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 14:34:48] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 14:34:48] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 14:34:48] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 14:35:17] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 14:35:17] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:35:17] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 14:35:19] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:35:21] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-10 14:35:22] INFO - src.gui.widgets.status_bar: Status: Added test wan_edit to queue
+[2025-07-10 14:35:22] INFO - src.gui.widgets.status_bar: Status: Added template wan_edit.json to queue
+[2025-07-10 14:35:22] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:35:24] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-10 14:35:24] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: wan_edit
+[2025-07-10 14:35:24] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:35:24] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:35:24] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:35:24] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_edit
+[2025-07-10 14:35:24] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:35:24] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:35:24] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:35:24] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:35:24] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:35:24] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710143524_77bda9d5
+[2025-07-10 14:35:42] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:35:42] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:35:42] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:35:42] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:35:42] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_025b1ce7_success.json
+[2025-07-10 14:35:42] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:35:42] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-10 14:35:43] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-10 14:37:32] INFO - src.gui.widgets.status_bar: Status: Executing test: wan_edit
+[2025-07-10 14:37:32] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:37:32] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:37:32] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:37:32] INFO - src.gui.widgets.status_bar: Status: Started streaming test: wan_edit
+[2025-07-10 14:37:32] INFO - src.gui.widgets.status_bar: Status: Executed test wan_edit
+[2025-07-10 14:37:32] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:37:32] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:37:32] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:37:32] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:37:32] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:37:32] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710143524_77bda9d5
+[2025-07-10 14:37:49] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:37:49] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:37:49] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:37:49] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:37:49] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_51baae66_success.json
+[2025-07-10 14:37:49] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:37:54] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-10 14:48:02] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 14:48:02] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 14:48:02] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 14:48:02] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 14:48:02] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 14:48:02] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 14:48:02] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 14:48:03] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 14:48:03] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 14:48:03] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:48:03] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 14:48:03] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 14:48:03] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 14:48:03] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 14:49:12] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 14:49:12] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:49:12] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 14:49:15] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:49:15] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:49:16] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-10 14:49:16] INFO - src.gui.widgets.status_bar: Status: Added test wan_edit to queue
+[2025-07-10 14:49:16] INFO - src.gui.widgets.status_bar: Status: Added template wan_edit.json to queue
+[2025-07-10 14:49:16] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:49:19] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-10 14:49:19] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: wan_edit
+[2025-07-10 14:49:19] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:49:19] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:49:19] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:49:19] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:49:19] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:49:19] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:49:19] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:49:19] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:49:19] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710144919_43222e3e
+[2025-07-10 14:49:35] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:49:35] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:49:35] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:49:35] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:49:35] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_3d71b4e8_success.json
+[2025-07-10 14:49:36] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-10 14:49:37] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 1/1 tests successful
+[2025-07-10 14:49:41] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:49:42] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_edit.json
+[2025-07-10 14:49:42] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_delete.json
+[2025-07-10 14:49:43] INFO - src.gui.widgets.status_bar: Status: Added test wan_delete to queue
+[2025-07-10 14:49:43] INFO - src.gui.widgets.status_bar: Status: Added template wan_delete.json to queue
+[2025-07-10 14:49:43] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:49:46] INFO - src.gui.widgets.status_bar: Status: Loaded template: wan_create.json
+[2025-07-10 14:49:47] INFO - src.gui.widgets.status_bar: Status: Added test wan_create to queue
+[2025-07-10 14:49:47] INFO - src.gui.widgets.status_bar: Status: Added template wan_create.json to queue
+[2025-07-10 14:49:47] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:49:49] INFO - src.gui.widgets.status_bar: Status: Moved test 'wan_delete' up in queue
+[2025-07-10 14:49:52] INFO - src.gui.widgets.status_bar: Status: Moved test 'wan_create' up in queue
+[2025-07-10 14:49:55] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 3 tests
+[2025-07-10 14:49:55] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 3: wan_delete
+[2025-07-10 14:49:55] INFO - src.gui.main_window: Executing test: wan_delete
+[2025-07-10 14:49:55] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:49:55] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_delete...
+[2025-07-10 14:49:55] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:49:55] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:49:55] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:49:55] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:49:55] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:49:55] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710144955_f268298a
+[2025-07-10 14:50:12] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:50:12] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:50:12] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:50:12] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_delete - SUCCESS
+[2025-07-10 14:50:12] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_delete_6143926e_success.json
+[2025-07-10 14:50:12] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 40s for device to stabilize...
+[2025-07-10 14:50:52] INFO - src.gui.widgets.status_bar: Status: Executing test 2 of 3: wan_create
+[2025-07-10 14:50:52] INFO - src.gui.widgets.status_bar: Status: Waiting 30s before executing next test...
+[2025-07-10 14:51:22] INFO - src.gui.main_window: Executing test: wan_create
+[2025-07-10 14:51:22] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:51:22] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_create...
+[2025-07-10 14:51:22] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:51:22] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:51:22] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:51:22] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:51:22] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:51:22] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710145122_68f99b33
+[2025-07-10 14:51:39] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:51:39] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:51:39] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:51:39] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_create - SUCCESS
+[2025-07-10 14:51:39] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_create_314ef1c3_success.json
+[2025-07-10 14:51:39] INFO - src.gui.widgets.status_bar: Status: Test completed. Waiting 40s for device to stabilize...
+[2025-07-10 14:52:19] INFO - src.gui.widgets.status_bar: Status: Executing test 3 of 3: wan_edit
+[2025-07-10 14:52:19] INFO - src.gui.widgets.status_bar: Status: Waiting 30s before executing next test...
+[2025-07-10 14:52:49] INFO - src.gui.main_window: Executing test: wan_edit
+[2025-07-10 14:52:49] INFO - src.gui.main_window: Test affects network connectivity
+[2025-07-10 14:52:49] INFO - src.gui.widgets.status_bar: Status: Executing network-affecting test: wan_edit...
+[2025-07-10 14:52:49] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:52:49] INFO - src.network.connection_manager: Detected network-affecting test - using enhanced connectivity handling
+[2025-07-10 14:52:49] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:52:49] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:52:49] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:52:49] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710144919_43222e3e
+[2025-07-10 14:52:49] ERROR - src.network.http_client: Exception during test send: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-07-10 14:52:49] WARNING - src.network.http_client: Detected connection reset error, marking as disconnected
+[2025-07-10 14:52:49] INFO - src.network.connection_manager: Network-affecting test connection failure - treating as network error for retry
+[2025-07-10 14:52:49] WARNING - src.network.connection_manager: Attempt 1/3 failed: Network error detected, will retry: Connection reset by server: ("Connection broken: ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)", ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+[2025-07-10 14:52:49] INFO - src.network.connection_manager: Waiting 10 seconds before retry 2
+[2025-07-10 14:52:59] INFO - src.network.connection_manager: Network-affecting test retry - performing enhanced connection validation
+[2025-07-10 14:52:59] WARNING - src.network.connection_manager: Not connected, attempting to reconnect...
+[2025-07-10 14:52:59] INFO - src.network.connection_manager: Reconnection attempt 1/3
+[2025-07-10 14:52:59] INFO - src.network.http_client: Disconnected from HTTP server
+[2025-07-10 14:52:59] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 14:52:59] INFO - src.network.connection_manager: Reconnection successful on attempt 1
+[2025-07-10 14:52:59] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:52:59] INFO - src.network.connection_manager: Extended timeout for network-affecting test: 80s
+[2025-07-10 14:52:59] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:52:59] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710144919_43222e3e
+[2025-07-10 14:53:15] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:53:15] INFO - src.network.connection_manager: Test succeeded on retry 1
+[2025-07-10 14:53:15] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:53:15] INFO - src.gui.main_window: Final result: SUCCESS - Test completed successfully (no verification required)
+[2025-07-10 14:53:15] INFO - src.gui.widgets.status_bar: Status: Test completed: wan_edit - SUCCESS
+[2025-07-10 14:53:15] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\wan_edit_c8faa18a_success.json
+[2025-07-10 14:53:15] INFO - src.gui.widgets.status_bar: Status: Executed 3 tests
+[2025-07-10 14:53:16] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 3/3 tests successful
+[2025-07-10 14:53:24] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:53:24] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 14:53:25] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-10 14:53:25] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-10 14:53:25] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 14:53:27] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-10 14:53:27] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 14:53:27] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 14:53:27] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 14:53:27] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-10 14:53:27] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 14:53:27] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 14:53:27] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 14:53:27] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710145327_6df3fdb7
+[2025-07-10 14:53:35] INFO - src.network.http_client: Received response from server
+[2025-07-10 14:53:35] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-10 14:53:35] INFO - src.utils.script_verifier: Using Python executable: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe
+[2025-07-10 14:54:28] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra thời gian thuê bao còn lại ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> Lease Expires: 11 July 2025 02:53:34
+-> Thời điểm kiểm tra: Thursday, July 10, 2025 02:54:28 PM
+-> Thời gian thuê bao còn lại: ~43145 giây.
+-> Thời gian thuê bao cấu hình: 43200 giây.
+-> Kết quả: Thời gian còn lại hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-10 14:54:28] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-10 14:54:28] INFO - src.utils.script_verifier: Script output content: '1'
+[2025-07-10 14:54:28] INFO - src.utils.script_verifier: Verification script passed: lan_edit_leasetime.py (execution time: 53.58s)
+[2025-07-10 14:54:28] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_leasetime.py (execution time: 53.58s)
+[2025-07-10 14:54:28] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_leasetime.py (execution time: 53.58s)
+[2025-07-10 14:54:28] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - SUCCESS
+[2025-07-10 14:54:28] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_f2d6f61f_success.json
+[2025-07-10 14:54:28] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-10 14:56:10] INFO - src.main: Exiting Test Case Manager v1.0.0
