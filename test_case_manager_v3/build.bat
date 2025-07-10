@@ -152,6 +152,13 @@ if exist ToolWL (
     if exist release\ToolWL\wifi_connect\__pycache__ rmdir /S /Q release\ToolWL\wifi_connect\__pycache__
     echo ✓ Cleaned up __pycache__ folders
 
+    REM Ensure dependency installer is included
+    if exist ToolWL\install_all_dependencies.bat (
+        echo ✓ Dependency installer included
+    ) else (
+        echo WARNING: install_all_dependencies.bat not found in ToolWL
+    )
+
 ) else (
     echo WARNING: ToolWL folder not found - script verification may not work
     echo Creating empty ToolWL folder structure...
@@ -243,6 +250,17 @@ echo 🔧 Adding new verification scripts:
 echo   - Add new .py scripts to: release\ToolWL\
 echo   - Scripts must follow input.txt/output.txt interface
 echo   - No rebuild required for new scripts
+echo.
+echo IMPORTANT - Install dependencies on target machine:
+echo   1. Run: release\ToolWL\install_all_dependencies.bat
+echo   2. Script will auto-install: pywifi, requests, psutil
+echo   3. Verify all libraries and local modules
+echo   4. Only need to run once after copying app to new machine
+echo.
+echo If ToolWL scripts still fail:
+echo   - Run Test Case Manager as Administrator
+echo   - Check antivirus not blocking Python scripts
+echo   - Ensure Python 3.8+ is installed
 echo ============================================================
 
 exit /b 0
