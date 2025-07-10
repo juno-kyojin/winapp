@@ -2238,3 +2238,54 @@ UnicodeEncodeError: 'charmap' codec can't encode character '\u1eaf' in position 
 [2025-07-10 10:07:07] INFO - src.utils.script_verifier: Removed existing output.txt file
 [2025-07-10 10:07:07] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
 [2025-07-10 10:07:07] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-10 11:24:32] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 11:24:32] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 11:24:33] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 11:24:33] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 11:24:33] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 11:24:33] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 11:24:33] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 11:24:33] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 11:24:33] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 11:24:33] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 11:24:33] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 11:24:33] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 11:24:33] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 11:24:33] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 11:24:35] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 11:24:35] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-10 11:24:35] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-10 11:24:37] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-10 11:24:37] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-10 11:24:37] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 11:24:38] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-10 11:24:38] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 11:24:38] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 11:24:39] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 11:24:39] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-10 11:24:39] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 11:24:39] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 11:24:39] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-10 11:24:39] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710112439_b96edf9c
+[2025-07-10 11:25:19] ERROR - src.network.http_client: Read timeout (40s) - Server took too long to respond
+[2025-07-10 11:25:19] WARNING - src.network.connection_manager: Attempt 1/3 failed: Network error detected, will retry: Read timeout (40s) - Server took too long to respond
+[2025-07-10 11:25:19] INFO - src.network.connection_manager: Waiting 2 seconds before retry 2
+[2025-07-10 11:25:26] WARNING - src.network.connection_manager: Ping request failed: HTTPConnectionPool(host='192.168.1.4', port=6262): Max retries exceeded with url: /ping (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x00000131F680B4D0>, 'Connection to 192.168.1.4 timed out. (connect timeout=5)')), but continuing
+[2025-07-10 11:25:26] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 11:25:26] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-10 11:25:26] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710112439_b96edf9c
+[2025-07-10 11:25:31] ERROR - src.network.http_client: Connection timeout (5s)
+[2025-07-10 11:25:31] WARNING - src.network.connection_manager: Attempt 2/3 failed: Network error detected, will retry: Connection timeout (5s)
+[2025-07-10 11:25:31] INFO - src.network.connection_manager: Waiting 2 seconds before retry 3
+[2025-07-10 11:25:38] WARNING - src.network.connection_manager: Ping request failed: HTTPConnectionPool(host='192.168.1.4', port=6262): Max retries exceeded with url: /ping (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x00000131F686DE00>, 'Connection to 192.168.1.4 timed out. (connect timeout=5)')), but continuing
+[2025-07-10 11:25:38] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 11:25:38] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-10 11:25:38] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710112439_b96edf9c
+[2025-07-10 11:25:43] ERROR - src.network.http_client: Connection timeout (5s)
+[2025-07-10 11:25:43] WARNING - src.network.connection_manager: Attempt 3/3 failed: Network error detected, will retry: Connection timeout (5s)
+[2025-07-10 11:25:43] ERROR - src.network.connection_manager: Test failed after 3 attempts: Connection timeout (5s)
+[2025-07-10 11:25:43] INFO - src.gui.main_window: Final result: FAIL - Device test failed, skipping verification
+[2025-07-10 11:25:43] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - FAIL
+[2025-07-10 11:25:43] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_07a1cf91_fail.json
+[2025-07-10 11:25:43] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Failed
+[2025-07-10 11:40:12] INFO - src.main: Exiting Test Case Manager v1.0.0

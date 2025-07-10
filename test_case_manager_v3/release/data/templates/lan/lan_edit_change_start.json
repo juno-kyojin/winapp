@@ -6,10 +6,9 @@
       "params": {
         "name": "lan",
         "network_ipv4_ip": "192.168.99.1",
+        "network_ipv4_mask": "255.255.255.0",
         "dhcp_start": "192.168.99.80",
-        "dhco_limit": 10,
-        "dhcp_leasetime": 200,
-        "network_ipv4_mask": "255.255.255.0"
+        "dhcp_limit": 10
       }
     }
   ]

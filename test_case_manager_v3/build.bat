@@ -133,31 +133,50 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-REM Copy ToolWL folder to release folder (for script verification)
-echo Copying ToolWL folder...
+REM ============================================================
+REM Copy ToolWL folder and dependencies (for script verification)
+REM ============================================================
+echo Copying ToolWL folder and dependencies...
+
 if exist ToolWL (
+    echo ✓ ToolWL folder found - copying to release...
     xcopy ToolWL release\ToolWL /E /I /Y
     if %ERRORLEVEL% NEQ 0 (
         echo ERROR: Failed to copy ToolWL folder!
         exit /b 1
     )
     echo ✓ ToolWL folder copied successfully
+
+    REM Clean up __pycache__ folders in release
+    if exist release\ToolWL\__pycache__ rmdir /S /Q release\ToolWL\__pycache__
+    if exist release\ToolWL\wifi_connect\__pycache__ rmdir /S /Q release\ToolWL\wifi_connect\__pycache__
+    echo ✓ Cleaned up __pycache__ folders
+
 ) else (
     echo WARNING: ToolWL folder not found - script verification may not work
+    echo Creating empty ToolWL folder structure...
+    mkdir release\ToolWL
+    echo # ToolWL Folder > release\ToolWL\README.txt
+    echo This folder contains verification scripts for Test Case Manager. >> release\ToolWL\README.txt
+    echo Add your verification scripts here following the input.txt/output.txt interface. >> release\ToolWL\README.txt
 )
 
-REM Copy wifi_connect module to ToolWL if it exists separately
-echo Checking for wifi_connect module...
+REM Copy additional wifi_connect module if it exists separately (fallback)
+echo Checking for additional wifi_connect dependencies...
 if exist ..\wifi_connect\wifi_connect (
-    echo Copying wifi_connect module to ToolWL...
-    xcopy ..\wifi_connect\wifi_connect release\ToolWL\wifi_connect /E /I /Y
-    if %ERRORLEVEL% NEQ 0 (
-        echo WARNING: Failed to copy wifi_connect module
+    if not exist release\ToolWL\wifi_connect (
+        echo Copying wifi_connect module to ToolWL...
+        xcopy ..\wifi_connect\wifi_connect release\ToolWL\wifi_connect /E /I /Y
+        if %ERRORLEVEL% NEQ 0 (
+            echo WARNING: Failed to copy wifi_connect module
+        ) else (
+            echo ✓ wifi_connect module copied successfully
+        )
     ) else (
-        echo ✓ wifi_connect module copied successfully
+        echo ✓ wifi_connect module already included in ToolWL
     )
 ) else (
-    echo ✓ wifi_connect module already included in ToolWL or not needed
+    echo ✓ No additional wifi_connect module found (using existing in ToolWL)
 )
 
 REM Assets are now embedded in the executable, no need to copy separately

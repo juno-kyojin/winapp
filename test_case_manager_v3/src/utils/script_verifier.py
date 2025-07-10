@@ -97,6 +97,54 @@ class ScriptVerifier:
         self.logger.warning(f"ToolWL not found, using fallback: {fallback_path}")
         return fallback_path
 
+    def _get_python_executable(self) -> str:
+        """
+        Get the appropriate Python executable for script execution.
+
+        This method handles both development and built executable scenarios:
+        - Development: Use sys.executable (current Python interpreter)
+        - Built executable: Try to find system Python or use bundled Python
+
+        Returns:
+            Path to Python executable
+        """
+        # Method 1: If running from development, use current Python
+        if not getattr(sys, 'frozen', False):
+            return sys.executable
+
+        # Method 2: Running from built executable - try to find system Python
+        import shutil
+
+        # Try common Python executable names
+        python_names = ['python', 'python3', 'python.exe', 'python3.exe']
+
+        for python_name in python_names:
+            python_path = shutil.which(python_name)
+            if python_path:
+                self.logger.debug(f"Found system Python: {python_path}")
+                return python_path
+
+        # Method 3: Try to use the Python that was used to build the executable
+        # This is stored in sys.executable even in frozen mode
+        if sys.executable and Path(sys.executable).exists():
+            # Extract directory and look for python.exe
+            exe_dir = Path(sys.executable).parent
+            possible_python_paths = [
+                exe_dir / "python.exe",
+                exe_dir / "python3.exe",
+                exe_dir / "Scripts" / "python.exe",
+                exe_dir.parent / "python.exe"
+            ]
+
+            for python_path in possible_python_paths:
+                if python_path.exists():
+                    self.logger.debug(f"Found Python near executable: {python_path}")
+                    return str(python_path)
+
+        # Method 4: Fallback to sys.executable (might be the .exe itself)
+        self.logger.warning(f"Could not find system Python, using fallback: {sys.executable}")
+        return sys.executable
+
     def should_run_verification(self, result_data: Optional[Dict[str, Any]]) -> bool:
         """
         Determine if verification script should be executed based on result data.
@@ -242,16 +290,22 @@ class ScriptVerifier:
             # Set environment variables for proper Unicode handling
             env = os.environ.copy()
             env['PYTHONIOENCODING'] = 'utf-8'
+            env['PYTHONUNBUFFERED'] = '1'  # Force unbuffered output
+
+            # Determine Python executable to use
+            python_exe = self._get_python_executable()
+            self.logger.info(f"Using Python executable: {python_exe}")
 
             result = subprocess.run(
-                [sys.executable, str(script_path)],
+                [python_exe, str(script_path)],
                 cwd=str(self.toolwl_path),
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
                 errors='replace',  # Replace problematic characters instead of failing
-                timeout=60,  # 60 second timeout
-                env=env
+                timeout=120,  # Increased timeout to 120 seconds
+                env=env,
+                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
             execution_time = time.time() - start_time
 
@@ -272,7 +326,7 @@ class ScriptVerifier:
                     with open(output_file, "r", encoding="utf-8") as f:
                         output_content = f.read().strip()
 
-                    self.logger.debug(f"Script output content: '{output_content}'")
+                    self.logger.info(f"Script output content: '{output_content}'")
 
                     if output_content == "1":
                         success_msg = f"Verification script passed: {script_cmd} (execution time: {execution_time:.2f}s)"
@@ -292,8 +346,39 @@ class ScriptVerifier:
                     self.logger.error(error_msg)
                     return False, error_msg
             else:
+                # Enhanced debugging for missing output file
+                self.logger.error(f"Script did not create output file: {output_file}")
+
+                # Check if script execution had errors
+                if result.returncode != 0:
+                    self.logger.error(f"Script execution failed with return code: {result.returncode}")
+                    if result.stderr:
+                        self.logger.error(f"Script stderr: {result.stderr}")
+
+                # List current directory contents for debugging
+                try:
+                    dir_contents = list(self.toolwl_path.iterdir())
+                    self.logger.error(f"ToolWL directory contents: {[f.name for f in dir_contents]}")
+                except Exception as e:
+                    self.logger.error(f"Could not list ToolWL directory: {e}")
+
+                # Check if there are any .txt files that might be the output
+                try:
+                    txt_files = list(self.toolwl_path.glob("*.txt"))
+                    if txt_files:
+                        self.logger.error(f"Found .txt files: {[f.name for f in txt_files]}")
+                        for txt_file in txt_files:
+                            if txt_file.name != "input.txt":
+                                try:
+                                    with open(txt_file, "r", encoding="utf-8") as f:
+                                        content = f.read()
+                                    self.logger.error(f"Content of {txt_file.name}: '{content}'")
+                                except Exception as e:
+                                    self.logger.error(f"Could not read {txt_file.name}: {e}")
+                except Exception as e:
+                    self.logger.error(f"Could not check for .txt files: {e}")
+
                 error_msg = f"Script did not create output file: {output_file}"
-                self.logger.error(error_msg)
                 return False, error_msg
 
         except subprocess.TimeoutExpired:
