@@ -14,6 +14,7 @@ Created: 2025-07-08
 
 import subprocess
 import sys
+import os
 import logging
 import time
 from pathlib import Path
@@ -201,42 +202,69 @@ class ScriptVerifier:
                 return False, error_msg
 
             self.logger.info(f"Executing verification script: {script_path}")
-            self.logger.debug(f"Script input parameters: {input_params}")
+            self.logger.info(f"Script input parameters: {input_params}")
 
             # Prepare input and output files
             input_file = self.toolwl_path / "input.txt"
             output_file = self.toolwl_path / "output.txt"
 
+            self.logger.info(f"Input file path: {input_file}")
+            self.logger.info(f"Output file path: {output_file}")
+
             # Write input parameters to input.txt
-            with open(input_file, "w", encoding="utf-8") as f:
-                for param in input_params:
-                    f.write(f"{param}\n")
+            try:
+                with open(input_file, "w", encoding="utf-8") as f:
+                    for param in input_params:
+                        f.write(f"{param}\n")
+                self.logger.info(f"Successfully wrote {len(input_params)} parameters to input.txt")
+            except Exception as e:
+                error_msg = f"Failed to write input file: {e}"
+                self.logger.error(error_msg)
+                return False, error_msg
 
             # Remove existing output file if present
             if output_file.exists():
                 output_file.unlink()
+                self.logger.info("Removed existing output.txt file")
 
-            self.logger.debug(f"Executing command: {sys.executable} {script_path}")
-            self.logger.debug(f"Working directory: {self.toolwl_path}")
+            self.logger.info(f"Executing command: {sys.executable} {script_path}")
+            self.logger.info(f"Working directory: {self.toolwl_path}")
 
-            # Execute the script with timeout
+            # Check if script file actually exists and is readable
+            if not script_path.is_file():
+                error_msg = f"Script file does not exist or is not a file: {script_path}"
+                self.logger.error(error_msg)
+                return False, error_msg
+
+            # Execute the script with timeout and proper encoding
             start_time = time.time()
+
+            # Set environment variables for proper Unicode handling
+            env = os.environ.copy()
+            env['PYTHONIOENCODING'] = 'utf-8'
+
             result = subprocess.run(
                 [sys.executable, str(script_path)],
                 cwd=str(self.toolwl_path),
                 capture_output=True,
                 text=True,
-                timeout=60  # 60 second timeout
+                encoding='utf-8',
+                errors='replace',  # Replace problematic characters instead of failing
+                timeout=60,  # 60 second timeout
+                env=env
             )
             execution_time = time.time() - start_time
 
             self.logger.debug(f"Script execution completed in {execution_time:.2f}s with return code: {result.returncode}")
 
-            # Log stdout and stderr if present
+            # Log stdout and stderr if present (use INFO level for debugging)
             if result.stdout:
-                self.logger.debug(f"Script stdout: {result.stdout}")
+                self.logger.info(f"Script stdout: {result.stdout}")
             if result.stderr:
-                self.logger.debug(f"Script stderr: {result.stderr}")
+                self.logger.error(f"Script stderr: {result.stderr}")
+
+            # Log return code for debugging
+            self.logger.info(f"Script return code: {result.returncode}")
 
             # Read and interpret output
             if output_file.exists():

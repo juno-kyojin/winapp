@@ -1987,3 +1987,254 @@
 [2025-07-08 17:16:45] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_ip_start - FAIL
 [2025-07-08 17:16:45] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_ip_start_0a1157bb_fail.json
 [2025-07-08 17:16:45] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Failed
+[2025-07-08 17:22:18] INFO - root: Logging initialized - Level: INFO
+[2025-07-08 17:22:18] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-08 17:22:18] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-08 17:22:18] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-08 17:22:18] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-08 17:22:18] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-08 17:22:18] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-08 17:22:18] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-08 17:22:18] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-08 17:22:18] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-08 17:22:18] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-08 17:22:18] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-08 17:22:18] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-08 17:22:18] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-08 17:22:20] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-08 17:22:20] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-08 17:22:20] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-08 17:22:23] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-08 17:22:23] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-08 17:22:23] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-08 17:22:25] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-08 17:22:25] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: lan_edit_leasetime
+[2025-07-08 17:22:25] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-08 17:22:25] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-08 17:22:25] INFO - src.gui.main_window: Sending test to device...
+[2025-07-08 17:22:25] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-08 17:22:25] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-08 17:22:25] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250708172225_eb8f7a07
+[2025-07-08 17:22:37] INFO - src.network.http_client: Received response from server
+[2025-07-08 17:22:37] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-08 17:22:37] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-08 17:22:37] ERROR - src.utils.script_verifier: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:22:37] INFO - src.gui.main_window: Script verification executed: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:22:37] WARNING - src.gui.main_window: Final result: FAIL - Device test passed but verification failed | Verification: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:22:37] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - FAIL
+[2025-07-08 17:22:37] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_7ea3ea06_fail.json
+[2025-07-08 17:22:37] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-08 17:22:38] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 0/1 tests successful, 1/1 tests failed
+[2025-07-08 17:22:52] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-08 17:22:53] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_ip_start to queue
+[2025-07-08 17:22:53] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_start.json to queue
+[2025-07-08 17:22:53] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-08 17:22:55] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_ip_start
+[2025-07-08 17:22:55] INFO - src.gui.main_window: Executing test: lan_edit_ip_start
+[2025-07-08 17:22:55] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_ip_start...
+[2025-07-08 17:22:55] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_ip_start
+[2025-07-08 17:22:55] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_ip_start
+[2025-07-08 17:22:55] INFO - src.gui.main_window: Sending test to device...
+[2025-07-08 17:22:55] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-08 17:22:55] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-08 17:22:55] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250708172255_8084b150
+[2025-07-08 17:23:03] INFO - src.network.http_client: Received response from server
+[2025-07-08 17:23:03] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-08 17:23:03] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_ip_start.py
+[2025-07-08 17:23:03] ERROR - src.utils.script_verifier: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:23:03] INFO - src.gui.main_window: Script verification executed: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:23:03] WARNING - src.gui.main_window: Final result: FAIL - Device test passed but verification failed | Verification: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:23:03] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_ip_start - FAIL
+[2025-07-08 17:23:03] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_ip_start_e45f1c5b_fail.json
+[2025-07-08 17:23:03] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Failed
+[2025-07-08 17:23:27] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-08 17:28:53] INFO - root: Logging initialized - Level: INFO
+[2025-07-08 17:28:53] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-08 17:28:53] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-08 17:28:53] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-08 17:28:53] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-08 17:28:53] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-08 17:28:53] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-08 17:28:53] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-08 17:28:53] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-08 17:28:53] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-08 17:28:53] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-08 17:28:53] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-08 17:28:54] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-08 17:28:54] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-08 17:29:02] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-08 17:29:02] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-08 17:29:02] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-08 17:29:04] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-08 17:29:04] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-08 17:29:04] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-08 17:29:06] INFO - src.gui.widgets.status_bar: Status: Started queue execution: 1 tests
+[2025-07-08 17:29:06] INFO - src.gui.widgets.status_bar: Status: Executing test 1 of 1: lan_edit_leasetime
+[2025-07-08 17:29:06] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-08 17:29:06] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-08 17:29:06] INFO - src.gui.main_window: Sending test to device...
+[2025-07-08 17:29:06] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-08 17:29:06] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-08 17:29:06] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250708172906_a31a6636
+[2025-07-08 17:29:14] INFO - src.network.http_client: Received response from server
+[2025-07-08 17:29:14] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-08 17:29:14] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-08 17:29:15] ERROR - src.utils.script_verifier: Script stderr: Traceback (most recent call last):
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py", line 55, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py", line 17, in main
+    print("--- B\u1eaft \u0111\u1ea7u ki\u1ec3m tra th\u1eddi gian thuê bao còn l\u1ea1i ---")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tobie\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u1eaf' in position 5: character maps to <undefined>
+
+[2025-07-08 17:29:15] INFO - src.utils.script_verifier: Script return code: 1
+[2025-07-08 17:29:15] ERROR - src.utils.script_verifier: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:29:15] INFO - src.gui.main_window: Script verification executed: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:29:15] WARNING - src.gui.main_window: Final result: FAIL - Device test passed but verification failed | Verification: Script did not create output file: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:29:15] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - FAIL
+[2025-07-08 17:29:15] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_765d2103_fail.json
+[2025-07-08 17:29:15] INFO - src.gui.widgets.status_bar: Status: Executed 1 tests
+[2025-07-08 17:29:16] INFO - src.gui.widgets.status_bar: Status: Queue execution ended: Queue execution completed: 0/1 tests successful, 1/1 tests failed
+[2025-07-08 17:29:30] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-08 17:34:30] INFO - root: Logging initialized - Level: INFO
+[2025-07-08 17:34:30] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-08 17:34:30] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-08 17:34:30] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-08 17:34:30] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-08 17:34:30] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-08 17:34:30] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-08 17:34:30] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-08 17:34:30] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-08 17:34:30] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-08 17:34:30] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-08 17:34:30] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-08 17:34:30] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-08 17:34:30] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-08 17:34:32] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-08 17:34:32] INFO - src.network.http_client: Successfully pinged server at http://192.168.1.4:6262/ping
+[2025-07-08 17:34:32] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.1.4
+[2025-07-08 17:34:34] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-08 17:34:34] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-08 17:34:34] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-08 17:34:35] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-08 17:34:35] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-08 17:34:35] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-08 17:34:35] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-08 17:34:35] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-08 17:34:35] INFO - src.gui.main_window: Sending test to device...
+[2025-07-08 17:34:35] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-08 17:34:35] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-08 17:34:35] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250708173435_051fa6bf
+[2025-07-08 17:34:44] INFO - src.network.http_client: Received response from server
+[2025-07-08 17:34:44] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-08 17:34:44] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-08 17:35:36] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_start.json
+[2025-07-08 17:35:37] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_ip_start to queue
+[2025-07-08 17:35:37] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_start.json to queue
+[2025-07-08 17:35:37] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-08 17:35:37] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra thời gian thuê bao còn lại ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> Lease Expires: 09 July 2025 05:34:43
+-> Thời điểm kiểm tra: Tuesday, July 08, 2025 05:35:37 PM
+-> Thời gian thuê bao còn lại: ~43145 giây.
+-> Thời gian thuê bao cấu hình: 43200 giây.
+-> Kết quả: Thời gian còn lại hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-08 17:35:37] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-08 17:35:37] INFO - src.utils.script_verifier: Verification script passed: lan_edit_leasetime.py (execution time: 53.63s)
+[2025-07-08 17:35:37] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_leasetime.py (execution time: 53.63s)
+[2025-07-08 17:35:37] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_leasetime.py (execution time: 53.63s)
+[2025-07-08 17:35:37] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_leasetime - SUCCESS
+[2025-07-08 17:35:37] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_leasetime_99cd134a_success.json
+[2025-07-08 17:35:37] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-08 17:35:49] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_ip_start
+[2025-07-08 17:35:49] INFO - src.gui.main_window: Executing test: lan_edit_ip_start
+[2025-07-08 17:35:49] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_ip_start...
+[2025-07-08 17:35:49] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_ip_start
+[2025-07-08 17:35:49] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_ip_start
+[2025-07-08 17:35:49] INFO - src.gui.main_window: Sending test to device...
+[2025-07-08 17:35:49] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-08 17:35:49] INFO - src.network.http_client: Sending test case to http://192.168.1.4:6262
+[2025-07-08 17:35:49] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250708173549_9465fd54
+[2025-07-08 17:35:58] INFO - src.network.http_client: Received response from server
+[2025-07-08 17:35:58] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_ip_start.py
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Script input parameters: ['192.168.99.80', '10']
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Successfully wrote 2 parameters to input.txt
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_ip_start.py
+[2025-07-08 17:35:58] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
+[2025-07-08 17:36:51] INFO - src.utils.script_verifier: Script stdout: --- Bắt đầu kiểm tra IP Start ---
+-> Đang renew IP...
+-> Đang lấy thông tin mạng...
+-> IP hiện tại: 192.168.99.87
+-> Kết quả: IP hợp lệ.
+--- Hoàn thành. Đã ghi kết quả '1' vào output.txt ---
+
+[2025-07-08 17:36:51] INFO - src.utils.script_verifier: Script return code: 0
+[2025-07-08 17:36:51] INFO - src.utils.script_verifier: Verification script passed: lan_edit_ip_start.py (execution time: 53.58s)
+[2025-07-08 17:36:52] INFO - src.gui.main_window: Script verification executed: Verification script passed: lan_edit_ip_start.py (execution time: 53.58s)
+[2025-07-08 17:36:52] INFO - src.gui.main_window: Final result: SUCCESS - Device test passed and verification successful | Verification: Verification script passed: lan_edit_ip_start.py (execution time: 53.58s)
+[2025-07-08 17:36:52] INFO - src.gui.widgets.status_bar: Status: Test completed: lan_edit_ip_start - SUCCESS
+[2025-07-08 17:36:52] INFO - src.core.result_manager: Test result saved: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results\lan_edit_ip_start_870d5fe8_success.json
+[2025-07-08 17:36:52] INFO - src.gui.widgets.status_bar: Status: Test stream ended: Completed
+[2025-07-08 17:37:11] INFO - src.main: Exiting Test Case Manager v1.0.0
+[2025-07-10 10:04:45] INFO - root: Logging initialized - Level: INFO
+[2025-07-10 10:04:45] INFO - src.main: Starting Test Case Manager v1.0.0
+[2025-07-10 10:04:46] INFO - src.core.test_case_loader: Discovered categories: LAN, NETWORK, WAN, WIRELESS
+[2025-07-10 10:04:46] INFO - src.core.test_case_loader: TestCaseLoader initialized with base directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\templates
+[2025-07-10 10:04:46] INFO - src.core.test_case_loader: Found 4 categories
+[2025-07-10 10:04:46] INFO - src.core.result_manager: ResultManager initialized with results directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\data\temp\results
+[2025-07-10 10:04:47] INFO - src.utils.image_utils: Window icon set: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\assets\logo.ico
+[2025-07-10 10:04:47] INFO - src.gui.widgets.status_bar: Status: Ready
+[2025-07-10 10:04:47] INFO - src.gui.panels.connection_panel: Settings loaded from configuration
+[2025-07-10 10:04:47] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 10:04:47] INFO - src.gui.widgets.status_bar: Status: Templates loaded successfully
+[2025-07-10 10:04:47] INFO - src.gui.panels.stream_panel: Stream Panel initialized
+[2025-07-10 10:04:47] INFO - src.gui.panels.logs_panel.LogsPanel: Logs Panel initialized
+[2025-07-10 10:04:47] INFO - src.gui.main_window: Test Case Manager v1.0.0 initialized
+[2025-07-10 10:06:49] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 10:06:49] INFO - src.gui.widgets.status_bar: Status: Loaded template: lan_edit_change_leasetime.json
+[2025-07-10 10:06:49] INFO - src.gui.widgets.status_bar: Status: Added test lan_edit_leasetime to queue
+[2025-07-10 10:06:49] INFO - src.gui.widgets.status_bar: Status: Added template lan_edit_change_leasetime.json to queue
+[2025-07-10 10:06:49] INFO - src.gui.widgets.status_bar: Status: Template added to queue
+[2025-07-10 10:06:51] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-10 10:06:51] INFO - src.gui.widgets.status_bar: Status: Not connected to device. Please connect first.
+[2025-07-10 10:06:52] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-10 10:06:57] INFO - src.gui.widgets.status_bar: Status: Connecting...
+[2025-07-10 10:06:57] INFO - src.network.http_client: Successfully pinged server at http://192.168.99.1:6262/ping
+[2025-07-10 10:06:57] INFO - src.gui.widgets.status_bar: Status: Connected to 192.168.99.1
+[2025-07-10 10:06:59] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime
+[2025-07-10 10:06:59] INFO - src.gui.main_window: Executing test: lan_edit_leasetime
+[2025-07-10 10:06:59] INFO - src.gui.widgets.status_bar: Status: Executing test: lan_edit_leasetime...
+[2025-07-10 10:06:59] INFO - src.gui.widgets.status_bar: Status: Started streaming test: lan_edit_leasetime
+[2025-07-10 10:06:59] INFO - src.gui.widgets.status_bar: Status: Executed test lan_edit_leasetime
+[2025-07-10 10:06:59] INFO - src.gui.main_window: Sending test to device...
+[2025-07-10 10:06:59] INFO - src.network.connection_manager: Sending test case to device
+[2025-07-10 10:06:59] INFO - src.network.http_client: Sending test case to http://192.168.99.1:6262
+[2025-07-10 10:06:59] INFO - src.network.http_client: Sending test data to server with transaction ID: 20250710100659_62ea95d1
+[2025-07-10 10:07:07] INFO - src.network.http_client: Received response from server
+[2025-07-10 10:07:07] INFO - src.gui.main_window: Device test passed - checking for script verification requirement
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Executing verification script: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Script input parameters: ['43200']
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Input file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\input.txt
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Output file path: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\output.txt
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Successfully wrote 1 parameters to input.txt
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Removed existing output.txt file
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Executing command: C:\Users\tobie\AppData\Local\Programs\Python\Python313\python.exe C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL\lan_edit_leasetime.py
+[2025-07-10 10:07:07] INFO - src.utils.script_verifier: Working directory: C:\Users\tobie\Desktop\winapp\winapp\test_case_manager_v3\ToolWL
