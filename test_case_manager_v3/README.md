@@ -29,7 +29,7 @@ test_case_manager_v3/
 ├── src/
 │   ├── core/          # Constants, config, test case loading, result management
 │   ├── gui/           # MainWindow với 5 tabs, panels, widgets, dialogs
-│   ├── network/       # TestExecutor, ConnectionManager, HTTPTestClient
+│   ├── network/       # TestExecutor, ConnectionManager, RndHTTPClient
 │   └── utils/         # ScriptVerifier, logger, error classification, file utils
 ├── ToolWL/            # Verification scripts với dependencies
 ├── data/              # Templates, logs, config, results
@@ -110,8 +110,7 @@ build.bat
 ## Giao thức giao tiếp
 
 ### HTTP API Endpoints
-- `POST /`: Gửi test case để thực thi
-- `GET /check_result/{transaction_id}`: Lấy kết quả test (polling mechanism)
+- `POST /`: Gửi test case để thực thi (synchronous response)
 
 ### Cấu trúc Test Case
 ```json
@@ -127,7 +126,7 @@ build.bat
     }
   ],
   "metadata": {
-    "transaction_id": "20250710143524_77bda9d5"
+    "timestamp": "2025-07-22 10:45:24"
   }
 }
 ```

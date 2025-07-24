@@ -15,7 +15,6 @@ Created: 2025-07-01
 import json
 import logging
 import time
-import uuid
 import socket
 import os
 import requests
@@ -59,7 +58,6 @@ class TestExecutor:
         # Track last execution stats
         self.last_test_time: Optional[float] = None
         self.last_test_duration: Optional[float] = None
-        self.last_transaction_id: Optional[str] = None
         self.last_test_type: Optional[str] = None
         self.last_test_affected_network: bool = False
         self.error_history: List[str] = []
@@ -128,17 +126,11 @@ class TestExecutor:
             # Simple server preparation
             self._prepare_server_for_test()
                 
-            # Add transaction ID if not present
+            # Add metadata if not present (no transaction ID needed for rnd_autotest)
             if "metadata" not in test_data:
-                test_data["metadata"] = {}
-                
-            if "transaction_id" not in test_data["metadata"]:
-                # Generate unique transaction ID
-                transaction_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{str(uuid.uuid4())[:8]}"
-                test_data["metadata"]["transaction_id"] = transaction_id
-                
-            # Store transaction ID for checking result later
-            transaction_id = test_data["metadata"]["transaction_id"]
+                test_data["metadata"] = {
+                    "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                }
 
             # Send test case to device (simplified - no complex retry logic)
             success, response, error = self.connection_manager.send_test(
@@ -186,93 +178,16 @@ class TestExecutor:
         """
         self.logger.info("Preparing server for test...")
 
-        # Basic ping verification
-        self._ping_server()
+        # For rnd_autotest synchronous HTTP, no ping verification needed
 
         # Short delay
         time.sleep(1)
     
 
     
-    def _verify_server_with_multiple_pings(self, extra_delay: bool = False) -> bool:
-        """
-        Verify server is ready by sending multiple ping requests with increasing delays.
-        
-        Args:
-            extra_delay: Whether to add extra delay between pings
-            
-        Returns:
-            True if server is responsive, False otherwise
-        """
-        self.logger.info("Performing multiple ping verification...")
-        success_count = 0
-        
-        # Try multiple pings with increasing delays
-        for i in range(4):
-            try:
-                # Check if the HTTP client is initialized
-                if not hasattr(self.connection_manager, 'http_client') or not self.connection_manager.http_client:
-                    self.logger.warning("HTTP client not initialized, skipping ping verification")
-                    return False
-                    
-                if not hasattr(self.connection_manager.http_client, 'url'):
-                    self.logger.warning("HTTP client URL not set, skipping ping verification")
-                    return False
-                    
-                response = requests.get(
-                    f"{self.connection_manager.http_client.url}/ping",
-                    timeout=5  # Use default timeout if http_client doesn't have connect_timeout
-                )
-                
-                if response.status_code == 200:
-                    success_count += 1
-                    self.logger.debug(f"Ping {i+1} successful")
-                else:
-                    self.logger.debug(f"Ping {i+1} returned status {response.status_code}")
-                
-                # Increasing delay between pings
-                delay = (i + 1) * 2 if extra_delay else (i + 1)
-                time.sleep(delay)
-            except Exception as e:
-                self.logger.debug(f"Ping {i+1} failed: {e}")
-                delay = (i + 2) * 2 if extra_delay else (i + 2)
-                time.sleep(delay)
-        
-        if success_count >= 3:
-            self.logger.info("Server verified responsive")
-            return True
-        else:
-            self.logger.warning(f"Server responsiveness check: {success_count}/4 successful")
-            # Wait longer if server doesn't seem fully responsive
-            time.sleep(5)
-            return False
+    # Removed _verify_server_with_multiple_pings() - rnd_autotest uses synchronous HTTP communication
     
-    def _ping_server(self) -> bool:
-        """
-        Send a simple ping request to the server.
-        
-        Returns:
-            True if ping successful, False otherwise
-        """
-        try:
-            # Check if the HTTP client is initialized
-            if not hasattr(self.connection_manager, 'http_client') or not self.connection_manager.http_client:
-                self.logger.warning("HTTP client not initialized, skipping ping")
-                return False
-                
-            if not hasattr(self.connection_manager.http_client, 'url'):
-                self.logger.warning("HTTP client URL not set, skipping ping")
-                return False
-                
-            response = requests.get(
-                f"{self.connection_manager.http_client.url}/ping",
-                timeout=5  # Use default timeout if http_client doesn't have connect_timeout
-            )
-            
-            return response.status_code == 200
-        except Exception as e:
-            self.logger.debug(f"Ping failed: {e}")
-            return False
+    # Removed _ping_server() - rnd_autotest uses synchronous HTTP communication
     
     def _send_dummy_request(self) -> None:
         """
@@ -302,7 +217,6 @@ class TestExecutor:
                     }
                 ],
                 "metadata": {
-                    "transaction_id": f"dummy-{str(uuid.uuid4())[:8]}",
                     "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                     "purpose": "prepare_server"
                 }

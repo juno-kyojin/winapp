@@ -1,9 +1,11 @@
 """
 Error classification system for Test Case Manager v1.0.
 
-This module provides error type classification to distinguish between
-network errors (which should be retried) and application errors
-(which should fail immediately).
+This module provides error type classification for HTTP communication
+with rnd_autotest server, distinguishing between network errors
+(which should be retried) and application errors (which should fail immediately).
+
+Focuses on HTTP errors: connection, timeout, status codes, and JSON parsing.
 """
 
 from enum import Enum
@@ -96,6 +98,11 @@ class ErrorClassifier:
             r"invalid.*json",
             r"malformed.*json",
             r"syntax.*error.*json",
+
+            # rnd_autotest specific errors
+            r"invalid.*response.*format",
+            r"missing.*summary.*field",
+            r"missing.*or.*invalid.*test_cases.*array",
             
             # Validation errors
             r"validation.*error",
@@ -119,8 +126,6 @@ class ErrorClassifier:
             r"invalid.*request",
             r"request.*rejected",
             r"server.*rejected.*test.*case",
-            r"transaction.*id.*conflict",
-            r"duplicate.*transaction",
             
             # File/resource errors
             r"file.*not.*found",

@@ -97,36 +97,18 @@ class ResultManager:
             Tuple containing (success boolean, file path or error message)
         """
         try:
-            # Kiểm tra xem kết quả thực sự có thành công hay không
-            actual_status = status
-            
-            # Kiểm tra trong result_data có thông tin về thành công/thất bại không
+            # Device is the sole authority for test results - no PC-side correction
+            # Simply use the status determined by the device/main_window logic
+            self.logger.info(f"Saving test result with device-determined status: {status}")
+
+            # Log device response for debugging but don't override device authority
             if "result_data" in result_data and isinstance(result_data["result_data"], dict):
                 result_obj = result_data["result_data"]
-                
-                # Kiểm tra summary
-                if "summary" in result_obj and isinstance(result_obj["summary"], dict):
+                if "summary" in result_obj:
                     summary = result_obj["summary"]
-                    if "failed" in summary and summary["failed"] > 0:
-                        self.logger.warning(f"Test {test_id} has failed tests in summary: {summary['failed']}")
-                        actual_status = "fail"
-                
-                # Kiểm tra error
-                if "error" in result_obj:
-                    self.logger.warning(f"Test {test_id} has error: {result_obj['error']}")
-                    actual_status = "fail"
-                    
-                # Kiểm tra failed_services
-                if "failed_services" in result_obj and result_obj["failed_services"]:
-                    self.logger.warning(f"Test {test_id} has failed services: {result_obj['failed_services']}")
-                    actual_status = "fail"
-                    
-            # Cập nhật trạng thái trong metadata
-            if actual_status != status:
-                self.logger.warning(f"Correcting status from {status} to {actual_status} for test {test_id}")
-                status = actual_status
-                if "metadata" in result_data:
-                    result_data["metadata"]["status"] = actual_status
+                    self.logger.info(f"Device summary: {summary}")
+                if "failed_services" in result_obj:
+                    self.logger.info(f"Device failed services: {result_obj['failed_services']}")
             
             # Generate unique filename with test_id, status, and unique identifier
             unique_id = uuid.uuid4().hex[:8]  # 8 chars from UUID for uniqueness

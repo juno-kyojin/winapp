@@ -1,0 +1,8 @@
+ {"test_cases": [
+     {
+      "service": "backup",
+      "action": "coppy",
+      "params": {
+        "path": "./backups"
+      }
+    } ] }

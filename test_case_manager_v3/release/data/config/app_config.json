@@ -8,8 +8,8 @@
     "connection_timeout": 15,
     "remote_config_path": "/root/config",
     "remote_result_path": "/root/result",
-    "http_host": "192.168.1.4",
-    "http_port": 6262,
+    "http_host": "192.168.1.101",
+    "http_port": 6969,
     "http_connect_timeout": 5,
     "http_read_timeout": 40,
     "middleware_url": "http://192.168.88.10:5000"

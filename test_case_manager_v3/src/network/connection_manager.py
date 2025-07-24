@@ -14,13 +14,12 @@ Created: 2025-06-12
 import json
 import logging
 import time
-import uuid
 import importlib
 import requests
 from datetime import datetime
 from typing import Dict, Any, Optional, Tuple
 
-from src.network.http_client import HTTPTestClient
+from src.network.rnd_http_client import RndHTTPClient
 from src.utils.error_types import ErrorType, should_retry_error, get_retry_reason
 
 
@@ -54,6 +53,38 @@ def affects_network_connectivity(test_data: Dict[str, Any]) -> bool:
 
     return False
 
+def is_complex_test(test_data: Dict[str, Any]) -> bool:
+    """
+    Check if test contains multiple test cases or complex operations.
+
+    Args:
+        test_data: Test data to check
+
+    Returns:
+        True if test is complex and may cause extended processing time
+    """
+    if "test_cases" in test_data and test_data["test_cases"]:
+        test_cases = test_data["test_cases"]
+
+        # Multiple test cases = complex
+        if len(test_cases) > 1:
+            return True
+
+        # Single test case but complex operations
+        for test_case in test_cases:
+            service = test_case.get("service", "").lower()
+            action = test_case.get("action", "").lower()
+
+            # WAN operations are inherently complex
+            if service == "wan" and action in ["create", "delete", "edit"]:
+                return True
+
+            # Backup operations can be time-consuming
+            if service == "backup":
+                return True
+
+    return False
+
 class ConnectionManager:
     """
     Unified connection manager for both SSH and HTTP connections.
@@ -75,7 +106,7 @@ class ConnectionManager:
         self.logger = logging.getLogger(__name__)
         
         # Initialize connection components
-        self.http_client: HTTPTestClient = HTTPTestClient()
+        self.http_client: RndHTTPClient = RndHTTPClient()
         # self.ssh_client = SSHConnection()  # Hiện chưa có SSHConnection
         
         # Default to HTTP mode
@@ -93,7 +124,7 @@ class ConnectionManager:
         self.default_timeout = 60
         self.network_timeout = 500  # Longer timeout for network-affecting tests - increased to match client.py
         self.between_tests_delay = 2  # Seconds to wait between tests
-        self.network_test_delay = 5  # Seconds to wait after network-affecting tests
+        self.network_test_delay = 30  # Seconds to wait after network-affecting tests (increased for WAN operations)
 
         # SSH connection (not implemented yet)
         # self.ssh_connection = None
@@ -178,12 +209,12 @@ class ConnectionManager:
             # )
             
         else:  # HTTP mode
-            self.port = kwargs.get('port', 6262)
+            self.port = kwargs.get('port', 6969)
             self.http_connect_timeout = kwargs.get('connect_timeout', 5)  # Default to 5s like client.py
-            self.http_read_timeout = kwargs.get('read_timeout', 500)  # Default to 500s like client.py
+            self.http_read_timeout = kwargs.get('read_timeout', 180)  # Increased to 180s for complex multi-test operations
             
             # Ensure port is an integer
-            port = int(self.port) if self.port is not None else 6262
+            port = int(self.port) if self.port is not None else 6969
             
             return self.http_client.connect(
                 host=hostname,
@@ -241,14 +272,11 @@ class ConnectionManager:
             self.logger.info("Sending test case to device")
             self.logger.debug(f"Test data: {json.dumps(test_data, indent=2)}")
             
-            # Add transaction ID if not present
+            # Add metadata if not present (no transaction ID needed for rnd_autotest)
             if "metadata" not in test_data:
-                test_data["metadata"] = {}
-                
-            if "transaction_id" not in test_data["metadata"]:
-                # Generate unique transaction ID
-                transaction_id = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{str(uuid.uuid4())[:8]}"
-                test_data["metadata"]["transaction_id"] = transaction_id
+                test_data["metadata"] = {
+                    "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                }
                 
             # Send test based on connection type
             if self._connection_type == self.SSH_MODE:
@@ -260,12 +288,25 @@ class ConnectionManager:
                 # Use HTTP client to send test
                 http_client = self.http_client
                 
-                # Adjust timeout for network-affecting tests
+                # Adjust timeout for network-affecting and complex tests
                 original_timeout = http_client.read_timeout
-                
-                if affects_network:
-                    http_client.read_timeout = original_timeout * 2
-                    self.logger.info(f"Extended timeout for network-affecting test: {http_client.read_timeout}s")
+                is_complex = is_complex_test(test_data)
+
+                if affects_network and is_complex:
+                    # Extra long timeout for complex network operations
+                    extended_timeout = original_timeout * 3
+                    http_client.read_timeout = extended_timeout
+                    self.logger.info(f"Extended timeout for complex network-affecting test: {original_timeout}s → {extended_timeout}s")
+                elif affects_network:
+                    extended_timeout = original_timeout * 2
+                    http_client.read_timeout = extended_timeout
+                    self.logger.info(f"Extended timeout for network-affecting test: {original_timeout}s → {extended_timeout}s")
+                elif is_complex:
+                    extended_timeout = int(original_timeout * 1.5)
+                    http_client.read_timeout = extended_timeout
+                    self.logger.info(f"Extended timeout for complex test: {original_timeout}s → {extended_timeout}s")
+                else:
+                    self.logger.info(f"Using standard timeout for simple test: {original_timeout}s")
                 
                 try:
                     # Send test directly without complex retry mechanisms
@@ -300,77 +341,13 @@ class ConnectionManager:
             self.logger.error("Not connected to device")
             return False
 
-        try:
-            # Ping đơn giản để kiểm tra device
-            response = requests.get(
-                f"{self.http_client.url}/ping",
-                timeout=5
-            )
+        # For rnd_autotest synchronous HTTP, device readiness is verified through actual test execution
+        self.logger.info("Device ready (synchronous HTTP communication)")
+        if affects_network:
+            time.sleep(2)  # Brief delay for network-affecting tests
+        return True
 
-            if response.status_code == 200:
-                self.logger.info("Device is ready")
-                # Chờ ngắn nếu test ảnh hưởng network
-                if affects_network:
-                    time.sleep(2)
-                return True
-            else:
-                self.logger.warning(f"Device ping returned status {response.status_code}")
-                return False
-
-        except Exception as e:
-            self.logger.error(f"Error checking device readiness: {e}")
-            return False
-
-    def ping_server(self) -> bool:
-        """
-        Send a ping request to the server to check if it's ready.
-        This helps ensure the server is in a clean state before sending a test.
-        
-        Returns:
-            True if server is responsive, False otherwise
-        """
-        if not self.is_connected():
-            self.logger.error("Not connected to server")
-            return False
-            
-        try:
-            # Send a ping request
-            if self.http_client and self.http_client.url:
-                try:
-                    response = requests.get(
-                        f"{self.http_client.url}/ping",
-                        timeout=self.http_client.connect_timeout
-                    )
-                    
-                    # Check if response is successful
-                    if response.status_code == 200:
-                        self.logger.debug("Server ping successful")
-                        return True
-                    else:
-                        self.logger.warning(f"Server ping returned status code {response.status_code}")
-                        # Try a simple GET to the base URL as fallback
-                        try:
-                            response = requests.get(
-                                self.http_client.url, 
-                                timeout=self.http_client.connect_timeout
-                            )
-                            if response.status_code == 200 or response.status_code == 404:
-                                self.logger.debug("Base URL connection successful")
-                                return True
-                        except Exception:
-                            pass
-                        return False
-                except Exception as e:
-                    self.logger.warning(f"Ping request failed: {e}, but continuing")
-                    # Ping failed, but we should still continue with the test
-                    return True
-            else:
-                self.logger.error("HTTP client not properly initialized")
-                return False
-                
-        except Exception as e:
-            self.logger.error(f"Error pinging server: {e}")
-            return False
+    # Removed ping_server() - rnd_autotest uses synchronous HTTP communication
 
     def prepare_server_for_test(self) -> bool:
         """
@@ -386,17 +363,8 @@ class ConnectionManager:
             return False
             
         try:
-            # Send a ping request to check if server is responsive
-            self.logger.info("Sending ping request to prepare server...")
-            response = requests.get(
-                f"{self.http_client.url}/ping",
-                timeout=self.http_client.connect_timeout
-            )
-            
-            if response.status_code != 200:
-                self.logger.warning(f"Server ping returned status code {response.status_code}")
-                time.sleep(2)  # Wait a moment if ping failed
-                return False
+            # For rnd_autotest synchronous HTTP, no ping needed
+            self.logger.info("Preparing server for test (synchronous HTTP)...")
                 
             # Send a dummy request to clear any existing config file
             dummy_data = {
@@ -408,7 +376,6 @@ class ConnectionManager:
                     }
                 ],
                 "metadata": {
-                    "transaction_id": f"dummy-{str(uuid.uuid4())[:8]}",
                     "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                     "purpose": "clear_config_file"
                 }
@@ -433,66 +400,15 @@ class ConnectionManager:
             # Wait to ensure server has processed the dummy request
             time.sleep(2)
             
-            # Send another ping to verify server is still responsive
-            try:
-                response = requests.get(
-                    f"{self.http_client.url}/ping",
-                    timeout=self.http_client.connect_timeout
-                )
-                
-                if response.status_code == 200:
-                    self.logger.info("Server is ready for test")
-                    return True
-                else:
-                    self.logger.warning(f"Server returned status code {response.status_code} after dummy request")
-                    return False
-            except Exception as e:
-                self.logger.error(f"Error checking server after dummy request: {e}")
-                return False
+            # For rnd_autotest synchronous HTTP, server is ready after dummy request
+            self.logger.info("Server is ready for test")
+            return True
                 
         except Exception as e:
             self.logger.error(f"Error preparing server for test: {e}")
             return False
 
-    def _verify_server_with_multiple_pings(self) -> bool:
-        """
-        Verify server is ready by sending multiple ping requests with increasing delays.
-        This helps ensure the server is in a stable state before sending important tests.
-        
-        Returns:
-            True if server is responsive, False otherwise
-        """
-        self.logger.info("Performing multiple ping verification...")
-        success_count = 0
-        
-        # Try multiple pings with increasing delays
-        for i in range(4):
-            try:
-                response = requests.get(
-                    f"{self.http_client.url}/ping",
-                    timeout=self.http_client.connect_timeout
-                )
-                
-                if response.status_code == 200:
-                    success_count += 1
-                    self.logger.debug(f"Ping {i+1} successful")
-                else:
-                    self.logger.debug(f"Ping {i+1} returned status {response.status_code}")
-                
-                # Increasing delay between pings
-                time.sleep(i + 1)
-            except Exception as e:
-                self.logger.debug(f"Ping {i+1} failed: {e}")
-                time.sleep(i + 2)  # Longer delay after failure
-        
-        if success_count >= 3:
-            self.logger.info("Server verified responsive")
-            return True
-        else:
-            self.logger.warning(f"Server responsiveness check: {success_count}/4 successful")
-            # Wait longer if server doesn't seem fully responsive
-            time.sleep(5)
-            return False
+    # Removed _verify_server_with_multiple_pings() - rnd_autotest uses synchronous HTTP communication
 
 
 
@@ -506,13 +422,8 @@ class ConnectionManager:
         """
         # Kiểm tra kết nối hiện tại
         if self.is_connected():
-            # Kiểm tra kết nối bằng ping đơn giản
-            if self.ping_server():
-                return True
-            else:
-                self.logger.warning("Connection check failed, attempting to reconnect...")
-                # Thử kết nối lại
-                return self._attempt_reconnection()
+            # For rnd_autotest synchronous HTTP, connection is verified through actual test execution
+            return True
         else:
             self.logger.warning("Not connected, attempting to reconnect...")
             # Thử kết nối lại
@@ -548,12 +459,9 @@ class ConnectionManager:
                         connection_params['read_timeout'] = self.http_read_timeout
 
                     if self.connect(self._hostname, **connection_params):
-                        # Kiểm tra kết nối bằng ping
-                        if self.ping_server():
-                            self.logger.info(f"Reconnection successful on attempt {attempt + 1}")
-                            return True
-                        else:
-                            self.logger.warning(f"Reconnection attempt {attempt + 1} failed ping test")
+                        # For rnd_autotest synchronous HTTP, connection success means ready
+                        self.logger.info(f"Reconnection successful on attempt {attempt + 1}")
+                        return True
                     else:
                         self.logger.warning(f"Reconnection attempt {attempt + 1} failed to establish connection")
                 else:

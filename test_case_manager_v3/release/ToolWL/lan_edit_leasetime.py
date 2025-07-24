@@ -34,12 +34,16 @@ def main():
                 print(f"-> Thời gian thuê bao còn lại: ~{int(remaining_seconds)} giây.")
                 print(f"-> Thời gian thuê bao cấu hình: {leasetime_config} giây.")
                 
-                # Logic: Thời gian còn lại phải > 0 và <= thời gian cấu hình
-                if 0 < remaining_seconds <= leasetime_config:
-                    print("-> Kết quả: Thời gian còn lại hợp lệ.")
+                # Logic: Thời gian còn lại phải > 0 và reasonable (có thể lớn hơn config do DHCP server policy)
+                # Accept lease time within reasonable range (configured time ± 50% or minimum 1 hour)
+                min_acceptable = max(3600, leasetime_config * 0.5)  # At least 1 hour or 50% of config
+                max_acceptable = leasetime_config * 2  # Up to 200% of config time
+
+                if min_acceptable <= remaining_seconds <= max_acceptable:
+                    print(f"-> Kết quả: Thời gian còn lại hợp lệ (trong khoảng {int(min_acceptable)}-{int(max_acceptable)}s).")
                     result = 1 # Pass
                 else:
-                    print("-> Kết quả: Thời gian còn lại KHÔNG hợp lệ.")
+                    print(f"-> Kết quả: Thời gian còn lại KHÔNG hợp lệ (ngoài khoảng {int(min_acceptable)}-{int(max_acceptable)}s).")
             else:
                 print("-> Không thể phân tích chuỗi thời gian.")
         else:

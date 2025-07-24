@@ -47,7 +47,7 @@ class ConnectionPanel(ttk.Frame):
         self.status_callback = status_callback
         
         # Default connection settings
-        default_http_port = 6262
+        default_http_port = 6970
         default_connect_timeout = 5
         default_read_timeout = 40
         default_ssh_port = 22

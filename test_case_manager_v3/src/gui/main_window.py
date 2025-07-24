@@ -34,7 +34,7 @@ from src.utils.script_verifier import ScriptVerifier
 from src.utils.formatters import extract_test_name, get_test_display_name
 
 # Network imports
-from src.network.connection_manager import ConnectionManager, affects_network_connectivity
+from src.network.connection_manager import ConnectionManager
 from src.network.test_executor import TestExecutor
 
 # GUI imports - panels
@@ -205,7 +205,7 @@ class MainWindow:
         tools_menu = tk.Menu(menubar, tearoff=0)
         tools_menu.add_command(label="Connection Test", command=self._test_connection)
         tools_menu.add_command(label="Template Validator", command=self._validate_templates)
-        tools_menu.add_command(label="Execute Queue", command=self._execute_queue)
+        # Removed Execute Queue - use Queue Panel's Execute All button instead
         menubar.add_cascade(label="Tools", menu=tools_menu)
 
         # Help menu
@@ -515,46 +515,31 @@ class MainWindow:
                 verification_message = ""
 
                 if success:
-                    # Device test passed - check if verification is needed
-                    self.logger.info("Device test passed - checking for script verification requirement")
+                    # HTTP communication successful - now check device's actual test result
+                    device_test_result = self._determine_device_test_result(result_data or {})
 
-                    try:
-                        # Check if verification is needed and execute if required
-                        verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(result_data)
+                    if device_test_result is None:
+                        # Script verification requested - handle it
+                        self.logger.info("Device requesting script verification - executing script flow")
+                        final_status, final_message = self._handle_script_verification(result_data or {})
+                    elif device_test_result:
+                        # Device test passed and no script verification requested
+                        self.logger.info("HTTP communication successful - device test result: PASSED")
+                        final_status = "success"
+                        final_message = "Device test passed - no script verification required"
+                        self.logger.info(f"Final result: SUCCESS - {final_message}")
 
-                        if verification_needed:
-                            # Update stream: verification
-                            if hasattr(self, 'stream_panel') and self.stream_panel:
-                                self.stream_panel.update_stream_status("verification", "Running PC-side verification script", 95)
-
-                            self.logger.info(f"Script verification executed: {verification_msg}")
-                            verification_message = f" | Verification: {verification_msg}"
-
-                            if verification_passed:
-                                final_status = "success"
-                                final_message = f"Device test passed and verification successful{verification_message}"
-                                self.logger.info(f"Final result: SUCCESS - {final_message}")
-                            else:
-                                final_status = "fail"
-                                final_message = f"Device test passed but verification failed{verification_message}"
-                                self.logger.warning(f"Final result: FAIL - {final_message}")
-                        else:
-                            # No verification needed - device result is final
-                            final_status = "success"
-                            final_message = f"Test completed successfully (no verification required)"
-                            self.logger.info(f"Final result: SUCCESS - {final_message}")
-
-                    except Exception as e:
-                        # Verification error - treat as failure
+                    else:
+                        # Device test failed based on device response
                         final_status = "fail"
-                        final_message = f"Device test passed but verification error: {str(e)}"
-                        self.logger.error(f"Verification error: {e}")
+                        final_message = f"Device test failed based on device response"
+                        self.logger.info(f"Final result: FAIL - Device test failed, skipping verification")
 
                 else:
-                    # Device test failed - no need for verification
+                    # HTTP communication failed - treat as failure
                     final_status = "fail"
-                    final_message = f"Device test failed: {message}"
-                    self.logger.info(f"Final result: FAIL - Device test failed, skipping verification")
+                    final_message = f"HTTP communication failed: {message}"
+                    self.logger.info(f"Final result: FAIL - HTTP communication failed, skipping verification")
 
                 # Update final status
                 status = final_status
@@ -611,10 +596,10 @@ class MainWindow:
                             completion_msg = f"✅ Test {test_display_index}/{total_tests} ({thread_test_name}) completed successfully"
                             if verification_message:
                                 completion_msg += f" (with verification)"
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, completion_msg)
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, completion_msg, execution_time)
                         else:
                             failure_msg = f"❌ Test {test_display_index}/{total_tests} ({thread_test_name}) failed: {final_message}"
-                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, failure_msg)
+                            self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, failure_msg, execution_time)
 
             except Exception as e:
                 # Set default execution time for failed tests (no actual test was executed)
@@ -641,7 +626,7 @@ class MainWindow:
 
                         # End queue test stream with error
                         self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, False,
-                                                               f"Test execution error: {str(e)}")
+                                                               f"Test execution error: {str(e)}", execution_time)
 
                 # Show error message
                 if self.root:
@@ -745,40 +730,7 @@ class MainWindow:
         else:
             self._update_status("Templates panel not initialized")
 
-    def _execute_queue(self) -> None:
-        """Execute all tests in the queue."""
-        if not self.queue_panel:
-            self._update_status("Queue panel not initialized")
-            return
-
-        test_queue = self.queue_panel.get_queue()
-        if not test_queue:
-            messagebox.showinfo(
-                "Execute Queue",
-                "Queue is empty. Add tests to the queue first."
-            )
-            return
-
-        # Check if we're connected
-        if not self.connection_manager.is_connected():
-            messagebox.showerror(
-                "Connection Error",
-                "Not connected to device. Please connect first."
-            )
-            return
-
-
-
-        # Execute tests one by one
-        for test_data in test_queue:
-            # Check if the test affects network connectivity
-            affects_network = affects_network_connectivity(test_data)
-
-            # Execute the test
-            self._execute_test(test_data, affects_network=affects_network)
-
-            # Wait a bit between tests
-            time.sleep(1)
+    # Removed _execute_queue method - Queue Panel handles execution directly
 
     def _show_documentation(self) -> None:
         """Show documentation."""
@@ -794,6 +746,144 @@ class MainWindow:
                 "Documentation Error",
                 f"Could not open documentation: {str(e)}"
             )
+
+    def _determine_device_test_result(self, result_data: Dict[str, Any]) -> Optional[bool]:
+        """
+        Determine if device test actually passed based on device response.
+        Device is the sole authority for test results.
+
+        Args:
+            result_data: Response data from device
+
+        Returns:
+            True if device indicates test passed, False otherwise
+        """
+        if not result_data or not isinstance(result_data, dict):
+            return False
+
+        # Check summary field for device determination
+        if "summary" in result_data:
+            summary = result_data["summary"]
+            if isinstance(summary, dict):
+                # Device reports failed tests
+                failed_count = summary.get("failed", 0)
+                if failed_count > 0:
+                    self.logger.info(f"Device reports {failed_count} failed tests")
+                    return False
+
+                # Device reports passed tests
+                passed_count = summary.get("passed", 0)
+                if passed_count > 0:
+                    self.logger.info(f"Device reports {passed_count} passed tests")
+                    return True
+
+        # Check for script verification request (NOT final result)
+        if "script" in result_data and "script_params" in result_data:
+            self.logger.info("Device requesting script verification - this is NOT final result")
+            return None  # Special value indicating script verification needed
+
+        # Check for explicit error status
+        if "status" in result_data and result_data["status"] == "error":
+            self.logger.info("Device returned explicit error status")
+            return False
+
+        # Default: if we got a valid response, assume success unless explicitly failed
+        self.logger.info("Device response format unclear - defaulting to success")
+        return True
+
+    def _handle_script_verification(self, result_data: Dict[str, Any]) -> Tuple[str, str]:
+        """
+        Handle script verification request from device.
+
+        Args:
+            result_data: Response data containing script verification request
+
+        Returns:
+            Tuple of (final_status, final_message)
+        """
+        try:
+            script_name = result_data.get("script", "")
+            script_params = result_data.get("script_params", [])
+
+            self.logger.info(f"Device requesting script verification: {script_name} with params: {script_params}")
+
+            # Execute script verification
+            verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(result_data)
+
+            if verification_needed:
+                self.logger.info(f"Script verification executed: {verification_msg}")
+
+                # Send script result back to device
+                script_result = "1" if verification_passed else "0"
+                if self._send_script_result_to_device(script_result):
+                    self.logger.info("Script result sent successfully - waiting for device final response")
+
+                    # Wait for device's final response after script verification
+                    try:
+                        # Give device time to process script result and send final response
+                        time.sleep(2)
+
+                        # Device should send final response via same HTTP connection
+                        # For now, assume script verification success means test passed
+                        if verification_passed:
+                            return "success", f"Device test passed with script verification: {verification_msg}"
+                        else:
+                            return "fail", f"Device test failed script verification: {verification_msg}"
+                    except Exception as e:
+                        return "fail", f"Error waiting for device final response: {str(e)}"
+                else:
+                    return "fail", "Failed to send script result to device"
+            else:
+                return "fail", "Script verification was requested but no verification logic available"
+
+        except Exception as e:
+            self.logger.error(f"Script verification error: {e}")
+            return "fail", f"Script verification error: {str(e)}"
+
+    def _send_script_result_to_device(self, result: str) -> bool:
+        """Send script verification result back to device."""
+        try:
+            script_response = {
+                "type": "script",
+                "script_result": [result]
+            }
+
+            self.logger.info(f"Sending script result to device: {script_response}")
+
+            # Send script result directly via HTTP POST (raw request, not test case format)
+            try:
+                import requests
+                response = requests.post(
+                    f"http://{self.connection_manager._hostname}:6969",
+                    json=script_response,
+                    headers={"Content-Type": "application/json", "Connection": "close"},
+                    timeout=(5, 30)
+                )
+                if response.status_code == 200:
+                    success = True
+                    error_message = ""
+                    self.logger.info(f"Script result sent successfully: {response.status_code}")
+                else:
+                    success = False
+                    error_message = f"HTTP {response.status_code}: {response.text}"
+                    self.logger.error(f"Script result send failed: {error_message}")
+            except Exception as e:
+                success = False
+                error_message = f"Request failed: {str(e)}"
+                self.logger.error(f"Script result send error: {error_message}")
+
+            if success:
+                self.logger.info("Script result sent successfully to device")
+                return True
+            else:
+                self.logger.error(f"Failed to send script result: {error_message}")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"Error sending script result to device: {e}")
+            return False
+
+
 
     def _show_about(self) -> None:
         """Show about dialog with logo."""

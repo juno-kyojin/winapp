@@ -160,6 +160,12 @@ class ScriptVerifier:
             return False
 
         try:
+            # Check for script verification request (device sends script at top level)
+            if "script" in result_data and "script_params" in result_data:
+                self.logger.debug("Found script verification request from device")
+                return True
+
+            # Legacy check: script in summary
             summary = result_data.get("summary", {})
             if not isinstance(summary, dict):
                 self.logger.debug("Summary is not a dictionary - no verification needed")
@@ -202,24 +208,41 @@ class ScriptVerifier:
             Tuple of (script_command, input_parameters) or (None, None) if extraction fails
         """
         try:
+            # Check for device script verification request format
+            if "script" in result_data and "script_params" in result_data:
+                script_cmd = result_data.get("script")
+                input_params = result_data.get("script_params")
+
+                if not script_cmd:
+                    self.logger.error("No script command in device request")
+                    return None, None
+
+                if not isinstance(input_params, list):
+                    self.logger.error(f"Script params is not a list: {input_params}")
+                    return None, None
+
+                self.logger.debug(f"Extracted device script info - cmd: {script_cmd}, input: {input_params}")
+                return script_cmd, input_params
+
+            # Legacy format: script in summary
             summary = result_data.get("summary", {})
             script_field = summary.get("script")
-            
+
             if not isinstance(script_field, dict):
                 self.logger.error(f"Script field is not a dictionary: {script_field}")
                 return None, None
-                
+
             script_cmd = script_field.get("cmd")
             input_params = script_field.get("input")
-            
+
             if not script_cmd:
                 self.logger.error("No 'cmd' field in script object")
                 return None, None
-                
+
             if not isinstance(input_params, list):
                 self.logger.error(f"Input parameters is not a list: {input_params}")
                 return None, None
-                
+
             self.logger.debug(f"Extracted script info - cmd: {script_cmd}, input: {input_params}")
             return script_cmd, input_params
             

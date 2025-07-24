@@ -7,8 +7,8 @@
         "frequency": "2G",
         "wifi_mode": "ap",
         "encryption": "psk2+ccmp",
-        "ssid": "han_lap_5G",
-        "password": "12345678",
+        "ssid": "han_lap",
+        "password": "123456789",
         "disable_mode": "0"
       }
     }

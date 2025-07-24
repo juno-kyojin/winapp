@@ -456,7 +456,9 @@ class QueuePanel(ttk.Frame):
                     # Execute test (thread-safe) - retry logic is now handled by connection manager
                     if self.execute_callback is not None:
                         execute_callback = self.execute_callback  # Capture reference for type safety
-                        self.after(0, lambda item=item, affects=affects_network: execute_callback(item["test_data"], affects))
+                        test_data = item["test_data"].copy()  # Create copy to avoid closure issues
+                        affects = affects_network
+                        self.after(0, lambda td=test_data, af=affects: execute_callback(td, af))
 
                     # Wait for test completion (with timeout)
                     if completion_event.wait(timeout=300):  # 5 minute timeout

@@ -4,18 +4,17 @@
 
 ## Tổng quan
 
-Module `network` chịu trách nhiệm toàn bộ giao tiếp HTTP giữa Test Case Manager v1.0 và thiết bị OpenWrt. Bao gồm connection management, test execution engine, intelligent retry mechanism và HTTP client.
+Module `network` chịu trách nhiệm toàn bộ giao tiếp HTTP giữa Test Case Manager v1.0 và rnd_autotest server. Bao gồm connection management, test execution engine và simplified HTTP client.
 
 ## Cấu trúc Module
 
 ```
 src/network/
 ├── README.md              # Tài liệu này
-├── __init__.py           # Module exports: ConnectionManager, HTTPTestClient, TestExecutor
-├── connection_manager.py # Quản lý kết nối HTTP/SSH
-├── http_client.py        # HTTP client với retry logic
-├── test_executor.py      # Test execution engine
-└── ssh_connection.py     # SSH connection (chưa implement)
+├── __init__.py           # Module exports: ConnectionManager, RndHTTPClient, TestExecutor
+├── connection_manager.py # Quản lý kết nối HTTP
+├── rnd_http_client.py    # Simplified HTTP client cho rnd_autotest
+└── test_executor.py      # Test execution engine
 ```
 
 ## Kiến trúc Network Layer
@@ -169,8 +168,7 @@ if affects_network:
 ### HTTP Endpoints
 Network module giao tiếp với OpenWrt communicate server qua HTTP:
 
-**Primary Endpoint**: `POST /` - Gửi test cases
-**Result Checking**: `GET /check_result/{transaction_id}` - Lấy kết quả
+**Primary Endpoint**: `POST /` - Gửi test cases (synchronous response)
 
 ### Request Format
 ```json
