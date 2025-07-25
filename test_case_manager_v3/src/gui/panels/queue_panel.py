@@ -189,7 +189,7 @@ class QueuePanel(ttk.Frame):
         try:
             # Generate unique ID for queue item
             queue_id = str(uuid.uuid4())[:8]
-            
+
             # Create queue item
             queue_item = {
                 "id": queue_id,

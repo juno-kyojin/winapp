@@ -118,10 +118,9 @@ class MainWindow:
         self.root.geometry(f"{width}x{height}+{x}+{y}")
         self.root.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
 
-        # Set grid weights for proper resizing
-        self.root.rowconfigure(0, weight=0)  # Header fixed height
-        self.root.rowconfigure(1, weight=1)  # Main content expands
-        self.root.rowconfigure(2, weight=0)  # Status bar fixed height
+        # Set grid weights for proper resizing (no header)
+        self.root.rowconfigure(0, weight=1)  # Main content expands
+        self.root.rowconfigure(1, weight=0)  # Status bar fixed height
         self.root.columnconfigure(0, weight=1)  # Expand horizontally
 
         # Set window icon (if available)
@@ -135,48 +134,8 @@ class MainWindow:
         self.root.protocol("WM_DELETE_WINDOW", self._on_closing)
 
     def _create_header(self) -> None:
-        """Create the application header with logo and title."""
-        if not self.root:
-            return
-
-        # Create header frame with better styling
-        header_frame = ttk.Frame(self.root, style="Header.TFrame")
-        header_frame.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
-        header_frame.columnconfigure(1, weight=1)  # Title expands
-
-        # Create inner frame for content with padding
-        content_frame = ttk.Frame(header_frame)
-        content_frame.grid(row=0, column=0, sticky="ew", padx=15, pady=10)
-        content_frame.columnconfigure(1, weight=1)
-
-        # No logo - just keep the title
-
-        # Add title and version in a clean layout
-        title_frame = ttk.Frame(content_frame)
-        title_frame.grid(row=0, column=0, sticky="w", pady=0)
-
-        # Create horizontal layout for title and version
-        title_version_frame = ttk.Frame(title_frame)
-        title_version_frame.pack(anchor="w")
-
-        title_label = ttk.Label(
-            title_version_frame,
-            text=f"{APP_NAME}",
-            font=("Segoe UI", 14, "bold")
-        )
-        title_label.pack(side="left")
-
-        version_label = ttk.Label(
-            title_version_frame,
-            text=f" v{APP_VERSION}",
-            font=("Segoe UI", 10),
-            foreground="gray"
-        )
-        version_label.pack(side="left", padx=(5, 0))
-
-        # Add separator
-        separator = ttk.Separator(self.root, orient="horizontal")
-        separator.grid(row=0, column=0, sticky="ew", pady=(55, 0))
+        """Header removed - clean interface without redundant title display."""
+        pass
 
     def _create_menu(self) -> None:
         """Create the application menu bar."""
@@ -215,12 +174,27 @@ class MainWindow:
         menubar.add_cascade(label="Help", menu=help_menu)
 
     def _create_tabs(self) -> None:
-        """Create the tabbed interface."""
+        """Create the tabbed interface with enlarged tab buttons."""
         if not self.root:
             return
 
+        # Configure style for expanded tab buttons
+        style = ttk.Style()
+
+        # Calculate tab width to fill the window
+        # We'll update this in resize event
+        self._update_tab_width()
+
         self.notebook = ttk.Notebook(self.root)
-        self.notebook.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        self.notebook.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        # Bind multiple events to adjust tab styling
+        self.root.bind('<Configure>', self._on_window_resize)
+        self.root.bind('<Map>', self._on_window_resize)  # When window is mapped
+        self.root.bind('<FocusIn>', self._on_window_resize)  # When window gets focus
+
+        # Initial resize call to set proper sizing
+        self.root.after(100, lambda: self._on_window_resize(None))
 
         # Create tab frames - these will be populated by panels
         self.connection_tab = ttk.Frame(self.notebook)
@@ -230,11 +204,116 @@ class MainWindow:
         self.logs_tab = ttk.Frame(self.notebook)
 
         # Add tabs to notebook
+        # Add tabs with normal text
         self.notebook.add(self.connection_tab, text="Connection")
         self.notebook.add(self.templates_tab, text="Templates")
         self.notebook.add(self.queue_tab, text="Queue")
         self.notebook.add(self.stream_tab, text="Stream")
         self.notebook.add(self.logs_tab, text="Logs")
+
+    def _update_tab_width(self) -> None:
+        """Update tab width to fill the window."""
+        if not self.root:
+            return
+
+        try:
+            # Get window width
+            window_width = self.root.winfo_width()
+            if window_width <= 1:  # Window not yet mapped
+                window_width = 1000  # Default width
+
+            # Calculate width per tab (5 tabs total)
+            # Account for padding and margins
+            available_width = window_width - 40  # Account for window padding
+            tab_width = available_width // 5  # 5 tabs
+
+            # Ensure minimum width
+            tab_width = max(tab_width, 100)
+
+            # Configure style with calculated width and centered text
+            style = ttk.Style()
+            style.configure('TNotebook.Tab',
+                           font=('Segoe UI', 12, 'bold'),
+                           padding=[15, 8],
+                           width=tab_width)
+
+            # Try different approach: configure layout for centering
+            style.layout('TNotebook.Tab', [
+                ('Notebook.tab', {
+                    'sticky': 'nswe',
+                    'children': [
+                        ('Notebook.padding', {
+                            'side': 'top',
+                            'sticky': 'nswe',
+                            'children': [
+                                ('Notebook.label', {
+                                    'side': 'top',
+                                    'sticky': ''  # No sticky = center
+                                })
+                            ]
+                        })
+                    ]
+                })
+            ])
+
+            # Try to map anchor for centering
+            style.map('TNotebook.Tab',
+                     anchor=[('selected', 'center'), ('!selected', 'center')],
+                     justify=[('selected', 'center'), ('!selected', 'center')])
+
+        except Exception as e:
+            print(f"Error updating tab width: {e}")
+
+    def _on_window_resize(self, event) -> None:
+        """Adjust tab styling based on window size."""
+        if not self.root:
+            return
+
+        # Skip if event is from child widget (not main window)
+        if event and hasattr(event, 'widget') and event.widget != self.root:
+            return
+
+        try:
+            # Get current window width
+            window_width = self.root.winfo_width()
+            window_height = self.root.winfo_height()
+
+            # More aggressive responsive scaling based on screen area
+            screen_area = window_width * window_height
+
+            if window_width > 1600 or screen_area > 1500000:  # Very large screens/full screen
+                font_size = 16
+                padding_x = 35
+                padding_y = 15
+            elif window_width > 1200 or screen_area > 800000:  # Large screens
+                font_size = 14
+                padding_x = 28
+                padding_y = 12
+            elif window_width > 900:  # Medium screens
+                font_size = 12
+                padding_x = 20
+                padding_y = 10
+            else:  # Small screens
+                font_size = 11
+                padding_x = 15
+                padding_y = 8
+
+            # Calculate width per tab (5 tabs total)
+            available_width = window_width - 40  # Account for window padding
+            tab_width = available_width // 5  # 5 tabs
+            tab_width = max(tab_width, 100)  # Ensure minimum width
+
+            # Update tab style with responsive sizing and width (layout already set)
+            style = ttk.Style()
+            style.configure('TNotebook.Tab',
+                           font=('Segoe UI', font_size, 'bold'),
+                           padding=[padding_x, padding_y],
+                           width=tab_width)
+
+            # Debug info removed to prevent spam
+
+        except Exception as e:
+            print(f"Error in window resize: {e}")
 
     def _create_status_bar(self) -> None:
         """Create the application status bar."""
@@ -243,7 +322,7 @@ class MainWindow:
 
         # Cast the root to tk.Widget which is what StatusBar expects
         self.status_bar = StatusBar(cast(tk.Widget, self.root))
-        self.status_bar.grid(row=2, column=0, sticky="ew")
+        self.status_bar.grid(row=1, column=0, sticky="ew")
 
     def _initialize_panels(self) -> None:
         """Initialize panels for each tab."""
@@ -256,7 +335,8 @@ class MainWindow:
                 self.connection_tab,
                 self.test_executor,
                 self.config,
-                self._update_status
+                self._update_status,
+                self._switch_to_tab  # Add tab switching callback
             )
             self.connection_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         except Exception as e:
@@ -295,17 +375,8 @@ class MainWindow:
 
             # Connect Templates Panel to Queue Panel
             if self.templates_panel and self.queue_panel:
-                # Thiết lập tham chiếu parent cho TemplatesPanel
+                # Set parent reference for templates panel
                 self.templates_panel.parent = self
-
-                def new_add_to_queue(self=self.templates_panel):
-                    # Get selected template
-                    template = self.get_selected_template()
-                    if template:
-                        # Add to queue
-                        self.parent._add_to_queue(template)
-
-                self.templates_panel.add_to_queue = new_add_to_queue
         except Exception as e:
             self.logger.error(f"Failed to initialize Templates Panel: {e}")
             self._show_placeholder(self.templates_tab, "Templates Panel")
@@ -364,6 +435,32 @@ class MainWindow:
         """
         if self.status_bar:
             self.status_bar.set_status(message)
+
+    def _switch_to_tab(self, tab_name: str) -> None:
+        """
+        Switch to the specified tab.
+
+        Args:
+            tab_name: Name of the tab to switch to
+        """
+        if not self.notebook:
+            return
+
+        # Map tab names to indices
+        tab_mapping = {
+            "Connection": 0,
+            "Templates": 1,
+            "Queue": 2,
+            "Stream": 3,
+            "Logs": 4
+        }
+
+        if tab_name in tab_mapping:
+            tab_index = tab_mapping[tab_name]
+            self.notebook.select(tab_index)
+            self.logger.info(f"Switched to {tab_name} tab")
+        else:
+            self.logger.warning(f"Unknown tab name: {tab_name}")
 
     def _add_to_queue(self, test_data: Dict[str, Any]) -> None:
         """
@@ -686,23 +783,19 @@ class MainWindow:
     def _test_connection(self) -> None:
         """Test the current connection."""
         if self.connection_panel:
-            self.connection_panel.test_connection()
+            self.connection_panel._connect()
         else:
             self._update_status("Connection panel not initialized")
 
     def _new_template(self) -> None:
         """Create a new template."""
-        if self.templates_panel:
-            self.templates_panel._new_template()
-        else:
-            self._update_status("Templates panel not initialized")
+        # Template creation will be handled by Editor tab in future
+        self._update_status("Template creation will be available in Editor tab")
 
     def _open_template(self) -> None:
         """Open an existing template."""
-        if self.templates_panel:
-            self.templates_panel._import_template()
-        else:
-            self._update_status("Templates panel not initialized")
+        # Template editing will be handled by Editor tab in future
+        self._update_status("Template editing will be available in Editor tab")
 
     def _export_results(self) -> None:
         """Export test results."""
@@ -725,10 +818,8 @@ class MainWindow:
 
     def _validate_templates(self) -> None:
         """Validate all templates."""
-        if self.templates_panel:
-            self.templates_panel._validate_template()
-        else:
-            self._update_status("Templates panel not initialized")
+        # Template validation will be handled by Editor tab in future
+        self._update_status("Template validation will be available in Editor tab")
 
     # Removed _execute_queue method - Queue Panel handles execution directly
 
@@ -813,26 +904,21 @@ class MainWindow:
             if verification_needed:
                 self.logger.info(f"Script verification executed: {verification_msg}")
 
-                # Send script result back to device
+                # Try to send script result back to device (best effort)
                 script_result = "1" if verification_passed else "0"
-                if self._send_script_result_to_device(script_result):
-                    self.logger.info("Script result sent successfully - waiting for device final response")
+                script_send_success = self._send_script_result_to_device(script_result)
 
-                    # Wait for device's final response after script verification
-                    try:
-                        # Give device time to process script result and send final response
-                        time.sleep(2)
-
-                        # Device should send final response via same HTTP connection
-                        # For now, assume script verification success means test passed
-                        if verification_passed:
-                            return "success", f"Device test passed with script verification: {verification_msg}"
-                        else:
-                            return "fail", f"Device test failed script verification: {verification_msg}"
-                    except Exception as e:
-                        return "fail", f"Error waiting for device final response: {str(e)}"
+                if script_send_success:
+                    self.logger.info("Script result sent successfully to device")
                 else:
-                    return "fail", "Failed to send script result to device"
+                    self.logger.warning("Failed to send script result to device, but continuing with verification result")
+
+                # Return result based on script verification outcome, not script send success
+                # Script verification is the authoritative result
+                if verification_passed:
+                    return "success", f"Script verification passed: {verification_msg}"
+                else:
+                    return "fail", f"Script verification failed: {verification_msg}"
             else:
                 return "fail", "Script verification was requested but no verification logic available"
 
@@ -850,7 +936,18 @@ class MainWindow:
 
             self.logger.info(f"Sending script result to device: {script_response}")
 
-            # Send script result directly via HTTP POST (raw request, not test case format)
+            # Try using connection manager's dedicated script result method first (preferred method)
+            try:
+                success, response_data, error_msg = self.connection_manager.send_script_result(script_response)
+                if success:
+                    self.logger.info("Script result sent successfully via connection manager")
+                    return True
+                else:
+                    self.logger.warning(f"Connection manager script result failed: {error_msg}, trying direct HTTP")
+            except Exception as e:
+                self.logger.warning(f"Connection manager script result error: {e}, trying direct HTTP")
+
+            # Fallback to direct HTTP POST if connection manager fails
             try:
                 import requests
                 response = requests.post(
@@ -860,23 +957,15 @@ class MainWindow:
                     timeout=(5, 30)
                 )
                 if response.status_code == 200:
-                    success = True
-                    error_message = ""
-                    self.logger.info(f"Script result sent successfully: {response.status_code}")
+                    self.logger.info(f"Script result sent successfully via direct HTTP: {response.status_code}")
+                    return True
                 else:
-                    success = False
                     error_message = f"HTTP {response.status_code}: {response.text}"
-                    self.logger.error(f"Script result send failed: {error_message}")
+                    self.logger.error(f"Direct HTTP failed: {error_message}")
+                    return False
             except Exception as e:
-                success = False
-                error_message = f"Request failed: {str(e)}"
+                error_message = f"Direct HTTP request failed: {str(e)}"
                 self.logger.error(f"Script result send error: {error_message}")
-
-            if success:
-                self.logger.info("Script result sent successfully to device")
-                return True
-            else:
-                self.logger.error(f"Failed to send script result: {error_message}")
                 return False
 
         except Exception as e:

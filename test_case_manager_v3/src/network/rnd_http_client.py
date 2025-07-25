@@ -139,10 +139,10 @@ class RndHTTPClient:
     def send_test(self, test_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str, ErrorType]:
         """
         Send test data to rnd_autotest server for immediate execution.
-        
+
         Args:
             test_data: Test case data to send
-            
+
         Returns:
             Tuple containing (success flag, response data, error message, error type)
         """
@@ -150,29 +150,38 @@ class RndHTTPClient:
             return False, None, "Not connected to server", ErrorType.NETWORK_ERROR
         
         try:
-            # Validate test data format
-            if "test_cases" not in test_data or not test_data["test_cases"]:
-                return False, None, "Invalid test case format - missing 'test_cases' array", ErrorType.APPLICATION_ERROR
-            
-            # Simple metadata for device compatibility
-            if "metadata" not in test_data:
-                test_data["metadata"] = {}
+            # Check if this is a script result (different validation)
+            is_script_result = test_data.get("type") == "script" and "script_result" in test_data
 
-            # Add minimal metadata with unique cache-busting element
-            current_time = time.time()
-            test_data["metadata"].update({
-                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "request_id": str(uuid.uuid4()),
-                "cache_bust": int(current_time * 1000000)  # Microsecond precision
-            })
-            
-            # Log test case for debugging
-            self.logger.info(f"Sending fresh request with ID: {test_data['metadata']['request_id']}")
-            self.logger.info(f"Request timestamp: {test_data['metadata']['timestamp']}")
-            self.logger.info(f"Cache bust value: {test_data['metadata']['cache_bust']}")
-            self.logger.debug(f"Sending test case: {json.dumps(test_data, indent=2)}")
+            if not is_script_result:
+                # Validate test case format (only for regular test cases)
+                if "test_cases" not in test_data or not test_data["test_cases"]:
+                    return False, None, "Invalid test case format - missing 'test_cases' array", ErrorType.APPLICATION_ERROR
 
-            # Force connection reset to prevent cached responses
+                # Simple metadata for device compatibility (only for test cases)
+                if "metadata" not in test_data:
+                    test_data["metadata"] = {}
+
+            if not is_script_result:
+                # Add minimal metadata with unique cache-busting element (only for test cases)
+                current_time = time.time()
+                test_data["metadata"].update({
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "request_id": str(uuid.uuid4()),
+                    "cache_bust": int(current_time * 1000000)  # Microsecond precision
+                })
+
+                # Log test case for debugging
+                self.logger.info(f"Sending fresh request with ID: {test_data['metadata']['request_id']}")
+                self.logger.info(f"Request timestamp: {test_data['metadata']['timestamp']}")
+                self.logger.info(f"Cache bust value: {test_data['metadata']['cache_bust']}")
+                self.logger.debug(f"Sending test case: {json.dumps(test_data, indent=2)}")
+            else:
+                # Log script result for debugging
+                self.logger.info(f"Sending script result: {test_data}")
+                self.logger.debug(f"Script result data: {json.dumps(test_data, indent=2)}")
+
+            # Force connection reset to prevent cached responses and connection issues
             if self.session:
                 try:
                     # Close all connections in the session pool
@@ -180,7 +189,7 @@ class RndHTTPClient:
                 except:
                     pass
 
-            # Create completely fresh session
+            # Create completely fresh session for each request to avoid ConnectionResetError
             self.session = requests.Session()
             self._setup_session()
 

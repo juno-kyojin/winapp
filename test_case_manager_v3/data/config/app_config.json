@@ -1,14 +1,7 @@
 {
   "network": {
     "connection_type": "http",
-    "ssh_host": "192.168.1.4",
-    "ssh_port": 22,
-    "ssh_username": "root",
-    "ssh_password": "",
-    "connection_timeout": 15,
-    "remote_config_path": "/root/config",
-    "remote_result_path": "/root/result",
-    "http_host": "192.168.1.101",
+    "http_host": "192.168.99.1",
     "http_port": 6969,
     "http_connect_timeout": 5,
     "http_read_timeout": 40,

@@ -72,8 +72,7 @@ DATABASE_PATH: Final[Path] = DATABASE_DIR / DATABASE_NAME
 # ------------------------------------------------------------------
 
 # Connection Types
-CONNECTION_TYPE_HTTP: Final[str] = "http"     # Sử dụng HTTP API
-CONNECTION_TYPE_SSH: Final[str] = "ssh"       # Sử dụng SSH legacy
+CONNECTION_TYPE_HTTP: Final[str] = "http"     # Sử dụng HTTP API only
 
 # HTTP Client-Server Constants
 DEFAULT_HTTP_API_PORT: Final[int] = 6970      # Port mặc định cho rnd_autotest server
@@ -93,7 +92,6 @@ HTTP_STATUS_TIMEOUT: Final[int] = 408
 HTTP_STATUS_SERVER_ERROR: Final[int] = 500
 
 # Port defaults
-DEFAULT_SSH_PORT: Final[int] = 22
 DEFAULT_HTTP_PORT: Final[int] = 80
 DEFAULT_HTTPS_PORT: Final[int] = 443
 DEFAULT_MIDDLEWARE_PORT: Final[int] = 5000
@@ -103,16 +101,6 @@ MAX_RETRY_ATTEMPTS: Final[int] = 3
 CONNECTION_TIMEOUT: Final[int] = 15
 COMMAND_TIMEOUT: Final[int] = 30
 NETWORK_CHECK_INTERVAL: Final[int] = 5
-
-# SSH Configuration
-SSH_CONNECT_TIMEOUT: Final[int] = 15
-SSH_BANNER_TIMEOUT: Final[int] = 10
-SSH_AUTH_TIMEOUT: Final[int] = 10
-
-# Default Remote Paths
-DEFAULT_REMOTE_CONFIG_PATH: Final[str] = "/root/config"
-DEFAULT_REMOTE_RESULT_PATH: Final[str] = "/root/result"
-DEFAULT_REMOTE_SCRIPT_PATH: Final[str] = "/root/scripts"
 
 # ------------------------------------------------------------------
 # Template Configuration
@@ -217,7 +205,7 @@ VALID_STATUSES: Final[Set[str]] = {
 # ------------------------------------------------------------------
 # Result Types
 # ------------------------------------------------------------------
-RESULT_SOURCE_SSH: Final[str] = "ssh"
+RESULT_SOURCE_HTTP: Final[str] = "http"
 RESULT_SOURCE_MIDDLEWARE: Final[str] = "middleware"
 RESULT_SOURCE_LOCAL: Final[str] = "local"
 
@@ -238,11 +226,9 @@ RESULTS_DIR: Final[Path] = TEMP_DIR / "results"
 # Default configuration
 DEFAULT_CONFIG: Final[Dict[str, Dict[str, Union[int, str, bool]]]] = {
     "connection": {
-        "http_port": 6970,
-        "ssh_port": 22,
+        "http_port": 6969,
         "connect_timeout": 5,
-        "read_timeout": 30,
-        "ssh_username": "admin"
+        "read_timeout": 40
     },
     "gui": {
         "theme": "default",

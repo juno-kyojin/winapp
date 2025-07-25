@@ -87,47 +87,37 @@ def is_complex_test(test_data: Dict[str, Any]) -> bool:
 
 class ConnectionManager:
     """
-    Unified connection manager for both SSH and HTTP connections.
-    
-    This class provides a common interface for connecting to devices
-    via either SSH or HTTP, sending test commands, and retrieving results.
-    It handles automatic switching between connection types and manages
-    connection parameters.
+    HTTP connection manager for Test Case Manager v1.0.
+
+    This class provides HTTP connection interface for connecting to devices
+    and sending test commands to rnd_autotest server.
     """
-    
-    # Connection types
-    SSH_MODE = "ssh"
-    HTTP_MODE = "http"
     
     def __init__(self) -> None:
         """
-        Initialize connection manager.
+        Initialize HTTP connection manager.
         """
         self.logger = logging.getLogger(__name__)
-        
-        # Initialize connection components
+
+        # Initialize HTTP client only
         self.http_client: RndHTTPClient = RndHTTPClient()
-        # self.ssh_client = SSHConnection()  # Hiện chưa có SSHConnection
-        
-        # Default to HTTP mode
-        self._connection_type = self.HTTP_MODE
-        
+
+        # Connection type is always HTTP
+        self._connection_type = "http"
+
         # Connection status
         self._connected = False
         self._hostname: Optional[str] = None
-        
+
         # Add timestamp for metadata
         self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.username = "juno-kyojin"
-        
+
         # Test execution settings
         self.default_timeout = 60
         self.network_timeout = 500  # Longer timeout for network-affecting tests - increased to match client.py
         self.between_tests_delay = 2  # Seconds to wait between tests
         self.network_test_delay = 30  # Seconds to wait after network-affecting tests (increased for WAN operations)
-
-        # SSH connection (not implemented yet)
-        # self.ssh_connection = None
 
     # def _initialize_ssh_connection(self) -> bool:
     #     """
@@ -150,21 +140,17 @@ class ConnectionManager:
 
     def set_connection_type(self, conn_type: str) -> None:
         """
-        Set the connection type to use.
-        
+        Set the connection type (HTTP only).
+
         Args:
-            conn_type: Connection type ('ssh' or 'http')
+            conn_type: Connection type (must be 'http')
         """
-        if conn_type.lower() not in [self.SSH_MODE, self.HTTP_MODE]:
-            self.logger.error(f"Invalid connection type: {conn_type}")
+        if conn_type.lower() != "http":
+            self.logger.error(f"Invalid connection type: {conn_type}. Only HTTP is supported.")
             return
-            
-        self._connection_type = conn_type.lower()
+
+        self._connection_type = "http"
         self.logger.info(f"Connection type set to {self._connection_type}")
-        
-        # Initialize SSH if needed (SSH not implemented yet)
-        # if conn_type.lower() == self.SSH_MODE:
-        #     self._initialize_ssh_connection()
     
     def connect(self, hostname: str, **kwargs) -> bool:
         """
@@ -186,67 +172,68 @@ class ConnectionManager:
             True if connection successful, False otherwise
         """
         self._hostname = hostname
-        
-        # SSH mode not implemented yet
-        if self._connection_type == self.SSH_MODE:
-            self.logger.error("SSH connection mode not implemented yet")
-            return False
-            # # Initialize SSH connection
-            # if not self._initialize_ssh_connection():
-            #     return False
-            #
-            # # SSH connection requires more parameters
-            # self.username = kwargs.get('username')
-            # self.password = kwargs.get('password')
-            # self.config_path = kwargs.get('config_path')
-            # self.result_path = kwargs.get('result_path')
-            #
-            # return self.ssh_connection.connect(
-            #     hostname=hostname,
-            #     username=self.username,
-            #     password=self.password,
-            #     timeout=kwargs.get('timeout', 10)
-            # )
-            
-        else:  # HTTP mode
-            self.port = kwargs.get('port', 6969)
-            self.http_connect_timeout = kwargs.get('connect_timeout', 5)  # Default to 5s like client.py
-            self.http_read_timeout = kwargs.get('read_timeout', 180)  # Increased to 180s for complex multi-test operations
-            
-            # Ensure port is an integer
-            port = int(self.port) if self.port is not None else 6969
-            
-            return self.http_client.connect(
-                host=hostname,
-                port=port,
-                connect_timeout=self.http_connect_timeout,
-                read_timeout=self.http_read_timeout
-            )
+
+        # HTTP connection only
+        self.port = kwargs.get('port', 6969)
+        self.http_connect_timeout = kwargs.get('connect_timeout', 5)  # Default to 5s like client.py
+        self.http_read_timeout = kwargs.get('read_timeout', 180)  # Increased to 180s for complex multi-test operations
+
+        # Ensure port is an integer
+        port = int(self.port) if self.port is not None else 6969
+
+        return self.http_client.connect(
+            host=hostname,
+            port=port,
+            connect_timeout=self.http_connect_timeout,
+            read_timeout=self.http_read_timeout
+        )
     
     def is_connected(self) -> bool:
         """
-        Check if connected to remote host.
+        Check if connected to remote host via HTTP.
 
         Returns:
             True if connected, False otherwise
         """
-        if self._connection_type == self.SSH_MODE:
-            # SSH not implemented yet
-            return False
-            # return self.ssh_connection is not None and self.ssh_connection.is_connected()
-        else:
-            return self.http_client.is_connected()
+        return self.http_client.is_connected()
     
     def disconnect(self) -> None:
-        """Disconnect from remote host."""
-        if self._connection_type == self.SSH_MODE:
-            # SSH not implemented yet
-            pass
-            # if self.ssh_connection is not None:
-            #     self.ssh_connection.disconnect()
+        """Disconnect from remote HTTP host."""
+        self.http_client.disconnect()
+
+        self._connected = False
+        self._hostname = None
+        self.logger.info("Disconnected from remote host")
+
+    def send_script_result(self, script_result_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+        """
+        Send script verification result to the device.
+
+        Args:
+            script_result_data: Script result data to send (format: {"type": "script", "script_result": [...]})
+
+        Returns:
+            Tuple containing (success flag, response data, error message)
+        """
+        if not self.is_connected():
+            return False, None, "Not connected to device"
+
+        # Validate script result data
+        if not script_result_data or "type" not in script_result_data:
+            return False, None, "Invalid script result data format"
+
+        self.logger.info("Sending script result to device via HTTP client")
+
+        # Use HTTP client directly for script results (no test case validation needed)
+        success, response_data, error_msg, error_type = self.http_client.send_test(script_result_data)
+
+        if success:
+            self.logger.info("Script result sent successfully")
+            return True, response_data, ""
         else:
-            self.http_client.disconnect()
-        
+            self.logger.error(f"Failed to send script result: {error_msg}")
+            return False, response_data, error_msg
+
     def send_test(self, test_data: Dict[str, Any],
                 affects_network: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
@@ -278,49 +265,39 @@ class ConnectionManager:
                     "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 }
                 
-            # Send test based on connection type
-            if self._connection_type == self.SSH_MODE:
-                # Implement SSH-based test execution when SSH connection is available
-                self.logger.error("SSH test execution not implemented yet")
-                return False, None, "SSH test execution not implemented yet"
-                
-            elif self._connection_type == self.HTTP_MODE:
-                # Use HTTP client to send test
-                http_client = self.http_client
-                
-                # Adjust timeout for network-affecting and complex tests
-                original_timeout = http_client.read_timeout
-                is_complex = is_complex_test(test_data)
+            # Send test via HTTP
+            http_client = self.http_client
 
-                if affects_network and is_complex:
-                    # Extra long timeout for complex network operations
-                    extended_timeout = original_timeout * 3
-                    http_client.read_timeout = extended_timeout
-                    self.logger.info(f"Extended timeout for complex network-affecting test: {original_timeout}s → {extended_timeout}s")
-                elif affects_network:
-                    extended_timeout = original_timeout * 2
-                    http_client.read_timeout = extended_timeout
-                    self.logger.info(f"Extended timeout for network-affecting test: {original_timeout}s → {extended_timeout}s")
-                elif is_complex:
-                    extended_timeout = int(original_timeout * 1.5)
-                    http_client.read_timeout = extended_timeout
-                    self.logger.info(f"Extended timeout for complex test: {original_timeout}s → {extended_timeout}s")
-                else:
-                    self.logger.info(f"Using standard timeout for simple test: {original_timeout}s")
-                
-                try:
-                    # Send test directly without complex retry mechanisms
-                    success, response_data, error_message, _ = http_client.send_test(test_data)
+            # Adjust timeout for network-affecting and complex tests
+            original_timeout = http_client.read_timeout
+            is_complex = is_complex_test(test_data)
 
-                    # Không kiểm tra lại kết quả từ http_client.py
-                    return success, response_data, error_message
-                finally:
-                    # Reset timeout
-                    if affects_network:
-                        http_client.read_timeout = original_timeout
-                
+            if affects_network and is_complex:
+                # Extra long timeout for complex network operations
+                extended_timeout = original_timeout * 3
+                http_client.read_timeout = extended_timeout
+                self.logger.info(f"Extended timeout for complex network-affecting test: {original_timeout}s → {extended_timeout}s")
+            elif affects_network:
+                extended_timeout = original_timeout * 2
+                http_client.read_timeout = extended_timeout
+                self.logger.info(f"Extended timeout for network-affecting test: {original_timeout}s → {extended_timeout}s")
+            elif is_complex:
+                extended_timeout = int(original_timeout * 1.5)
+                http_client.read_timeout = extended_timeout
+                self.logger.info(f"Extended timeout for complex test: {original_timeout}s → {extended_timeout}s")
             else:
-                return False, None, f"Unknown connection type: {self._connection_type}"
+                self.logger.info(f"Using standard timeout for simple test: {original_timeout}s")
+
+            try:
+                # Send test directly without complex retry mechanisms
+                success, response_data, error_message, _ = http_client.send_test(test_data)
+
+                # Không kiểm tra lại kết quả từ http_client.py
+                return success, response_data, error_message
+            finally:
+                # Reset timeout
+                if affects_network:
+                    http_client.read_timeout = original_timeout
                 
         except Exception as e:
             error_msg = f"Error sending test case: {str(e)}"

@@ -19,10 +19,7 @@ from typing import Dict, Any, Optional, Union, cast, TypeVar, Type
 from dataclasses import dataclass, asdict, field
 
 from .constants import (
-    CONFIG_DIR, 
-    DEFAULT_SSH_PORT,
-    DEFAULT_REMOTE_CONFIG_PATH,
-    DEFAULT_REMOTE_RESULT_PATH,
+    CONFIG_DIR,
     CONNECTION_TIMEOUT,
     TEST_TIMEOUT_DEFAULT
 )
@@ -35,41 +32,25 @@ T = TypeVar('T', bound='AppConfig')
 @dataclass
 class NetworkConfig:
     """
-    Network connection configuration.
-    
+    HTTP network connection configuration.
+
     Attributes:
-        connection_type: Type of connection (http/ssh)
-        ssh_host: SSH server hostname or IP
-        ssh_port: SSH server port
-        ssh_username: SSH username
-        ssh_password: SSH password
-        connection_timeout: Connection timeout in seconds
-        remote_config_path: Path to config files on remote server
-        remote_result_path: Path to result files on remote server
+        connection_type: Type of connection (always 'http')
         http_host: HTTP server hostname or IP
         http_port: HTTP server port
         http_connect_timeout: HTTP connection timeout in seconds
         http_read_timeout: HTTP read timeout in seconds
         middleware_url: URL to middleware server
     """
-    
-    # Connection type - HTTP or SSH
-    connection_type: str = "http"  # Default to HTTP
-    
-    # SSH configuration
-    ssh_host: str = "192.168.88.1"
-    ssh_port: int = DEFAULT_SSH_PORT
-    ssh_username: str = "root"
-    ssh_password: str = ""
-    connection_timeout: int = CONNECTION_TIMEOUT
-    remote_config_path: str = DEFAULT_REMOTE_CONFIG_PATH
-    remote_result_path: str = DEFAULT_REMOTE_RESULT_PATH
-    
+
+    # Connection type - HTTP only
+    connection_type: str = "http"  # Always HTTP
+
     # HTTP configuration
-    http_host: str = "192.168.88.1"  # Default to same IP as SSH
-    http_port: int = 6970            # Default HTTP port for rnd_autotest
-    http_connect_timeout: int = 5    # Default connect timeout in seconds
-    http_read_timeout: int = 40      # Default read timeout in seconds
+    http_host: str = "192.168.1.101"  # Default OpenWrt device IP
+    http_port: int = 6969             # Default HTTP port for rnd_autotest (updated to match actual)
+    http_connect_timeout: int = 5     # Default connect timeout in seconds
+    http_read_timeout: int = 40       # Default read timeout in seconds
     middleware_url: str = "http://192.168.88.10:5000"  # Existing setting
 
 
@@ -165,8 +146,20 @@ class AppConfig:
         config = cls()
         
         if "network" in data:
-            # Create new instance since NetworkConfig is immutable
-            config.network = NetworkConfig(**data["network"])
+            # Filter out SSH fields for backward compatibility
+            network_data = data["network"].copy()
+
+            # Remove SSH-related fields if they exist
+            ssh_fields_to_remove = [
+                'ssh_host', 'ssh_port', 'ssh_username', 'ssh_password',
+                'connection_timeout', 'remote_config_path', 'remote_result_path'
+            ]
+
+            for field in ssh_fields_to_remove:
+                network_data.pop(field, None)
+
+            # Create new instance with only HTTP fields
+            config.network = NetworkConfig(**network_data)
         if "test" in data:
             config.test = TestConfig(**data["test"])
         if "gui" in data:
@@ -181,15 +174,18 @@ class AppConfig:
         Raises:
             ConfigurationError: If configuration is invalid
         """
-        # Validate network config
-        if not self.network.ssh_host:
-            raise ConfigurationError("SSH host cannot be empty")
-        
-        if not (1 <= self.network.ssh_port <= 65535):
-            raise ConfigurationError("SSH port must be between 1 and 65535")
-        
-        if not self.network.ssh_username:
-            raise ConfigurationError("SSH username cannot be empty")
+        # Validate HTTP network config
+        if not self.network.http_host:
+            raise ConfigurationError("HTTP host cannot be empty")
+
+        if not (1 <= self.network.http_port <= 65535):
+            raise ConfigurationError("HTTP port must be between 1 and 65535")
+
+        if self.network.http_connect_timeout <= 0:
+            raise ConfigurationError("HTTP connect timeout must be positive")
+
+        if self.network.http_read_timeout <= 0:
+            raise ConfigurationError("HTTP read timeout must be positive")
         
         # Validate test config
         if self.test.default_timeout <= 0:
