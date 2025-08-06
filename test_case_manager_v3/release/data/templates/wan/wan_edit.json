@@ -4,9 +4,9 @@
       "service": "wan",
       "action": "edit",
       "params": {
-        "name": "wan1",
+        "name": "wan",
         "protocol": "ipv4",
-        "gateway_type": "bridge",
+        "gateway_type": "static",
         "vlan_type": "",
         "vlan_id": "-1",
         "mtu": 1492,

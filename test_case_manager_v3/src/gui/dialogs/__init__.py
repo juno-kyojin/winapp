@@ -11,6 +11,7 @@ Created: 2025-06-25
 """
 
 from src.gui.dialogs.about_dialog import AboutDialog
+from src.gui.dialogs.preset_manager_dialog import PresetManagerDialog
 # Import placeholders until we implement these classes
 # from src.gui.dialogs.preferences_dialog import PreferencesDialog
 # from src.gui.dialogs.test_details_dialog import TestDetailsDialog
@@ -18,7 +19,8 @@ from src.gui.dialogs.about_dialog import AboutDialog
 
 __all__ = [
     'AboutDialog',
+    'PresetManagerDialog',
     # 'PreferencesDialog',
     # 'TestDetailsDialog',
     # 'ParameterDialog'
-] 
+]

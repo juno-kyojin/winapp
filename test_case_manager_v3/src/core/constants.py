@@ -139,10 +139,10 @@ PARAM_TYPES: Final[Dict[str, str]] = {
 # ------------------------------------------------------------------
 # GUI Constants
 # ------------------------------------------------------------------
-WINDOW_MIN_WIDTH: Final[int] = 800
-WINDOW_MIN_HEIGHT: Final[int] = 600
-WINDOW_DEFAULT_WIDTH: Final[int] = 1200
-WINDOW_DEFAULT_HEIGHT: Final[int] = 800
+WINDOW_MIN_WIDTH: Final[int] = 1000
+WINDOW_MIN_HEIGHT: Final[int] = 700
+WINDOW_DEFAULT_WIDTH: Final[int] = 1400
+WINDOW_DEFAULT_HEIGHT: Final[int] = 900
 
 # ------------------------------------------------------------------
 # Logging Configuration

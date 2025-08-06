@@ -1,0 +1,17 @@
+{
+  "presets": [
+    {
+      "id": "8163c9e5-91f9-4973-902a-d4c778affbd0",
+      "name": "lan_edit",
+      "description": "test các chức năng của lan",
+      "test_ids": [
+        "lan_edit|LAN"
+      ],
+      "created_date": "2025-08-05T07:57:19.091215Z",
+      "modified_date": "2025-08-05T07:57:19.091215Z",
+      "test_count": 1
+    }
+  ],
+  "version": "1.0",
+  "last_updated": "2025-08-05T07:57:19.093001Z"
+}

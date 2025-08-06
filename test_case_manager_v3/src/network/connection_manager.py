@@ -207,13 +207,13 @@ class ConnectionManager:
 
     def send_script_result(self, script_result_data: Dict[str, Any]) -> Tuple[bool, Optional[Dict[str, Any]], str]:
         """
-        Send script verification result to the device.
+        Send script verification result to the device and wait for final test result.
 
         Args:
             script_result_data: Script result data to send (format: {"type": "script", "script_result": [...]})
 
         Returns:
-            Tuple containing (success flag, response data, error message)
+            Tuple containing (success flag, final response data, error message)
         """
         if not self.is_connected():
             return False, None, "Not connected to device"
@@ -222,17 +222,65 @@ class ConnectionManager:
         if not script_result_data or "type" not in script_result_data:
             return False, None, "Invalid script result data format"
 
-        self.logger.info("Sending script result to device via HTTP client")
+        self.logger.info("Sending script result to device and waiting for final test result")
 
-        # Use HTTP client directly for script results (no test case validation needed)
-        success, response_data, error_msg, error_type = self.http_client.send_test(script_result_data)
+        # For script results, use retry mechanism to handle connection issues
+        max_retries = 2  # Fewer retries for script results
+        last_error = ""
 
-        if success:
-            self.logger.info("Script result sent successfully")
-            return True, response_data, ""
-        else:
-            self.logger.error(f"Failed to send script result: {error_msg}")
-            return False, response_data, error_msg
+        for attempt in range(max_retries):
+            try:
+                # Ensure fresh connection for script results to avoid ConnectionResetError
+                if attempt > 0:
+                    self.logger.info(f"Script result retry attempt {attempt + 1}")
+                    # Force reconnection on retry
+                    if hasattr(self.http_client, 'session') and self.http_client.session:
+                        self.http_client.session.close()
+
+                # Use HTTP client directly for script results (no test case validation needed)
+                success, response_data, error_msg, error_type = self.http_client.send_test(script_result_data)
+
+                if success:
+                    if attempt > 0:
+                        self.logger.info(f"Script result sent successfully on retry {attempt + 1}")
+                    else:
+                        self.logger.info("Script result sent successfully")
+
+                    # Check if response contains final test result or another script request
+                    if response_data and "script" in response_data:
+                        # Device sent another script request - this shouldn't happen for LAN tests
+                        self.logger.warning("Device sent another script request after script result")
+                        return True, response_data, ""
+                    elif response_data and ("summary" in response_data or "status" in response_data):
+                        # Device sent final test result
+                        self.logger.info("Received final test result from device")
+                        return True, response_data, ""
+                    else:
+                        # Device acknowledged script result but didn't send final result yet
+                        # This is the current behavior - device processes script result internally
+                        self.logger.info("Device acknowledged script result")
+                        return True, response_data, ""
+                else:
+                    last_error = error_msg
+                    # Check if this is a connection error that should be retried
+                    if "connection" in error_msg.lower() or "reset" in error_msg.lower():
+                        if attempt < max_retries - 1:
+                            self.logger.warning(f"Connection error on attempt {attempt + 1}, retrying: {error_msg}")
+                            time.sleep(1)  # Short delay before retry
+                            continue
+                    else:
+                        # Non-connection error, don't retry
+                        break
+
+            except Exception as e:
+                last_error = str(e)
+                self.logger.error(f"Exception sending script result on attempt {attempt + 1}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(1)
+                    continue
+
+        self.logger.error(f"Failed to send script result after {max_retries} attempts: {last_error}")
+        return False, None, last_error
 
     def send_test(self, test_data: Dict[str, Any],
                 affects_network: bool = False) -> Tuple[bool, Optional[Dict[str, Any]], str]:
@@ -549,7 +597,7 @@ class ConnectionManager:
 
         # All attempts failed or application error encountered
         if last_error_type == ErrorType.APPLICATION_ERROR:
-            self.logger.error(f"Test failed due to application error (no retry): {last_error}")
+            self.logger.error(f"Test failed due to appliation error (no retry): {last_error}")
         else:
             self.logger.error(f"Test failed after {max_retries} attempts: {last_error}")
         return False, None, f"Failed after {max_retries} attempts: {last_error}"

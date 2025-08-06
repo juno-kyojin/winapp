@@ -4,7 +4,7 @@
       "service": "wan",
       "action": "delete",
       "params": {
-        "name": "wan1"
+        "name": "wan"
       }
     }
   ]

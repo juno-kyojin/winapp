@@ -23,7 +23,10 @@ from datetime import datetime
 
 # Core imports
 from src.core.config import AppConfig
-from src.core.constants import APP_NAME, APP_VERSION, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT
+from src.core.constants import (
+    APP_NAME, APP_VERSION, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT,
+    WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT
+)
 from src.core.exceptions import TestCaseManagerError
 from src.core.test_case_loader import TestCaseLoader
 from src.core.result_manager import ResultManager
@@ -105,9 +108,13 @@ class MainWindow:
         self.root = tk.Tk()
         self.root.title(f"{APP_NAME} v{APP_VERSION}")
 
-        # Set window size and position
-        width = 800  # Default width
-        height = 600  # Default height
+        # Get window size from config or use defaults
+        width = getattr(self.config.gui, 'window_width', WINDOW_DEFAULT_WIDTH)
+        height = getattr(self.config.gui, 'window_height', WINDOW_DEFAULT_HEIGHT)
+
+        # Ensure minimum size
+        width = max(width, WINDOW_MIN_WIDTH)
+        height = max(height, WINDOW_MIN_HEIGHT)
 
         # Center window on screen
         screen_width = self.root.winfo_screenwidth()
@@ -612,25 +619,8 @@ class MainWindow:
                 verification_message = ""
 
                 if success:
-                    # HTTP communication successful - now check device's actual test result
-                    device_test_result = self._determine_device_test_result(result_data or {})
-
-                    if device_test_result is None:
-                        # Script verification requested - handle it
-                        self.logger.info("Device requesting script verification - executing script flow")
-                        final_status, final_message = self._handle_script_verification(result_data or {})
-                    elif device_test_result:
-                        # Device test passed and no script verification requested
-                        self.logger.info("HTTP communication successful - device test result: PASSED")
-                        final_status = "success"
-                        final_message = "Device test passed - no script verification required"
-                        self.logger.info(f"Final result: SUCCESS - {final_message}")
-
-                    else:
-                        # Device test failed based on device response
-                        final_status = "fail"
-                        final_message = f"Device test failed based on device response"
-                        self.logger.info(f"Final result: FAIL - Device test failed, skipping verification")
+                    # HTTP communication successful - now handle natural request-response cycle
+                    final_status, final_message = self._handle_natural_test_flow(result_data or {})
 
                 else:
                     # HTTP communication failed - treat as failure
@@ -882,95 +872,94 @@ class MainWindow:
         self.logger.info("Device response format unclear - defaulting to success")
         return True
 
-    def _handle_script_verification(self, result_data: Dict[str, Any]) -> Tuple[str, str]:
+
+
+
+
+
+    def _handle_natural_test_flow(self, initial_response: Dict[str, Any]) -> Tuple[str, str]:
         """
-        Handle script verification request from device.
+        Handle the natural request-response cycle with device.
+
+        Each HTTP request gets exactly one response:
+        1. App sends test case → Device responds with script request OR final result
+        2. If script request: App sends script result → Device responds with next script request OR final result
+        3. Repeat until device sends final result
 
         Args:
-            result_data: Response data containing script verification request
+            initial_response: Initial response from device after sending test case
 
         Returns:
             Tuple of (final_status, final_message)
         """
         try:
-            script_name = result_data.get("script", "")
-            script_params = result_data.get("script_params", [])
+            current_response = initial_response
+            script_count = 0
+            max_script_iterations = 10  # Prevent infinite loops
 
-            self.logger.info(f"Device requesting script verification: {script_name} with params: {script_params}")
+            while script_count < max_script_iterations:
+                # Check what type of response we received
+                device_test_result = self._determine_device_test_result(current_response)
 
-            # Execute script verification
-            verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(result_data)
+                if device_test_result is None:
+                    # Device is requesting script verification
+                    script_count += 1
+                    script_name = current_response.get("script", "unknown")
+                    script_params = current_response.get("script_params", [])
 
-            if verification_needed:
-                self.logger.info(f"Script verification executed: {verification_msg}")
+                    self.logger.info(f"Device requesting script verification #{script_count}: {script_name} with params: {script_params}")
 
-                # Try to send script result back to device (best effort)
-                script_result = "1" if verification_passed else "0"
-                script_send_success = self._send_script_result_to_device(script_result)
+                    # Execute the requested script
+                    verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(current_response)
 
-                if script_send_success:
-                    self.logger.info("Script result sent successfully to device")
+                    if not verification_needed:
+                        return "fail", f"Script verification was requested but could not be executed: {verification_msg}"
+
+                    # Send script result back to device and get next response
+                    script_result = "1" if verification_passed else "0"
+                    script_response = {
+                        "type": "script",
+                        "script_result": [script_result]
+                    }
+
+                    self.logger.info(f"Sending script #{script_count} result: {script_result} ({'PASS' if verification_passed else 'FAIL'})")
+
+                    # Send script result and get device's next response
+                    success, next_response, error_msg = self.connection_manager.send_script_result(script_response)
+
+                    if not success:
+                        return "fail", f"Failed to send script result #{script_count}: {error_msg}"
+
+                    # Device's next response (either another script request or final result)
+                    current_response = next_response or {}
+                    self.logger.info(f"Received device response after script #{script_count}")
+
+                elif device_test_result is True:
+                    # Device sent final result: PASS
+                    self.logger.info(f"Device completed test successfully after {script_count} script verifications")
+                    return "success", f"Test passed with {script_count} script verifications"
+
+                elif device_test_result is False:
+                    # Device sent final result: FAIL
+                    self.logger.info(f"Device reported test failure after {script_count} script verifications")
+                    return "fail", f"Device test failed after {script_count} script verifications"
+
                 else:
-                    self.logger.warning("Failed to send script result to device, but continuing with verification result")
+                    # Unexpected response format
+                    self.logger.warning(f"Unexpected device response format: {current_response}")
+                    return "fail", "Unexpected device response format"
 
-                # Return result based on script verification outcome, not script send success
-                # Script verification is the authoritative result
-                if verification_passed:
-                    return "success", f"Script verification passed: {verification_msg}"
-                else:
-                    return "fail", f"Script verification failed: {verification_msg}"
-            else:
-                return "fail", "Script verification was requested but no verification logic available"
+            # Too many script iterations
+            self.logger.error(f"Exceeded maximum script iterations ({max_script_iterations})")
+            return "fail", f"Test exceeded maximum script iterations ({max_script_iterations})"
 
         except Exception as e:
-            self.logger.error(f"Script verification error: {e}")
-            return "fail", f"Script verification error: {str(e)}"
+            self.logger.error(f"Error in natural test flow: {e}")
+            return "fail", f"Error in test flow: {str(e)}"
 
-    def _send_script_result_to_device(self, result: str) -> bool:
-        """Send script verification result back to device."""
-        try:
-            script_response = {
-                "type": "script",
-                "script_result": [result]
-            }
 
-            self.logger.info(f"Sending script result to device: {script_response}")
 
-            # Try using connection manager's dedicated script result method first (preferred method)
-            try:
-                success, response_data, error_msg = self.connection_manager.send_script_result(script_response)
-                if success:
-                    self.logger.info("Script result sent successfully via connection manager")
-                    return True
-                else:
-                    self.logger.warning(f"Connection manager script result failed: {error_msg}, trying direct HTTP")
-            except Exception as e:
-                self.logger.warning(f"Connection manager script result error: {e}, trying direct HTTP")
 
-            # Fallback to direct HTTP POST if connection manager fails
-            try:
-                import requests
-                response = requests.post(
-                    f"http://{self.connection_manager._hostname}:6969",
-                    json=script_response,
-                    headers={"Content-Type": "application/json", "Connection": "close"},
-                    timeout=(5, 30)
-                )
-                if response.status_code == 200:
-                    self.logger.info(f"Script result sent successfully via direct HTTP: {response.status_code}")
-                    return True
-                else:
-                    error_message = f"HTTP {response.status_code}: {response.text}"
-                    self.logger.error(f"Direct HTTP failed: {error_message}")
-                    return False
-            except Exception as e:
-                error_message = f"Direct HTTP request failed: {str(e)}"
-                self.logger.error(f"Script result send error: {error_message}")
-                return False
-
-        except Exception as e:
-            self.logger.error(f"Error sending script result to device: {e}")
-            return False
 
 
 

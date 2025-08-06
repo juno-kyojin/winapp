@@ -51,20 +51,20 @@ class RndHTTPClient:
         self._setup_session()
     
     def _setup_session(self) -> None:
-        """Setup HTTP session with retry strategy and no connection pooling."""
+        """Setup HTTP session with retry strategy and minimal connection pooling."""
         # Simple retry strategy for connection issues only
         retry_strategy = Retry(
-            total=3,
+            total=2,  # Reduced retries to avoid long delays
             status_forcelist=[429, 500, 502, 503, 504],
-            backoff_factor=1,
+            backoff_factor=0.5,  # Faster backoff
             allowed_methods=["POST"]
         )
 
-        # Disable connection pooling to mimic curl behavior
+        # Minimal connection pooling to avoid ConnectionResetError
         adapter = HTTPAdapter(
             max_retries=retry_strategy,
-            pool_connections=1,  # Minimal connection pool
-            pool_maxsize=1       # Force new connections
+            pool_connections=1,  # Single connection pool
+            pool_maxsize=1       # Force fresh connections
         )
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
