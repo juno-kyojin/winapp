@@ -42,13 +42,16 @@ class ScriptVerifier:
             toolwl_path: Optional custom path to ToolWL directory
         """
         self.logger = get_logger(__name__)
-        
+
         # Set ToolWL path
         if toolwl_path:
             self.toolwl_path = Path(toolwl_path)
         else:
             # Auto-detect ToolWL directory location
             self.toolwl_path = self._find_toolwl_directory()
+
+        # Track running processes for cancellation support
+        self.running_processes: List[subprocess.Popen] = []
         
         self.logger.debug(f"ToolWL path: {self.toolwl_path}")
         
@@ -319,29 +322,65 @@ class ScriptVerifier:
             python_exe = self._get_python_executable()
             self.logger.info(f"Using Python executable: {python_exe}")
 
-            result = subprocess.run(
+            # Use Popen for better process control and cancellation support
+            process = subprocess.Popen(
                 [python_exe, str(script_path)],
                 cwd=str(self.toolwl_path),
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 text=True,
                 encoding='utf-8',
-                errors='replace',  # Replace problematic characters instead of failing
-                timeout=120,  # Increased timeout to 120 seconds
                 env=env,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
             )
-            execution_time = time.time() - start_time
 
-            self.logger.debug(f"Script execution completed in {execution_time:.2f}s with return code: {result.returncode}")
+            # Track process for potential cancellation
+            self.running_processes.append(process)
 
-            # Log stdout and stderr if present (use INFO level for debugging)
-            if result.stdout:
-                self.logger.info(f"Script stdout: {result.stdout}")
-            if result.stderr:
-                self.logger.error(f"Script stderr: {result.stderr}")
+            try:
+                # Wait for process completion with timeout
+                stdout, stderr = process.communicate(timeout=120)
+                execution_time = time.time() - start_time
 
-            # Log return code for debugging
-            self.logger.info(f"Script return code: {result.returncode}")
+                # Remove from tracking list when completed
+                if process in self.running_processes:
+                    self.running_processes.remove(process)
+
+                self.logger.debug(f"Script execution completed in {execution_time:.2f}s with return code: {process.returncode}")
+
+                # Log stdout and stderr if present (use INFO level for debugging)
+                if stdout:
+                    self.logger.info(f"Script stdout: {stdout}")
+                if stderr:
+                    self.logger.error(f"Script stderr: {stderr}")
+
+                # Log return code for debugging
+                self.logger.info(f"Script return code: {process.returncode}")
+
+                # Create result object for compatibility
+                class Result:
+                    def __init__(self, returncode, stdout, stderr):
+                        self.returncode = returncode
+                        self.stdout = stdout
+                        self.stderr = stderr
+
+                result = Result(process.returncode, stdout, stderr)
+
+            except subprocess.TimeoutExpired:
+                # Handle timeout - terminate process
+                self.logger.warning(f"Script execution timed out after 120 seconds: {script_cmd}")
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+
+                # Remove from tracking list
+                if process in self.running_processes:
+                    self.running_processes.remove(process)
+
+                return False, f"Script execution timed out after 120 seconds"
 
             # Read and interpret output
             if output_file.exists():
@@ -450,3 +489,43 @@ class ScriptVerifier:
             error_msg = f"Error during test result verification: {e}"
             self.logger.error(error_msg)
             return True, error_msg, False
+
+    def terminate_running_scripts(self) -> None:
+        """
+        Terminate all currently running verification scripts.
+
+        This method is called when test execution is cancelled to ensure
+        no orphaned script processes remain running.
+        """
+        if not self.running_processes:
+            self.logger.debug("No running script processes to terminate")
+            return
+
+        self.logger.info(f"Terminating {len(self.running_processes)} running script process(es)")
+
+        for process in self.running_processes[:]:  # Create copy to avoid modification during iteration
+            try:
+                if process.poll() is None:  # Process is still running
+                    self.logger.info(f"Terminating script process PID: {process.pid}")
+                    process.terminate()
+
+                    # Wait up to 5 seconds for graceful termination
+                    try:
+                        process.wait(timeout=5)
+                        self.logger.info(f"Script process PID {process.pid} terminated gracefully")
+                    except subprocess.TimeoutExpired:
+                        # Force kill if graceful termination failed
+                        self.logger.warning(f"Force killing script process PID: {process.pid}")
+                        process.kill()
+                        process.wait()
+
+                # Remove from tracking list
+                self.running_processes.remove(process)
+
+            except Exception as e:
+                self.logger.error(f"Error terminating script process: {e}")
+                # Still remove from list to avoid repeated attempts
+                if process in self.running_processes:
+                    self.running_processes.remove(process)
+
+        self.logger.info("All script processes terminated")

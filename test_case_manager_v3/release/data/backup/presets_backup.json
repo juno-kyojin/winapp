@@ -10,8 +10,21 @@
       "created_date": "2025-08-05T07:57:19.091215Z",
       "modified_date": "2025-08-05T07:57:19.091215Z",
       "test_count": 1
+    },
+    {
+      "id": "bf56e03c-1bf4-4386-9417-64b3e835f209",
+      "name": "wan_test",
+      "description": "bộ test cho wan hỗ trợ tạo sửa xóa",
+      "test_ids": [
+        "wan_edit|WAN",
+        "wan_create|WAN",
+        "wan_delete|WAN"
+      ],
+      "created_date": "2025-08-05T08:33:51.895232Z",
+      "modified_date": "2025-08-05T08:33:51.895232Z",
+      "test_count": 3
     }
   ],
   "version": "1.0",
-  "last_updated": "2025-08-05T07:57:19.093001Z"
+  "last_updated": "2025-08-05T08:33:51.897744Z"
 }

@@ -250,8 +250,8 @@ class RndHTTPClient:
                     # Log actual response for debugging
                     self.logger.info(f"Received response from rnd_autotest: {json.dumps(response_data, indent=2)}")
 
-                    # Analyze response timing to understand server behavior
-                    if "failed_by_service" in response_data:
+                    # Analyze response timing to understand server behavior (only for test cases, not script results)
+                    if "failed_by_service" in response_data and "metadata" in test_data:
                         for _, failures in response_data["failed_by_service"].items():
                             for failure in failures:
                                 if "timestamp" in failure:

@@ -20,11 +20,11 @@ from src.core.test_case_loader import TestCaseLoader
 from src.core.preset_manager import PresetManager
 from src.core.constants import CONFIG_DIR
 from src.gui.dialogs.preset_manager_dialog import PresetManagerDialog
+from src.gui.dialogs.unified_template_dialog import UnifiedTemplateDialog
 from src.utils.logger import get_logger
 
 
-# Import test name utilities
-from src.utils.formatters import extract_test_name
+# Import test name utilities - removed extract_test_name as we now use filename directly
 
 # UI Constants for improved UX
 SPACING = {
@@ -480,83 +480,56 @@ class TemplatesPanel(ttk.Frame):
         except Exception as e:
             self.logger.debug(f"Error forcing preview show: {e}")
 
-    def _view_test_popup(self, test_index: int) -> None:
-        """Show test content in a popup dialog."""
-        # Get the currently displayed tests (could be filtered)
-        if self.current_category == "All":
-            current_search = self.search_var.get() if hasattr(self, 'search_var') else ""
-            if current_search.strip():
-                displayed_tests = self._filter_tests_by_search(current_search, self.all_test_data)
-            else:
-                displayed_tests = self.all_test_data
-        else:
-            current_search = self.search_var.get() if hasattr(self, 'search_var') else ""
-            if current_search.strip():
-                displayed_tests = self._filter_tests_by_search(current_search, self.original_test_data)
-            else:
-                displayed_tests = self.original_test_data
-
-        if test_index < 0 or test_index >= len(displayed_tests):
-            return
-
-        test_data = displayed_tests[test_index]
-
-        # Create popup dialog
-        dialog = tk.Toplevel(self)
-        dialog.title(f"View Test Case - {test_data['display_name']}")
-        dialog.geometry("600x500")
-        dialog.resizable(True, True)
-
-        # Center the dialog
-        dialog.transient(self.winfo_toplevel())
-        dialog.grab_set()
-
-        # Main frame
-        main_frame = ttk.Frame(dialog)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-        # Content text with scrollbar
-        text_frame = ttk.Frame(main_frame)
-        text_frame.pack(fill=tk.BOTH, expand=True)
-
-        content_text = tk.Text(
-            text_frame,
-            wrap=tk.WORD,
-            font=("Consolas", 10),
-            state=tk.DISABLED
-        )
-        scrollbar = ttk.Scrollbar(text_frame, orient="vertical", command=content_text.yview)
-        content_text.configure(yscrollcommand=scrollbar.set)
-
-        content_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        # Button frame
-        button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, pady=(10, 0))
-
-        # Close button
-        close_btn = ttk.Button(
-            button_frame,
-            text="Close",
-            command=dialog.destroy
-        )
-        close_btn.pack(side=tk.RIGHT)
-
-        # Load and display content with syntax highlighting
+    def _view_template(self, test_index: int) -> None:
+        """Show template content in unified dialog (VIEW mode)."""
         try:
-            content = self._format_test_content(test_data)
-            content_text.configure(state=tk.NORMAL)
-            content_text.insert(1.0, content)
-            self._apply_json_syntax_highlighting(content_text, content)
-            content_text.configure(state=tk.DISABLED)
+            # Get test data based on current view
+            current_category_display = self.category_var.get()
+
+            if current_category_display == "All (tests)" or current_category_display.startswith("All"):
+                # Using "All" view - get from all_test_data
+                if not hasattr(self, 'all_test_data') or test_index >= len(self.all_test_data):
+                    self.logger.error(f"Invalid test index: {test_index} for All view")
+                    return
+                test_data = self.all_test_data[test_index]
+            else:
+                # Using specific category view
+                current_category = self._get_current_category()
+                if not current_category:
+                    self.logger.error(f"Could not determine category from: {current_category_display}")
+                    return
+
+                if current_category not in self.category_tests:
+                    self.logger.error(f"Category not found in data: {current_category}")
+                    return
+
+                category_data = self.category_tests[current_category]
+                if test_index >= len(category_data):
+                    self.logger.error(f"Invalid test index: {test_index}")
+                    return
+                test_data = category_data[test_index]
+
+            # Get template path and data
+            template_path = test_data.get('template_path')
+            template_data = test_data.get('template_data', {})
+
+            if not template_path or not os.path.exists(template_path):
+                self.logger.error(f"Template file not found: {template_path}")
+                messagebox.showerror("Error", f"Template file not found: {template_path}")
+                return
+
+            # Create and show unified template dialog in VIEW mode
+            UnifiedTemplateDialog(
+                parent=self,
+                template_path=template_path,
+                template_data=template_data,
+                mode="VIEW",
+                on_save_callback=self._on_template_saved
+            )
+
         except Exception as e:
-            content_text.configure(state=tk.NORMAL)
-            content_text.insert(1.0, f"Error loading test content: {str(e)}")
-            content_text.configure(state=tk.DISABLED)
-
-
-
+            self.logger.error(f"Error opening template viewer: {e}")
+            messagebox.showerror("Error", f"Could not open template viewer: {str(e)}")
 
     def _format_test_content(self, test_data: Dict[str, Any]) -> str:
         """Format test content for display."""
@@ -1099,13 +1072,13 @@ class TemplatesPanel(ttk.Frame):
         test_data = []
         for template_file in templates:
             try:
-                # Load template content to get display name
+                # Load template content
                 template_path = self.test_loader.get_template_path(category, template_file)
                 with open(template_path, "r", encoding="utf-8") as f:
                     template_content = json.loads(f.read())
 
-                # Extract display name
-                display_name = extract_test_name(template_content, template_file)
+                # Use filename as display name (remove .json extension)
+                display_name = template_file.replace(".json", "") if template_file.endswith(".json") else template_file
 
                 test_data.append({
                     "file_name": template_file,
@@ -1116,10 +1089,11 @@ class TemplatesPanel(ttk.Frame):
                 })
             except Exception as e:
                 self.logger.warning(f"Could not load template {template_file}: {e}")
-                # Add with basic info if loading fails
+                # Add with basic info if loading fails - use filename as display name
+                display_name = template_file.replace(".json", "") if template_file.endswith(".json") else template_file
                 test_data.append({
                     "file_name": template_file,
-                    "display_name": template_file.replace(".json", "").replace("_", " ").title(),
+                    "display_name": display_name,
                     "template_path": "",
                     "template_data": {},
                     "category": category
@@ -1187,7 +1161,7 @@ class TemplatesPanel(ttk.Frame):
             test_frame = ttk.Frame(self.test_list_frame, relief="flat", borderwidth=0)
             test_frame.grid(row=i, column=0, sticky="ew", padx=5, pady=2)
             test_frame.columnconfigure(1, weight=1)  # Test name column expands
-            test_frame.columnconfigure(2, weight=0)  # Button column fixed size
+            test_frame.columnconfigure(2, weight=0, minsize=120)  # Button column fixed size with min width
 
             # Add max width constraint for very wide windows
             if hasattr(self, '_current_layout') and self._current_layout.get('panel_width', 0) > 1600:
@@ -1225,23 +1199,39 @@ class TemplatesPanel(ttk.Frame):
             )
             name_label.grid(row=0, column=1, sticky="w", padx=(0, 5))
 
-            # Button frame for View button only
+            # Button frame for View and Edit buttons
             button_frame = ttk.Frame(test_frame)
             button_frame.grid(row=0, column=2, sticky="e", padx=(5, 0))
 
-            # Create button command with proper closure
+            # Create button commands with proper closure
             def make_view_command(index):
-                return lambda: self._view_test_popup(index)
+                return lambda: self._view_template(index)
 
-            # View button with adaptive width and proper styling
+            def make_edit_command(index):
+                return lambda: self._edit_template(index)
+
+            # View button with smaller width for dual button layout
             view_btn = ttk.Button(
                 button_frame,
                 text="View",
-                width=self._get_adaptive_button_width(),
+                width=5,  # Smaller width to fit both buttons
                 command=make_view_command(i),
                 style="Tertiary.TButton"
             )
-            view_btn.grid(row=0, column=0)
+            view_btn.grid(row=0, column=0, padx=(0, 2))
+
+            # Edit button
+            edit_btn = ttk.Button(
+                button_frame,
+                text="Edit",
+                width=5,  # Smaller width to fit both buttons
+                command=make_edit_command(i),
+                style="Tertiary.TButton"
+            )
+            edit_btn.grid(row=0, column=1)
+
+            # Debug logging
+            self.logger.info(f"Created Edit button for test {i}: {test.get('display_name', 'unknown')}")
 
     def _load_category_tests(self, category: str) -> None:
         """
@@ -1339,7 +1329,7 @@ class TemplatesPanel(ttk.Frame):
             test_frame = ttk.Frame(self.test_list_frame, relief="flat", borderwidth=0)
             test_frame.grid(row=i, column=0, sticky="ew", padx=5, pady=2)
             test_frame.columnconfigure(1, weight=1)  # Test name column expands
-            test_frame.columnconfigure(2, weight=0)  # Button column fixed size
+            test_frame.columnconfigure(2, weight=0, minsize=120)  # Button column fixed size with min width
 
             # Add max width constraint for very wide windows
             if hasattr(self, '_current_layout') and self._current_layout.get('panel_width', 0) > 1600:
@@ -1377,23 +1367,39 @@ class TemplatesPanel(ttk.Frame):
             )
             name_label.grid(row=0, column=1, sticky="w", padx=(0, 5))
 
-            # Button frame for View button only
+            # Button frame for View and Edit buttons
             button_frame = ttk.Frame(test_frame)
             button_frame.grid(row=0, column=2, sticky="e", padx=(5, 0))
 
-            # Create button command with proper closure
+            # Create button commands with proper closure
             def make_view_command(index):
-                return lambda: self._view_test_popup(index)
+                return lambda: self._view_template(index)
 
-            # View button with adaptive width and proper styling
+            def make_edit_command(index):
+                return lambda: self._edit_template(index)
+
+            # View button with smaller width for dual button layout
             view_btn = ttk.Button(
                 button_frame,
                 text="View",
-                width=self._get_adaptive_button_width(),
+                width=5,  # Smaller width to fit both buttons
                 command=make_view_command(i),
                 style="Tertiary.TButton"
             )
-            view_btn.grid(row=0, column=0)
+            view_btn.grid(row=0, column=0, padx=(0, 2))
+
+            # Edit button
+            edit_btn = ttk.Button(
+                button_frame,
+                text="Edit",
+                width=5,  # Smaller width to fit both buttons
+                command=make_edit_command(i),
+                style="Tertiary.TButton"
+            )
+            edit_btn.grid(row=0, column=1)
+
+            # Debug logging
+            self.logger.info(f"Created Edit button for test {i}: {test.get('display_name', 'unknown')}")
 
     def _configure_test_item_style(self, frame: ttk.Frame, index: int) -> None:
         """Configure styling for individual test items."""
@@ -1793,6 +1799,8 @@ class TemplatesPanel(ttk.Frame):
         self.sent_tests.clear()
         self.logger.debug("Reset sent tests tracking")
 
+
+
     def _refresh_ui_after_send(self) -> None:
         """Refresh UI to show [SENT] indicators after sending tests to queue."""
         try:
@@ -1811,6 +1819,8 @@ class TemplatesPanel(ttk.Frame):
             self.logger.error(f"Error refreshing UI after send: {e}")
         finally:
             self._is_ui_refresh = False
+
+
 
     def _clear_sent_test_selections(self, sent_tests: List[Dict[str, Any]]) -> None:
         """Clear selections for tests that were successfully sent to queue.
@@ -2340,5 +2350,186 @@ class TemplatesPanel(ttk.Frame):
         except Exception as e:
             self.logger.error(f"Error showing preset manager: {e}")
             messagebox.showerror("Error", f"Failed to open preset manager: {str(e)}")
+
+    def _edit_template(self, index: int) -> None:
+        """Open template editor for the specified test."""
+        try:
+            # Get test data based on current view
+            current_category_display = self.category_var.get()
+
+            if current_category_display == "All (tests)" or current_category_display.startswith("All"):
+                # Using "All" view - get from all_test_data
+                if not hasattr(self, 'all_test_data') or index >= len(self.all_test_data):
+                    self.logger.error(f"Invalid test index: {index} for All view")
+                    return
+                test_data = self.all_test_data[index]
+            else:
+                # Using specific category view
+                current_category = self._get_current_category()
+                if not current_category:
+                    self.logger.error(f"Could not determine category from: {current_category_display}")
+                    return
+
+                if current_category not in self.category_tests:
+                    self.logger.error(f"Category not found in data: {current_category}")
+                    return
+
+                category_data = self.category_tests[current_category]
+                if index >= len(category_data):
+                    self.logger.error(f"Invalid test index: {index}")
+                    return
+                test_data = category_data[index]
+
+            # Get template path and data
+            template_path = test_data.get("template_path", "")
+            template_data = test_data.get("template_data", {})
+
+            if not template_path or not os.path.exists(template_path):
+                messagebox.showerror("Error", "Template file not found")
+                return
+
+            # Create and show unified template dialog in EDIT mode
+            UnifiedTemplateDialog(
+                parent=self,
+                template_path=template_path,
+                template_data=template_data,
+                mode="EDIT",
+                on_save_callback=self._on_template_saved
+            )
+
+        except Exception as e:
+            self.logger.error(f"Error opening template editor: {e}")
+            messagebox.showerror("Error", f"Could not open template editor: {str(e)}")
+
+    def _on_template_saved(self, template_path: str) -> None:
+        """Handle template save callback - refresh templates."""
+        try:
+            self.logger.info(f"Template saved: {template_path}")
+
+            # Clear sent status for the edited template to allow re-testing
+            self._clear_sent_status_for_template(template_path)
+
+            # Reload templates to reflect changes
+            self._reload_templates()
+
+            # Show success message
+            self._update_status("Template saved and reloaded successfully")
+
+        except Exception as e:
+            self.logger.error(f"Error handling template save: {e}")
+            messagebox.showerror("Error", f"Template saved but could not reload: {str(e)}")
+
+    def _clear_sent_status_for_template(self, template_path: str) -> None:
+        """Clear sent status for a specific template to allow re-testing after edit."""
+        try:
+            # Extract template filename from path
+            template_filename = os.path.basename(template_path)
+            template_name = os.path.splitext(template_filename)[0]  # Remove .json extension
+
+            # Find and remove matching test IDs from sent_tests
+            tests_to_remove = []
+            for test_id in self.sent_tests:
+                # Test ID format is usually "template_name|CATEGORY"
+                if test_id.startswith(template_name + "|"):
+                    tests_to_remove.append(test_id)
+                # Also check for exact template name match (fallback)
+                elif test_id == template_name:
+                    tests_to_remove.append(test_id)
+
+            # Remove found test IDs
+            for test_id in tests_to_remove:
+                self.sent_tests.remove(test_id)
+                self.logger.info(f"Cleared sent status for edited template: {test_id}")
+
+            if tests_to_remove:
+                self.logger.info(f"Cleared sent status for {len(tests_to_remove)} test(s) after template edit")
+                # Update status to inform user
+                self._update_status(f"Template edited - can now re-add to queue for testing")
+            else:
+                self.logger.debug(f"No sent status found for template: {template_name}")
+
+        except Exception as e:
+            self.logger.error(f"Error clearing sent status for template {template_path}: {e}")
+
+    def clear_sent_status_for_completed_tests(self, test_identifiers: List[str]) -> None:
+        """
+        Clear sent status for tests that have completed execution.
+        Called by queue panel when tests are auto-cleared after completion.
+
+        Args:
+            test_identifiers: List of test identifiers in format "name|category"
+        """
+        try:
+            if not test_identifiers:
+                return
+
+            # Remove completed test identifiers from sent_tests set
+            tests_cleared = []
+            self.logger.debug(f"Attempting to clear sent status for: {test_identifiers}")
+            self.logger.debug(f"Current sent_tests set: {self.sent_tests}")
+
+            for test_id in test_identifiers:
+                if test_id in self.sent_tests:
+                    self.sent_tests.remove(test_id)
+                    tests_cleared.append(test_id)
+                    self.logger.debug(f"Cleared sent status for: {test_id}")
+                else:
+                    self.logger.debug(f"Test ID not found in sent_tests: {test_id}")
+
+            if tests_cleared:
+                self.logger.info(f"Cleared sent status for {len(tests_cleared)} completed test(s): {tests_cleared}")
+
+                # Refresh UI to remove [SENT] indicators
+                self._refresh_ui_after_send()
+
+                # Update status to inform user
+                self._update_status(f"Cleared sent status for {len(tests_cleared)} completed test(s) - can now re-add to queue")
+            else:
+                self.logger.debug(f"No sent status found for completed tests: {test_identifiers}")
+
+        except Exception as e:
+            self.logger.error(f"Error clearing sent status for completed tests: {e}")
+
+    def _reload_templates(self) -> None:
+        """Reload all templates to reflect changes."""
+        try:
+            # Store current selection state
+            current_category = self.category_var.get()
+            current_selections = {}
+            for test_id, var in self.checkbox_vars.items():
+                current_selections[test_id] = var.get()
+
+            # Reload templates
+            self._load_templates()
+
+            # Restore category selection
+            if current_category in [self.category_var.get()]:  # Check if still valid
+                self.category_var.set(current_category)
+
+            # Trigger category selection to refresh display
+            self._on_category_selected(None)
+
+            # Try to restore selections (best effort)
+            for test_id, was_selected in current_selections.items():
+                if test_id in self.checkbox_vars and was_selected:
+                    self.checkbox_vars[test_id].set(True)
+
+            self.logger.info("Templates reloaded successfully")
+
+        except Exception as e:
+            self.logger.error(f"Error reloading templates: {e}")
+            messagebox.showerror("Error", f"Could not reload templates: {str(e)}")
+
+    def _get_current_category(self) -> Optional[str]:
+        """Get the current selected category (without count info)."""
+        display_name = self.category_var.get()
+        if not display_name or display_name == "All (tests)" or display_name.startswith("All"):
+            return None
+
+        # Extract category name from display name (remove count info)
+        # Format: "CATEGORY (X tests)" -> "CATEGORY"
+        if " (" in display_name:
+            return display_name.split(" (")[0]
+        return display_name
 
 

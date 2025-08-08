@@ -23,8 +23,21 @@
       "created_date": "2025-08-05T08:33:51.895232Z",
       "modified_date": "2025-08-05T08:33:51.895232Z",
       "test_count": 3
+    },
+    {
+      "id": "66749911-17a1-497e-b8f7-5a172ebedd0b",
+      "name": "wireless",
+      "description": "",
+      "test_ids": [
+        "wireless_wireless_config_radio|WIRELESS",
+        "wireless_wireless_edit_ap|WIRELESS",
+        "wireless_wireless_edit_sta|WIRELESS"
+      ],
+      "created_date": "2025-08-06T02:00:04.956586Z",
+      "modified_date": "2025-08-06T02:00:04.956586Z",
+      "test_count": 3
     }
   ],
   "version": "1.0",
-  "last_updated": "2025-08-05T08:33:51.897744Z"
+  "last_updated": "2025-08-06T02:00:04.958136Z"
 }

@@ -384,6 +384,8 @@ class MainWindow:
             if self.templates_panel and self.queue_panel:
                 # Set parent reference for templates panel
                 self.templates_panel.parent = self
+                # Set templates panel reference for queue panel (for clearing sent status)
+                self.queue_panel.templates_panel = self.templates_panel
         except Exception as e:
             self.logger.error(f"Failed to initialize Templates Panel: {e}")
             self._show_placeholder(self.templates_tab, "Templates Panel")
@@ -403,6 +405,11 @@ class MainWindow:
         # Connect Queue Panel to Stream Panel for queue execution streaming
         if hasattr(self, 'queue_panel') and hasattr(self, 'stream_panel') and self.queue_panel and self.stream_panel:
             self.queue_panel.stream_panel = self.stream_panel
+            # Connect Stream Panel to Queue Panel for cancellation functionality
+            self.stream_panel.queue_panel_ref = self.queue_panel
+
+        # Store reference to queue panel for potential future use
+        self.queue_panel_ref = self.queue_panel if hasattr(self, 'queue_panel') else None
 
         # Initialize Logs Panel
         try:
@@ -581,9 +588,14 @@ class MainWindow:
                 # Get test name for thread context using utility function
                 thread_test_name = get_test_display_name(test_data)
 
+                # SOFT CANCELLATION: Do not check cancellation during test execution
+                # Let the current test complete naturally - cancellation only affects future tests
+
                 # Update stream: preparing to send
                 if hasattr(self, 'stream_panel') and self.stream_panel:
                     self.stream_panel.update_stream_status("preparing", "Validating test data and connection", 10)
+
+                # SOFT CANCELLATION: Do not interrupt test preparation
 
                 # Execute the test
                 self.logger.info("Sending test to device...")
@@ -591,6 +603,8 @@ class MainWindow:
                 # Update stream: sending test
                 if hasattr(self, 'stream_panel') and self.stream_panel:
                     self.stream_panel.update_stream_status("sending", "Sending test data to device", 30)
+
+                # SOFT CANCELLATION: Do not interrupt device communication
 
                 # Start measuring ACTUAL test execution time (excluding delays and preparation)
                 test_start_time = time.time()
@@ -601,6 +615,8 @@ class MainWindow:
                     affects_network=affects_network,
                     max_retries=3  # Use intelligent retry with 3 attempts for network errors only
                 )
+
+                # SOFT CANCELLATION: Do not interrupt after device communication
 
                 # Calculate ACTUAL execution time (only test execution, excluding delays)
                 execution_time = time.time() - test_start_time
@@ -630,7 +646,16 @@ class MainWindow:
 
                 # Update final status
                 status = final_status
-                self._update_status(f"Test completed: {thread_test_name} - {final_status.upper()}")
+
+                # Handle cancelled status
+                if final_status == "cancelled":
+                    self._update_status(f"Test cancelled: {thread_test_name}")
+                    # End stream with cancelled status
+                    if hasattr(self, 'stream_panel') and self.stream_panel:
+                        self.stream_panel.end_test_stream(False, f"🛑 {final_message}")
+                    return  # Don't save cancelled tests to history
+                else:
+                    self._update_status(f"Test completed: {thread_test_name} - {final_status.upper()}")
 
                 # Save result to history
                 try:
@@ -669,16 +694,12 @@ class MainWindow:
                     if self.stream_panel.is_queue_executing and hasattr(self, '_current_queue_test_index'):
                         self.stream_panel.set_queue_test_execution_time(self._current_queue_test_index, execution_time)
 
-                        # Report test result to queue panel for accurate tracking (use final status)
-                        final_success = (final_status == "success")
-                        if hasattr(self, 'queue_panel') and self.queue_panel:
-                            self.queue_panel.set_test_result(self._current_queue_test_index, final_success)
-
                         # End queue test stream with appropriate message based on final status
                         # Get total tests for proper indexing display
                         total_tests = len(self.queue_panel.queue_items) if hasattr(self, 'queue_panel') and self.queue_panel else 1
                         test_display_index = self._current_queue_test_index + 1
 
+                        final_success = (final_status == "success")
                         if final_success:
                             completion_msg = f"✅ Test {test_display_index}/{total_tests} ({thread_test_name}) completed successfully"
                             if verification_message:
@@ -687,6 +708,16 @@ class MainWindow:
                         else:
                             failure_msg = f"❌ Test {test_display_index}/{total_tests} ({thread_test_name}) failed: {final_message}"
                             self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, final_success, failure_msg, execution_time)
+
+                # Report test result to queue panel for accurate tracking (regardless of queue execution mode)
+                if hasattr(self, '_current_queue_test_index') and self._current_queue_test_index >= 0:
+                    final_success = (final_status == "success")
+                    if hasattr(self, 'queue_panel') and self.queue_panel:
+                        self.queue_panel.set_test_result(self._current_queue_test_index, final_success)
+                        self.logger.debug(f"Reported test result to queue panel: index={self._current_queue_test_index}, success={final_success}")
+
+                    # Reset the queue test index after reporting
+                    self._current_queue_test_index = -1
 
             except Exception as e:
                 # Set default execution time for failed tests (no actual test was executed)
@@ -707,13 +738,18 @@ class MainWindow:
                     if self.stream_panel.is_queue_executing and hasattr(self, '_current_queue_test_index'):
                         self.stream_panel.set_queue_test_execution_time(self._current_queue_test_index, execution_time)
 
-                        # Report test failure to queue panel for accurate tracking
-                        if hasattr(self, 'queue_panel') and self.queue_panel:
-                            self.queue_panel.set_test_result(self._current_queue_test_index, False)
-
                         # End queue test stream with error
                         self.stream_panel.end_queue_test_stream(self._current_queue_test_index, thread_test_name, False,
                                                                f"Test execution error: {str(e)}", execution_time)
+
+                # Report test failure to queue panel for accurate tracking (regardless of queue execution mode)
+                if hasattr(self, '_current_queue_test_index') and self._current_queue_test_index >= 0:
+                    if hasattr(self, 'queue_panel') and self.queue_panel:
+                        self.queue_panel.set_test_result(self._current_queue_test_index, False)
+                        self.logger.debug(f"Reported test failure to queue panel: index={self._current_queue_test_index}")
+
+                    # Reset the queue test index after reporting
+                    self._current_queue_test_index = -1
 
                 # Show error message
                 if self.root:
@@ -898,6 +934,9 @@ class MainWindow:
             max_script_iterations = 10  # Prevent infinite loops
 
             while script_count < max_script_iterations:
+                # SOFT CANCELLATION: Do not interrupt natural request-response flow
+                # Let the current test complete its natural cycle
+
                 # Check what type of response we received
                 device_test_result = self._determine_device_test_result(current_response)
 
@@ -909,8 +948,14 @@ class MainWindow:
 
                     self.logger.info(f"Device requesting script verification #{script_count}: {script_name} with params: {script_params}")
 
+                    # SOFT CANCELLATION: Do not interrupt script verification
+                    # Let the script execute and complete naturally
+
                     # Execute the requested script
                     verification_needed, verification_msg, verification_passed = self.script_verifier.verify_test_result(current_response)
+
+                    # SOFT CANCELLATION: Do not interrupt after script execution
+                    # Let the result be sent back to device naturally
 
                     if not verification_needed:
                         return "fail", f"Script verification was requested but could not be executed: {verification_msg}"
@@ -924,11 +969,17 @@ class MainWindow:
 
                     self.logger.info(f"Sending script #{script_count} result: {script_result} ({'PASS' if verification_passed else 'FAIL'})")
 
+                    # SOFT CANCELLATION: Do not interrupt before sending script result
+                    # Device is waiting for this result - must complete the cycle
+
                     # Send script result and get device's next response
                     success, next_response, error_msg = self.connection_manager.send_script_result(script_response)
 
                     if not success:
                         return "fail", f"Failed to send script result #{script_count}: {error_msg}"
+
+                    # SOFT CANCELLATION: Do not interrupt after sending script result
+                    # Wait for device's natural response
 
                     # Device's next response (either another script request or final result)
                     current_response = next_response or {}

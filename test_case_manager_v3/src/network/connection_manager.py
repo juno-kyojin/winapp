@@ -601,3 +601,32 @@ class ConnectionManager:
         else:
             self.logger.error(f"Test failed after {max_retries} attempts: {last_error}")
         return False, None, f"Failed after {max_retries} attempts: {last_error}"
+
+    def send_cancellation_signal(self) -> bool:
+        """
+        Send cancellation signal to device to reset its state.
+
+        Returns:
+            True if cancellation signal sent successfully, False otherwise
+        """
+        try:
+            self.logger.info("Sending cancellation signal to device")
+
+            cancellation_data = {
+                "type": "cancel",
+                "message": "Test execution cancelled by user"
+            }
+
+            # Use shorter timeout for cancellation signal
+            success, response, error_msg = self.http_client.send_test(cancellation_data, timeout=10)
+
+            if success:
+                self.logger.info("Cancellation signal sent successfully to device")
+                return True
+            else:
+                self.logger.warning(f"Failed to send cancellation signal: {error_msg}")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"Error sending cancellation signal: {e}")
+            return False

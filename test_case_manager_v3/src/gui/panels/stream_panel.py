@@ -57,6 +57,10 @@ class StreamPanel(ttk.Frame):
 
         # Queue test execution time tracking
         self.queue_test_execution_times: Dict[int, float] = {}
+
+        # Cancel functionality
+        self.cancel_button: Optional[ttk.Button] = None
+        self.queue_panel_ref: Optional[Any] = None  # Reference to queue panel for cancellation
         
         # Create UI
         self._create_ui()
@@ -157,20 +161,68 @@ class StreamPanel(ttk.Frame):
         """Create frame with control buttons."""
         controls_frame = ttk.Frame(self)
         controls_frame.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
-        
+
         # Clear Stream button
-        ttk.Button(controls_frame, text="Clear Stream", 
+        ttk.Button(controls_frame, text="Clear Stream",
                   command=self._clear_stream).pack(side=tk.LEFT, padx=5)
-        
+
+        # Cancel Execution button (initially disabled)
+        self.cancel_button = ttk.Button(controls_frame, text="Cancel Execution",
+                                       command=self._cancel_execution, state=tk.DISABLED)
+        self.cancel_button.pack(side=tk.LEFT, padx=10)
+
         # Auto-scroll checkbox
         self.auto_scroll_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(controls_frame, text="Auto-scroll", 
+        ttk.Checkbutton(controls_frame, text="Auto-scroll",
                        variable=self.auto_scroll_var).pack(side=tk.LEFT, padx=10)
-        
+
         # Export Stream button
-        ttk.Button(controls_frame, text="Export Stream", 
+        ttk.Button(controls_frame, text="Export Stream",
                   command=self._export_stream).pack(side=tk.RIGHT, padx=5)
-    
+
+    def _cancel_execution(self) -> None:
+        """Cancel the current test execution using soft cancel approach."""
+        from tkinter import messagebox
+
+        # Confirm cancellation with updated message
+        if not messagebox.askyesno(
+            "Cancel Execution",
+            "Are you sure you want to cancel the remaining test execution?\n\n"
+            "• Current test will complete naturally and get proper result\n"
+            "• Remaining tests in queue will be cancelled\n"
+            "• No disruption to device state"
+        ):
+            return
+
+        # Log cancellation request
+        self.logger.info("User requested soft cancellation - current test will complete, remaining tests cancelled")
+        self._add_stream_entry("🛑 Soft cancellation requested by user", "warning")
+        self._add_stream_entry("⏳ Current test will complete naturally, remaining tests will be cancelled", "info")
+
+        # Request soft cancellation from queue panel
+        if self.queue_panel_ref and hasattr(self.queue_panel_ref, 'request_soft_cancellation'):
+            self.queue_panel_ref.request_soft_cancellation()
+            self._add_stream_entry("🛑 Cancellation signal sent - execution will stop after current test", "warning")
+
+            # Update cancel button to show cancellation in progress
+            if self.cancel_button:
+                self.cancel_button.config(text="Cancelling...", state=tk.DISABLED)
+        else:
+            self.logger.warning("Cannot cancel execution - queue panel reference not available")
+            self._add_stream_entry("❌ Failed to send cancellation signal - queue panel not available", "error")
+
+    def _enable_cancel_button(self) -> None:
+        """Enable the cancel button when execution starts."""
+        if self.cancel_button:
+            self.cancel_button.config(state=tk.NORMAL)
+
+    def _disable_cancel_button(self) -> None:
+        """Disable the cancel button when execution ends."""
+        if self.cancel_button:
+            # Reset button text and disable it
+            self.cancel_button.config(text="Cancel", state=tk.DISABLED)
+            self.logger.debug("Cancel button reset to normal state after execution")
+
     def start_test_stream(self, test_name: str, test_data: Dict[str, Any]) -> None:
         """
         Start streaming for a new test execution.
@@ -199,6 +251,9 @@ class StreamPanel(ttk.Frame):
         }
 
         self.is_streaming = True
+
+        # Enable cancel button for single test execution
+        self._enable_cancel_button()
 
         # Update current test display
         self.current_test_var.set(test_name)
@@ -270,6 +325,10 @@ class StreamPanel(ttk.Frame):
 
         self.is_streaming = False
 
+        # Disable cancel button for single test execution (queue execution handles this separately)
+        if not self.is_queue_executing:
+            self._disable_cancel_button()
+
         # Update final status
         final_status = "Completed" if success else "Failed"
         self.current_status_var.set(final_status)
@@ -307,6 +366,9 @@ class StreamPanel(ttk.Frame):
         }
 
         self.is_queue_executing = True
+
+        # Enable cancel button for queue execution
+        self._enable_cancel_button()
 
         # Show queue info frame
         self.queue_info_frame.grid()
@@ -486,6 +548,9 @@ class StreamPanel(ttk.Frame):
             return
 
         self.is_queue_executing = False
+
+        # Disable cancel button when queue execution ends
+        self._disable_cancel_button()
 
         # Get queue execution info
         total_tests = self.queue_execution["total_tests"]
